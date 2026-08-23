@@ -56,7 +56,7 @@ struct ItemEditorView: View {
       } header: {
         Text("使用目標")
       } footer: {
-        Text("カテゴリに関係なく、自分が使いたい期間を設定します。")
+        Text("この愛用品を使いたい期間の目安です。")
       }
     }
     .navigationTitle(item == nil ? "愛用品を追加" : "登録内容を編集").navigationBarTitleDisplayMode(.inline)
