@@ -120,9 +120,19 @@ enum ReplacementStatus: Int, Comparable {
     if let months = components.month, months > 0 { return "\(months)か月" }
     return "\(max(0, components.day ?? 0))日"
   }
-  func remainingText(asOf date: Date = .now, calendar: Calendar = .current) -> String {
+  func remainingText(
+    asOf date: Date = .now, calendar: Calendar = .current, usesDayPrecision: Bool = false
+  ) -> String {
     let referenceDate = referenceDate(asOf: date)
     let targetDate = targetDate(calendar: calendar)
+    if usesDayPrecision {
+      let referenceDay = calendar.startOfDay(for: referenceDate)
+      let targetDay = calendar.startOfDay(for: targetDate)
+      let days = calendar.dateComponents([.day], from: referenceDay, to: targetDay).day ?? 0
+      if days == 0 { return "今日が目標日です" }
+      if days > 0 && days < 30 { return "目標まであと\(days)日" }
+      if days < 0 && days > -30 { return "目標を\(-days)日超えて使えています" }
+    }
     if referenceDate <= targetDate {
       return
         "目標まであと約\(yearMonthDurationText(from: referenceDate, to: targetDate, calendar: calendar))"
