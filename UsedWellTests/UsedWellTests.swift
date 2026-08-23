@@ -78,4 +78,46 @@ import Testing
     #expect(
       item.targetDate(calendar: calendar) == calendar.date(byAdding: .month, value: 38, to: start))
   }
+
+  @Test func notificationPlansIncludeFutureMilestones() {
+    let item = notificationDetails(targetMonths: 10)
+    let plans = NotificationPlanner.plans(for: item, after: start, calendar: calendar)
+    let targetDate = calendar.date(byAdding: .month, value: 10, to: start)!
+    let targetDays = calendar.dateComponents([.day], from: start, to: targetDate).day!
+    let reviewDate = calendar.date(
+      byAdding: .day, value: Int(ceil(Double(targetDays) * 0.9)), to: start)!
+
+    #expect(plans.map(\.milestone) == [.review, .goal])
+    #expect(plans.map(\.date) == [reviewDate, targetDate])
+    #expect(plans[0].identifier.hasSuffix(".90"))
+    #expect(plans[1].identifier.hasSuffix(".100"))
+  }
+
+  @Test func notificationPlansSkipPastMilestones() {
+    let item = notificationDetails(targetMonths: 10)
+    let targetDate = calendar.date(byAdding: .month, value: 10, to: start)!
+    let targetDays = calendar.dateComponents([.day], from: start, to: targetDate).day!
+    let afterReview = calendar.date(
+      byAdding: .day, value: Int(ceil(Double(targetDays) * 0.9)), to: start)!
+
+    let plans = NotificationPlanner.plans(
+      for: item, after: calendar.date(byAdding: .day, value: 1, to: afterReview)!,
+      calendar: calendar)
+
+    #expect(plans.map(\.milestone) == [.goal])
+    #expect(NotificationPlanner.plans(for: item, after: targetDate, calendar: calendar).isEmpty)
+  }
+
+  @Test func completedItemsHaveNoNotificationPlans() {
+    let item = notificationDetails(targetMonths: 10, isCompleted: true)
+    #expect(NotificationPlanner.plans(for: item, after: start, calendar: calendar).isEmpty)
+  }
+
+  private func notificationDetails(
+    targetMonths: Int, isCompleted: Bool = false
+  ) -> ItemNotificationDetails {
+    ItemNotificationDetails(
+      id: UUID(), name: "Phone", purchaseDate: start, targetMonths: targetMonths,
+      isCompleted: isCompleted)
+  }
 }

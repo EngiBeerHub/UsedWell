@@ -5,6 +5,7 @@ struct ItemEditorView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item?
+  let onSaved: (ItemNotificationDetails, Bool) -> Void
   @State private var name: String
   @State private var category: ItemCategory
   @State private var purchaseDate: Date
@@ -12,8 +13,12 @@ struct ItemEditorView: View {
   @State private var targetYears: Int
   @State private var targetAdditionalMonths: Int
 
-  init(item: Item? = nil) {
+  init(
+    item: Item? = nil,
+    onSaved: @escaping (ItemNotificationDetails, Bool) -> Void = { _, _ in }
+  ) {
     self.item = item
+    self.onSaved = onSaved
     _name = State(initialValue: item?.name ?? "")
     _category = State(initialValue: item?.category ?? .phone)
     _purchaseDate = State(initialValue: item?.purchaseDate ?? .now)
@@ -77,18 +82,22 @@ struct ItemEditorView: View {
   }
   private func save() {
     let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+    let savedItem: Item
     if let item {
       item.name = cleanName
       item.category = category
       item.purchaseDate = purchaseDate
       item.purchasePrice = purchasePrice ?? 0
       item.targetMonths = targetMonths
+      savedItem = item
     } else {
-      modelContext.insert(
-        Item(
-          name: cleanName, category: category, purchaseDate: purchaseDate,
-          purchasePrice: purchasePrice ?? 0, targetMonths: targetMonths))
+      let newItem = Item(
+        name: cleanName, category: category, purchaseDate: purchaseDate,
+        purchasePrice: purchasePrice ?? 0, targetMonths: targetMonths)
+      modelContext.insert(newItem)
+      savedItem = newItem
     }
+    onSaved(ItemNotificationDetails(item: savedItem), item == nil)
     dismiss()
   }
 }

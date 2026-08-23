@@ -45,6 +45,7 @@ enum ReplacementStatus: Int, Comparable {
 }
 
 @Model final class Item {
+  var notificationID: UUID = UUID()
   var name: String
   var categoryRawValue: String
   var purchaseDate: Date

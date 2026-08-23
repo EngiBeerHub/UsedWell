@@ -84,10 +84,17 @@ struct ItemDetailView: View {
         ToolbarItem(placement: .topBarTrailing) { Button("編集") { showsEditor = true } }
       }
     }
-    .sheet(isPresented: $showsEditor) { NavigationStack { ItemEditorView(item: item) } }
+    .sheet(isPresented: $showsEditor) {
+      NavigationStack {
+        ItemEditorView(item: item) { item, _ in
+          Task { await NotificationScheduler.shared.rescheduleIfAuthorized(item) }
+        }
+      }
+    }
     .alert("買い替え完了にしますか？", isPresented: $showsCompleteConfirmation) {
       Button("今日で使用を終了") {
         item.completedDate = .now
+        NotificationScheduler.shared.cancel(itemID: item.notificationID)
         showsCompletionResult = true
       }
       Button("キャンセル", role: .cancel) {}
@@ -105,6 +112,7 @@ struct ItemDetailView: View {
     }
     .alert("この記録を削除しますか？", isPresented: $showsDeleteConfirmation) {
       Button("完全に削除", role: .destructive) {
+        NotificationScheduler.shared.cancel(itemID: item.notificationID)
         modelContext.delete(item)
         dismiss()
       }
