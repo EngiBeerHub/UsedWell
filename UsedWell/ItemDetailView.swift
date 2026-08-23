@@ -69,7 +69,12 @@ struct ItemDetailView: View {
         }
       }
       Section {
-        Button("記録を削除", systemImage: "trash", role: .destructive) { showsDeleteConfirmation = true }
+        Button(role: .destructive) {
+          showsDeleteConfirmation = true
+        } label: {
+          Label("記録を削除", systemImage: "trash")
+            .foregroundStyle(.red)
+        }
       }
     }
     .navigationTitle(item.isCompleted ? "履歴の詳細" : "愛用品の詳細").navigationBarTitleDisplayMode(.inline)
