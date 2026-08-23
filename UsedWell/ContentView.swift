@@ -3,7 +3,11 @@ import SwiftUI
 
 struct ContentView: View {
   @Query private var items: [Item]
+  @State private var navigationPath: [UUID] = []
+  @State private var notificationNavigation = NotificationNavigation.shared
   @State private var showsAdd = false
+  @State private var showsNotificationExplanation = false
+  @State private var pendingNotificationItem: ItemNotificationDetails?
   private var activeItems: [Item] {
     items.filter { !$0.isCompleted }.sorted {
       let lhs = $0.reviewPriority()
@@ -13,7 +17,7 @@ struct ContentView: View {
   }
   private var hasHistory: Bool { items.contains(where: \.isCompleted) }
   var body: some View {
-    NavigationStack {
+    NavigationStack(path: $navigationPath) {
       Group {
         if activeItems.isEmpty {
           VStack(spacing: 16) {
@@ -43,11 +47,13 @@ struct ContentView: View {
           List {
             Section("次に見直すもの") {
               if let item = activeItems.first {
-                NavigationLink(value: item) { FeaturedItemCard(item: item) }
+                NavigationLink(value: item.notificationID) { FeaturedItemCard(item: item) }
               }
             }
             Section("使用中の愛用品") {
-              ForEach(activeItems) { item in NavigationLink(value: item) { ItemRow(item: item) } }
+              ForEach(activeItems) { item in
+                NavigationLink(value: item.notificationID) { ItemRow(item: item) }
+              }
             }
             Section {
               NavigationLink {
@@ -64,11 +70,62 @@ struct ContentView: View {
           Button("愛用品を追加", systemImage: "plus") { showsAdd = true }
         }
       }
-      .navigationDestination(for: Item.self) { item in
-        ItemDetailView(item: item, onAddReplacement: { showsAdd = true })
+      .navigationDestination(for: UUID.self) { itemID in
+        if let item = items.first(where: { $0.notificationID == itemID }) {
+          ItemDetailView(item: item, onAddReplacement: { showsAdd = true })
+        } else {
+          ContentUnavailableView("記録が見つかりません", systemImage: "questionmark.folder")
+        }
       }
     }
-    .sheet(isPresented: $showsAdd) { NavigationStack { ItemEditorView() } }
+    .sheet(isPresented: $showsAdd, onDismiss: handleAddDismiss) {
+      NavigationStack {
+        ItemEditorView { item, isNew in
+          if isNew { pendingNotificationItem = item }
+        }
+      }
+    }
+    .alert("通知で見直し時期をお知らせ", isPresented: $showsNotificationExplanation) {
+      Button("通知を許可") { requestNotificationPermission() }
+      Button("後で", role: .cancel) { pendingNotificationItem = nil }
+    } message: {
+      Text("使用目標の90%と100%に達する日に、愛用品を見直すきっかけをお知らせします。")
+    }
+    .onChange(of: notificationNavigation.itemID) { _, itemID in
+      openNotificationItem(itemID)
+    }
+    .task { openNotificationItem(notificationNavigation.itemID) }
+  }
+
+  private func handleAddDismiss() {
+    guard let item = pendingNotificationItem else { return }
+    Task {
+      switch await NotificationScheduler.shared.authorizationStatus() {
+      case .notDetermined:
+        showsNotificationExplanation = true
+      case .authorized, .provisional, .ephemeral:
+        await NotificationScheduler.shared.reschedule(item)
+        pendingNotificationItem = nil
+      default:
+        pendingNotificationItem = nil
+      }
+    }
+  }
+
+  private func requestNotificationPermission() {
+    guard let item = pendingNotificationItem else { return }
+    Task {
+      if await NotificationScheduler.shared.requestAuthorization() {
+        await NotificationScheduler.shared.reschedule(item)
+      }
+      pendingNotificationItem = nil
+    }
+  }
+
+  private func openNotificationItem(_ itemID: UUID?) {
+    guard let itemID, items.contains(where: { $0.notificationID == itemID }) else { return }
+    navigationPath = [itemID]
+    notificationNavigation.itemID = nil
   }
 }
 
