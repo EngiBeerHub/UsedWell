@@ -85,11 +85,11 @@ struct ContentView: View {
         }
       }
     }
-    .alert("通知で見直し時期をお知らせ", isPresented: $showsNotificationExplanation) {
+    .alert("見直し時期を通知します", isPresented: $showsNotificationExplanation) {
       Button("通知を許可") { requestNotificationPermission() }
       Button("後で", role: .cancel) { pendingNotificationItem = nil }
     } message: {
-      Text("使用目標の90%と100%に達する日に、愛用品を見直すきっかけをお知らせします。")
+      Text("愛用品を見直すタイミングになったらお知らせします。")
     }
     .onChange(of: notificationNavigation.itemID) { _, itemID in
       openNotificationItem(itemID)
