@@ -76,39 +76,80 @@ struct ContentView: View {
 private struct FeaturedItemCard: View {
   let item: Item
   var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      HStack {
-        Image(systemName: item.category.symbolName).font(.title2).foregroundStyle(.tint)
-        VStack(alignment: .leading) {
-          Text(item.name).font(.headline)
+    VStack(alignment: .leading, spacing: 14) {
+      HStack(alignment: .top, spacing: 12) {
+        Image(systemName: item.category.symbolName)
+          .font(.title2)
+          .foregroundStyle(.tint)
+          .frame(width: 28, height: 28)
+        VStack(alignment: .leading, spacing: 5) {
+          HStack(alignment: .firstTextBaseline, spacing: 12) {
+            Text(item.name)
+              .font(.headline)
+              .lineLimit(1)
+            Spacer(minLength: 8)
+            ProgressText(item: item, featured: true)
+          }
           StatusLabel(item: item)
         }
-        Spacer()
-        Text(item.progress(), format: .percent.precision(.fractionLength(0))).font(.title2.bold())
-          .monospacedDigit()
       }
       ProgressView(value: min(item.progress(), 1))
-      Text(item.remainingText).font(.subheadline).foregroundStyle(.secondary)
-    }.padding(.vertical, 6).accessibilityIdentifier("featured-item")
+      VStack(alignment: .leading, spacing: 4) {
+        Text(item.remainingText)
+          .font(.subheadline)
+        ItemUsageSummary(item: item)
+      }
+      .foregroundStyle(.secondary)
+      .padding(.leading, 40)
+    }
+    .padding(.vertical, 8)
+    .accessibilityIdentifier("featured-item")
   }
 }
 
 struct ItemRow: View {
   let item: Item
   var body: some View {
-    HStack(spacing: 12) {
-      Image(systemName: item.category.symbolName).frame(width: 32).foregroundStyle(.tint)
-      VStack(alignment: .leading, spacing: 4) {
-        Text(item.name).font(.headline)
+    HStack(alignment: .top, spacing: 12) {
+      Image(systemName: item.category.symbolName)
+        .font(.title3)
+        .foregroundStyle(.tint)
+        .frame(width: 28, height: 28)
+      VStack(alignment: .leading, spacing: 5) {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+          Text(item.name)
+            .font(.headline)
+            .lineLimit(1)
+          Spacer(minLength: 8)
+          ProgressText(item: item)
+        }
         StatusLabel(item: item)
-        Text("使用期間 \(item.usageDurationText)・1日 \(item.dailyCostText)")
-          .font(.caption).foregroundStyle(.secondary)
+        ItemUsageSummary(item: item)
       }
-      Spacer()
-      Text(item.progress(), format: .percent.precision(.fractionLength(0))).font(
-        .subheadline.bold()
-      ).monospacedDigit()
-    }.padding(.vertical, 3)
+    }
+    .padding(.vertical, 5)
+  }
+}
+
+private struct ProgressText: View {
+  let item: Item
+  var featured = false
+
+  var body: some View {
+    Text(item.progress(), format: .percent.precision(.fractionLength(0)))
+      .font(featured ? .title2.bold() : .subheadline.bold())
+      .monospacedDigit()
+      .foregroundStyle(.primary)
+  }
+}
+
+private struct ItemUsageSummary: View {
+  let item: Item
+
+  var body: some View {
+    Text("使用期間 \(item.usageDurationText) ・ 1日 \(item.dailyCostText)")
+      .font(.caption)
+      .foregroundStyle(.secondary)
   }
 }
 
@@ -121,9 +162,12 @@ extension Item {
 struct StatusLabel: View {
   let item: Item
   var body: some View {
-    Label(item.status().title, systemImage: item.status().symbolName).font(
-      .caption.weight(.semibold)
-    ).foregroundStyle(item.status() == .goalAchieved ? .green : .secondary)
+    HStack(spacing: 5) {
+      Image(systemName: item.status().symbolName)
+      Text(item.status().title)
+    }
+    .font(.caption.weight(.semibold))
+    .foregroundStyle(item.status() == .goalAchieved ? .green : .secondary)
   }
 }
 
