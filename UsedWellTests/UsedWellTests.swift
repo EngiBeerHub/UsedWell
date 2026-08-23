@@ -71,6 +71,47 @@ import Testing
       item.remainingText(asOf: overTarget, calendar: calendar)
         == "目標を約1年2か月超えて使えています")
   }
+
+  @Test func detailedRemainingDurationUsesDaysNearTarget() {
+    let item = Item(
+      name: "Phone", category: .phone, purchaseDate: start, purchasePrice: 100_000, targetMonths: 1)
+    let targetDate = item.targetDate(calendar: calendar)
+
+    #expect(
+      item.remainingText(asOf: targetDate, calendar: calendar, usesDayPrecision: true) == "今日が目標日です"
+    )
+    #expect(
+      item.remainingText(
+        asOf: calendar.date(byAdding: .day, value: -1, to: targetDate)!, calendar: calendar,
+        usesDayPrecision: true) == "目標まであと1日")
+    #expect(
+      item.remainingText(
+        asOf: calendar.date(byAdding: .day, value: -29, to: targetDate)!, calendar: calendar,
+        usesDayPrecision: true) == "目標まであと29日")
+    #expect(
+      item.remainingText(
+        asOf: calendar.date(byAdding: .day, value: 1, to: targetDate)!, calendar: calendar,
+        usesDayPrecision: true) == "目標を1日超えて使えています")
+    #expect(
+      item.remainingText(
+        asOf: calendar.date(byAdding: .day, value: 29, to: targetDate)!, calendar: calendar,
+        usesDayPrecision: true) == "目標を29日超えて使えています")
+  }
+
+  @Test func detailedRemainingDurationUsesMonthsAtThirtyDays() {
+    let item = Item(
+      name: "Phone", category: .phone, purchaseDate: start, purchasePrice: 100_000, targetMonths: 3)
+    let targetDate = item.targetDate(calendar: calendar)
+
+    #expect(
+      item.remainingText(
+        asOf: calendar.date(byAdding: .day, value: -30, to: targetDate)!, calendar: calendar,
+        usesDayPrecision: true) == "目標まであと約1か月")
+    #expect(
+      item.remainingText(
+        asOf: calendar.date(byAdding: .day, value: 30, to: targetDate)!, calendar: calendar,
+        usesDayPrecision: true) == "目標を約1か月超えて使えています")
+  }
   @Test func targetDateAddsConfiguredMonths() {
     let item = Item(
       name: "Bag", category: .bag, purchaseDate: start, purchasePrice: 50_000, targetMonths: 38)

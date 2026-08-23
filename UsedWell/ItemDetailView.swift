@@ -29,7 +29,8 @@ struct ItemDetailView: View {
           if item.isCompleted {
             Text("最終進捗率").font(.subheadline).foregroundStyle(.secondary)
           } else {
-            Text(item.remainingText).font(.subheadline).foregroundStyle(.secondary)
+            Text(item.remainingText(usesDayPrecision: true)).font(.subheadline).foregroundStyle(
+              .secondary)
           }
         }.frame(maxWidth: .infinity).padding(.vertical, 8)
       }
