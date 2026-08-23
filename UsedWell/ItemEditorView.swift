@@ -66,9 +66,21 @@ struct ItemEditorView: View {
     }
     .navigationTitle(item == nil ? "愛用品を追加" : "登録内容を編集").navigationBarTitleDisplayMode(.inline)
     .toolbar {
-      ToolbarItem(placement: .cancellationAction) { Button("キャンセル") { dismiss() } }
+      ToolbarItem(placement: .cancellationAction) {
+        Button {
+          dismiss()
+        } label: {
+          Image(systemName: "xmark")
+        }
+        .accessibilityLabel("キャンセル")
+      }
       ToolbarItem(placement: .confirmationAction) {
-        Button("保存", action: save).disabled(!isValid).accessibilityIdentifier("save-item")
+        Button(action: save) {
+          Image(systemName: "checkmark")
+        }
+        .disabled(!isValid)
+        .accessibilityLabel("保存")
+        .accessibilityIdentifier("save-item")
       }
     }
     .onChange(of: targetYears) { _, newValue in
