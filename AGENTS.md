@@ -69,6 +69,17 @@ Key product flows include:
 - view completed items in history;
 - delete active or historical records where allowed.
 
+## UI validation
+
+- Do not consider UI changes validated by build and tests alone.
+- For UI changes, run the app and verify the affected screens and interactions when the available environment allows it.
+- Validate the states relevant to the change, including navigation, sheets, scrolling, input, and empty or error states where applicable.
+- Check for obvious layout, readability, and interaction issues.
+- Choose an appropriate validation method for the change, such as Simulator interaction, UI tests, or other available tools.
+- When a UI change has meaningful visual or interaction impact, include useful UI evidence in the PR.
+- UI evidence may include screenshots of relevant states, multiple screenshots when state differences matter, or a screen recording when motion or interaction is important.
+- Record the environment and validation method briefly in the PR `Validation` section.
+
 ## Documentation
 
 - Do not create additional Markdown files merely for planning, implementation summaries, or AI handoff.
