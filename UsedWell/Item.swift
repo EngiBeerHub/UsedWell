@@ -71,11 +71,14 @@ enum ReplacementStatus: Int, Comparable {
     set { categoryRawValue = newValue.rawValue }
   }
   var isCompleted: Bool { completedDate != nil }
+  func referenceDate(asOf date: Date = .now) -> Date { completedDate ?? date }
   func targetDate(calendar: Calendar = .current) -> Date {
     calendar.date(byAdding: .month, value: targetMonths, to: purchaseDate) ?? purchaseDate
   }
   func elapsedDays(asOf date: Date = .now, calendar: Calendar = .current) -> Int {
-    max(1, calendar.dateComponents([.day], from: purchaseDate, to: completedDate ?? date).day ?? 1)
+    max(
+      1, calendar.dateComponents([.day], from: purchaseDate, to: referenceDate(asOf: date)).day ?? 1
+    )
   }
   func targetDays(calendar: Calendar = .current) -> Int {
     max(
@@ -98,23 +101,45 @@ enum ReplacementStatus: Int, Comparable {
   func targetDailyCost(calendar: Calendar = .current) -> Double {
     Double(purchasePrice) / Double(targetDays(calendar: calendar))
   }
-  func extendedDailyCost(calendar: Calendar = .current) -> Double {
-    Double(purchasePrice) / Double(targetDays(calendar: calendar) + 365)
+  func extendedDailyCost(asOf date: Date = .now, calendar: Calendar = .current) -> Double {
+    let extendedDate =
+      calendar.date(byAdding: .year, value: 1, to: referenceDate(asOf: date)) ?? date
+    let days = max(
+      1, calendar.dateComponents([.day], from: purchaseDate, to: extendedDate).day ?? 1)
+    return Double(purchasePrice) / Double(days)
   }
   func reviewPriority(asOf date: Date = .now) -> (Int, Double) {
     (status(asOf: date).rawValue, progress(asOf: date))
   }
 
-  var usageDurationText: String {
-    let components = Calendar.current.dateComponents(
-      [.year, .month, .day], from: purchaseDate, to: completedDate ?? .now)
+  func usageDurationText(asOf date: Date = .now, calendar: Calendar = .current) -> String {
+    let components = calendar.dateComponents(
+      [.year, .month, .day], from: purchaseDate, to: referenceDate(asOf: date))
     if let years = components.year, years > 0 { return "\(years)年\(components.month ?? 0)か月" }
     if let months = components.month, months > 0 { return "\(months)か月" }
     return "\(max(0, components.day ?? 0))日"
   }
-  var remainingText: String {
-    let days = Calendar.current.dateComponents([.day], from: .now, to: targetDate()).day ?? 0
+  func remainingText(asOf date: Date = .now, calendar: Calendar = .current) -> String {
+    let days =
+      calendar.dateComponents(
+        [.day], from: referenceDate(asOf: date), to: targetDate(calendar: calendar)
+      ).day ?? 0
     if days >= 0 { return "目標まであと約\(max(1, Int(ceil(Double(days) / 30))))か月" }
     return "目標を約\(max(1, Int(ceil(Double(-days) / 30))))か月超えて使えています"
+  }
+
+  var usageDurationText: String { usageDurationText() }
+  var remainingText: String { remainingText() }
+  var targetDurationText: String {
+    targetMonths % 12 == 0 ? "\(targetMonths / 12)年" : "\(targetMonths)か月"
+  }
+  var completedPeriodText: String {
+    "\(purchaseDate.japaneseDateText) 〜 \((completedDate ?? referenceDate()).japaneseDateText)"
+  }
+}
+
+extension Date {
+  var japaneseDateText: String {
+    formatted(Date.FormatStyle().year().month().day().locale(Locale(identifier: "ja_JP")))
   }
 }

@@ -21,23 +21,19 @@ struct HistoryView: View {
           } label: {
             VStack(alignment: .leading, spacing: 5) {
               Text(item.name).font(.headline).foregroundStyle(.primary)
-              Text("最終使用期間 \(item.usageDurationText)")
-              Text(
-                "1日あたり \(item.currentDailyCost(), format: .currency(code: "JPY").precision(.fractionLength(0)))"
-              )
+              HStack(spacing: 4) {
+                Text("\(item.usageDurationText)使用")
+                Text("·")
+                Text(
+                  "\(item.currentDailyCost(), format: .currency(code: "JPY").precision(.fractionLength(0))) / 日"
+                )
+              }.font(.subheadline.weight(.medium)).foregroundStyle(.primary)
               Text(item.completedPeriodText)
-            }.font(.caption).foregroundStyle(.secondary)
+                .font(.caption).foregroundStyle(.secondary)
+            }
           }
         }
       }
     }.navigationTitle("これまで使ったもの")
-  }
-}
-
-extension Item {
-  fileprivate var completedPeriodText: String {
-    let start = purchaseDate.formatted(date: .abbreviated, time: .omitted)
-    let end = (completedDate ?? .now).formatted(date: .abbreviated, time: .omitted)
-    return "\(start) 〜 \(end)"
   }
 }

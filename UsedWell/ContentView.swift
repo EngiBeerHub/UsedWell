@@ -16,7 +16,7 @@ struct ContentView: View {
     NavigationStack {
       Group {
         if activeItems.isEmpty {
-          VStack(spacing: 24) {
+          VStack(spacing: 12) {
             ContentUnavailableView {
               Label("愛用品を登録しましょう", systemImage: "heart.text.square")
             } description: {
@@ -25,12 +25,13 @@ struct ContentView: View {
               Button("最初の愛用品を登録") { showsAdd = true }.buttonStyle(.borderedProminent)
             }
             if hasHistory {
+              Divider().padding(.horizontal, 32)
               NavigationLink {
                 HistoryView()
               } label: {
                 Label("これまで使ったもの", systemImage: "clock.arrow.circlepath")
               }
-              .buttonStyle(.bordered)
+              .buttonStyle(.plain).foregroundStyle(.tint)
             }
           }
         } else {

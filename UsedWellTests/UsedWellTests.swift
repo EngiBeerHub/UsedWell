@@ -26,7 +26,27 @@ import Testing
     #expect(
       item.currentDailyCost(asOf: current, calendar: calendar)
         > item.targetDailyCost(calendar: calendar))
-    #expect(item.targetDailyCost(calendar: calendar) > item.extendedDailyCost(calendar: calendar))
+    let oneYearLater = calendar.date(byAdding: .year, value: 1, to: current)!
+    let expectedDays = calendar.dateComponents([.day], from: start, to: oneYearLater).day!
+    #expect(
+      item.extendedDailyCost(asOf: current, calendar: calendar) == 100_000 / Double(expectedDays))
+  }
+  @Test func completedValuesStayFixedAfterCompletion() {
+    let completion = calendar.date(byAdding: .day, value: 100, to: start)!
+    let muchLater = calendar.date(byAdding: .year, value: 10, to: completion)!
+    let item = Item(
+      name: "Watch", category: .watch, purchaseDate: start, purchasePrice: 20_000, targetMonths: 12,
+      completedDate: completion)
+
+    #expect(
+      item.progress(asOf: completion, calendar: calendar)
+        == item.progress(asOf: muchLater, calendar: calendar))
+    #expect(
+      item.currentDailyCost(asOf: completion, calendar: calendar)
+        == item.currentDailyCost(asOf: muchLater, calendar: calendar))
+    #expect(
+      item.remainingText(asOf: completion, calendar: calendar)
+        == item.remainingText(asOf: muchLater, calendar: calendar))
   }
   @Test func completedItemUsesCompletionDateForCost() {
     let completion = calendar.date(byAdding: .day, value: 100, to: start)!

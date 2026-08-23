@@ -16,34 +16,50 @@ struct ItemDetailView: View {
         VStack(spacing: 12) {
           Image(systemName: item.category.symbolName).font(.largeTitle).foregroundStyle(.tint)
           Text(item.name).font(.title2.bold())
-          StatusLabel(item: item)
+          if item.isCompleted {
+            Label("買い替え完了", systemImage: "checkmark.circle.fill")
+              .font(.subheadline.weight(.semibold)).foregroundStyle(.green)
+          } else {
+            StatusLabel(item: item)
+          }
           Text(item.progress(), format: .percent.precision(.fractionLength(0))).font(
             .largeTitle.bold()
           ).monospacedDigit()
           ProgressView(value: min(item.progress(), 1))
-          Text(item.remainingText).font(.subheadline).foregroundStyle(.secondary)
+          if item.isCompleted {
+            Text("最終進捗率").font(.subheadline).foregroundStyle(.secondary)
+          } else {
+            Text(item.remainingText).font(.subheadline).foregroundStyle(.secondary)
+          }
         }.frame(maxWidth: .infinity).padding(.vertical, 8)
       }
-      Section("使用状況") {
-        LabeledContent("使用期間", value: item.usageDurationText)
-        LabeledContent(
-          "使用目標",
-          value: item.targetMonths % 12 == 0
-            ? "\(item.targetMonths / 12)年" : "\(item.targetMonths)か月")
-        LabeledContent("購入日", value: item.purchaseDate.formatted(date: .long, time: .omitted))
+      Section(item.isCompleted ? "最終結果" : "使用状況") {
+        LabeledContent(item.isCompleted ? "最終使用期間" : "使用期間", value: item.usageDurationText)
+        LabeledContent("使用目標", value: item.targetDurationText)
+        if item.isCompleted {
+          LabeledContent("使用期間", value: item.completedPeriodText)
+        } else {
+          LabeledContent("購入日", value: item.purchaseDate.japaneseDateText)
+        }
         LabeledContent(
           "購入価格",
           value: item.purchasePrice.formatted(.currency(code: "JPY").precision(.fractionLength(0))))
         LabeledContent("カテゴリ", value: item.category.rawValue)
       }
-      Section {
-        CostRow(title: "現在", value: item.currentDailyCost(), emphasis: true)
-        CostRow(title: "目標まで使う", value: item.targetDailyCost())
-        CostRow(title: "さらに1年使う", value: item.extendedDailyCost())
-      } header: {
-        Text("1日あたりのコスト")
-      } footer: {
-        Text("長く使うほど、1日あたりのコストは下がります。")
+      if item.isCompleted {
+        Section("最終コスト") {
+          CostRow(title: "1日あたり", value: item.currentDailyCost(), emphasis: true)
+        }
+      } else {
+        Section {
+          CostRow(title: "現在", value: item.currentDailyCost(), emphasis: true)
+          CostRow(title: "目標まで使う", value: item.targetDailyCost())
+          CostRow(title: "今からさらに1年使う", value: item.extendedDailyCost())
+        } header: {
+          Text("1日あたりのコスト")
+        } footer: {
+          Text("長く使うほど、1日あたりのコストは下がります。")
+        }
       }
       if !item.isCompleted {
         Section {
