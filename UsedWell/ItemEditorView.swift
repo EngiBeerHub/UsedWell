@@ -37,11 +37,11 @@ struct ItemEditorView: View {
           .environment(\.locale, Locale(identifier: "ja_JP"))
         LabeledContent("購入価格") {
           HStack(spacing: 4) {
+            Text("¥").foregroundStyle(.secondary)
             TextField("0", value: $purchasePrice, format: .number)
               .keyboardType(.numberPad)
               .multilineTextAlignment(.trailing)
               .accessibilityIdentifier("purchase-price")
-            Text("円").foregroundStyle(.secondary)
           }
         }
       }
