@@ -66,7 +66,7 @@ struct ItemDetailView: View {
         Section {
           Button("買い替え完了にする", systemImage: "checkmark.circle") { showsCompleteConfirmation = true }
         } footer: {
-          Text("目標達成とは別の操作です。実際に使い終えたときだけ実行してください。")
+          Text("使い終えた愛用品を、これまで使ったものに移します。")
         }
       }
       Section {

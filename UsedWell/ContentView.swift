@@ -59,7 +59,7 @@ struct ContentView: View {
           }.listStyle(.insetGrouped)
         }
       }
-      .navigationTitle("UsedWell")
+      .navigationTitle("愛用品")
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button("愛用品を追加", systemImage: "plus") { showsAdd = true }
