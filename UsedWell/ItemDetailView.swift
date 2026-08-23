@@ -36,6 +36,7 @@ struct ItemDetailView: View {
       Section(item.isCompleted ? "最終結果" : "使用状況") {
         LabeledContent(item.isCompleted ? "最終使用期間" : "使用期間", value: item.usageDurationText)
         LabeledContent("使用目標", value: item.targetDurationText)
+        LabeledContent("目標日", value: item.targetDate().japaneseDateText)
         if item.isCompleted {
           LabeledContent("使用開始〜終了", value: item.completedPeriodText)
         } else {
@@ -84,9 +85,7 @@ struct ItemDetailView: View {
       }
     }
     .sheet(isPresented: $showsEditor) { NavigationStack { ItemEditorView(item: item) } }
-    .confirmationDialog(
-      "買い替え完了にしますか？", isPresented: $showsCompleteConfirmation, titleVisibility: .visible
-    ) {
+    .alert("買い替え完了にしますか？", isPresented: $showsCompleteConfirmation) {
       Button("今日で使用を終了") {
         item.completedDate = .now
         showsCompletionResult = true
@@ -104,9 +103,7 @@ struct ItemDetailView: View {
     } message: {
       Text(completionMessage)
     }
-    .confirmationDialog(
-      "この記録を削除しますか？", isPresented: $showsDeleteConfirmation, titleVisibility: .visible
-    ) {
+    .alert("この記録を削除しますか？", isPresented: $showsDeleteConfirmation) {
       Button("完全に削除", role: .destructive) {
         modelContext.delete(item)
         dismiss()
