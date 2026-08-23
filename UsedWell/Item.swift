@@ -120,18 +120,33 @@ enum ReplacementStatus: Int, Comparable {
     return "\(max(0, components.day ?? 0))日"
   }
   func remainingText(asOf date: Date = .now, calendar: Calendar = .current) -> String {
-    let days =
-      calendar.dateComponents(
-        [.day], from: referenceDate(asOf: date), to: targetDate(calendar: calendar)
-      ).day ?? 0
-    if days >= 0 { return "目標まであと約\(max(1, Int(ceil(Double(days) / 30))))か月" }
-    return "目標を約\(max(1, Int(ceil(Double(-days) / 30))))か月超えて使えています"
+    let referenceDate = referenceDate(asOf: date)
+    let targetDate = targetDate(calendar: calendar)
+    if referenceDate <= targetDate {
+      return
+        "目標まであと約\(yearMonthDurationText(from: referenceDate, to: targetDate, calendar: calendar))"
+    }
+    return
+      "目標を約\(yearMonthDurationText(from: targetDate, to: referenceDate, calendar: calendar))超えて使えています"
+  }
+
+  private func yearMonthDurationText(from start: Date, to end: Date, calendar: Calendar) -> String {
+    let components = calendar.dateComponents([.year, .month], from: start, to: end)
+    let years = max(0, components.year ?? 0)
+    let months = max(0, components.month ?? 0)
+    if years > 0 && months > 0 { return "\(years)年\(months)か月" }
+    if years > 0 { return "\(years)年" }
+    return "\(max(1, months))か月"
   }
 
   var usageDurationText: String { usageDurationText() }
   var remainingText: String { remainingText() }
   var targetDurationText: String {
-    targetMonths % 12 == 0 ? "\(targetMonths / 12)年" : "\(targetMonths)か月"
+    let years = targetMonths / 12
+    let months = targetMonths % 12
+    if years > 0 && months > 0 { return "\(years)年\(months)か月" }
+    if years > 0 { return "\(years)年" }
+    return "\(months)か月"
   }
   var completedPeriodText: String {
     "\(purchaseDate.japaneseDateText) 〜 \((completedDate ?? referenceDate()).japaneseDateText)"

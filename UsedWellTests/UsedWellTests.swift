@@ -60,4 +60,22 @@ import Testing
     #expect(ReplacementStatus.goalAchieved > .considerReplacing)
     #expect(ReplacementStatus.considerReplacing > .stillUsing)
   }
+  @Test func remainingDurationUsesYearsAndMonths() {
+    let item = Item(
+      name: "Computer", category: .computer, purchaseDate: start, purchasePrice: 200_000,
+      targetMonths: 26)
+    #expect(item.remainingText(asOf: start, calendar: calendar) == "目標まであと約2年2か月")
+
+    let overTarget = calendar.date(byAdding: .month, value: 40, to: start)!
+    #expect(
+      item.remainingText(asOf: overTarget, calendar: calendar)
+        == "目標を約1年2か月超えて使えています")
+  }
+  @Test func targetDateAddsConfiguredMonths() {
+    let item = Item(
+      name: "Bag", category: .bag, purchaseDate: start, purchasePrice: 50_000, targetMonths: 38)
+    #expect(item.targetDurationText == "3年2か月")
+    #expect(
+      item.targetDate(calendar: calendar) == calendar.date(byAdding: .month, value: 38, to: start))
+  }
 }
