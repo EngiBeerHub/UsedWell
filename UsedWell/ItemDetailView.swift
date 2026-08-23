@@ -37,7 +37,7 @@ struct ItemDetailView: View {
         LabeledContent(item.isCompleted ? "最終使用期間" : "使用期間", value: item.usageDurationText)
         LabeledContent("使用目標", value: item.targetDurationText)
         if item.isCompleted {
-          LabeledContent("使用期間", value: item.completedPeriodText)
+          LabeledContent("使用開始〜終了", value: item.completedPeriodText)
         } else {
           LabeledContent("購入日", value: item.purchaseDate.japaneseDateText)
         }
@@ -53,8 +53,8 @@ struct ItemDetailView: View {
       } else {
         Section {
           CostRow(title: "現在", value: item.currentDailyCost(), emphasis: true)
-          CostRow(title: "目標まで使う", value: item.targetDailyCost())
-          CostRow(title: "今からさらに1年使う", value: item.extendedDailyCost())
+          CostRow(title: "今から1年後", value: item.extendedDailyCost())
+          CostRow(title: "目標達成時（\(item.targetDurationText)）", value: item.targetDailyCost())
         } header: {
           Text("1日あたりのコスト")
         } footer: {

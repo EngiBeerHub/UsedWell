@@ -16,16 +16,19 @@ struct ContentView: View {
     NavigationStack {
       Group {
         if activeItems.isEmpty {
-          VStack(spacing: 12) {
-            ContentUnavailableView {
-              Label("愛用品を登録しましょう", systemImage: "heart.text.square")
-            } description: {
-              Text("使った期間とコストを見える化して、納得できる買い替え時期を考えられます。")
-            } actions: {
-              Button("最初の愛用品を登録") { showsAdd = true }.buttonStyle(.borderedProminent)
-            }
+          VStack(spacing: 16) {
+            Image(systemName: "heart.text.square")
+              .font(.largeTitle)
+              .foregroundStyle(.secondary)
+            Text("愛用品を登録しましょう")
+              .font(.title3.bold())
+            Text("使った期間とコストを見える化して、\n納得できる買い替え時期を考えられます。")
+              .font(.subheadline)
+              .foregroundStyle(.secondary)
+              .multilineTextAlignment(.center)
+            Button("最初の愛用品を登録") { showsAdd = true }.buttonStyle(.borderedProminent)
             if hasHistory {
-              Divider().padding(.horizontal, 32)
+              Divider().padding(.top, 4)
               NavigationLink {
                 HistoryView()
               } label: {
@@ -34,6 +37,8 @@ struct ContentView: View {
               .buttonStyle(.plain).foregroundStyle(.tint)
             }
           }
+          .padding(.horizontal, 32)
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
           List {
             Section("次に見直すもの") {
