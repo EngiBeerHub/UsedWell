@@ -179,6 +179,8 @@ struct ItemRow: View {
           Spacer(minLength: 8)
           ProgressText(item: item)
         }
+        ProgressView(value: min(item.progress(), 1))
+          .controlSize(.small)
         StatusLabel(item: item)
         ItemUsageSummary(item: item)
       }
