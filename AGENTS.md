@@ -80,6 +80,14 @@ Key product flows include:
 - UI evidence may include screenshots of relevant states, multiple screenshots when state differences matter, or a screen recording when motion or interaction is important.
 - Record the environment and validation method briefly in the PR `Validation` section.
 
+### Xcode tooling
+
+- When the official Xcode MCP is available, prefer it for Xcode-native tasks such as project inspection, Apple documentation lookup, build diagnostics, XCTest execution, and SwiftUI Preview rendering.
+- For SwiftUI UI changes, use `RenderPreview` when practical to inspect affected views and relevant visual variants. Preview validation complements but does not replace runtime validation.
+- Use XcodeBuildMCP for Simulator-based runtime validation when actual app interaction is relevant, including navigation, taps, text input, scrolling, and screenshots.
+- Prefer the lightest validation method that provides sufficient confidence: use Preview for isolated visual verification and Simulator interaction for behavior, integration, navigation, or states that Preview cannot adequately validate.
+- If a preferred tool is unavailable, use an appropriate available fallback and note any meaningful validation limitation in the PR.
+
 ## Documentation
 
 - Do not create additional Markdown files merely for planning, implementation summaries, or AI handoff.
