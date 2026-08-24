@@ -26,6 +26,7 @@ struct ItemDetailView: View {
             .largeTitle.bold()
           ).monospacedDigit()
           ProgressView(value: min(item.progress(), 1))
+            .tint(progressTint)
           if item.isCompleted {
             Text("最終進捗率").font(.subheadline).foregroundStyle(.secondary)
           } else {
@@ -128,6 +129,15 @@ struct ItemDetailView: View {
       .currency(code: "JPY").precision(.fractionLength(0))
     )
     return "最終使用期間は\(item.usageDurationText)、1日あたり\(cost)でした。"
+  }
+
+  private var progressTint: Color {
+    if item.isCompleted { return .green }
+    switch item.status() {
+    case .stillUsing: return .accentColor
+    case .considerReplacing: return .orange
+    case .goalAchieved: return .green
+    }
   }
 }
 
