@@ -2,6 +2,12 @@ name: Test screenshot artifact
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - test/screenshot-artifact-handoff
+    paths:
+      - .github/workflows/test-screenshot-artifact.yml
+      - test-artifacts/home.jpg
 
 jobs:
   upload-screenshot:
