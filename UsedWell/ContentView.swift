@@ -150,6 +150,7 @@ private struct FeaturedItemCard: View {
         }
       }
       ProgressView(value: min(item.progress(), 1))
+        .tint(item.status().progressTint)
       VStack(alignment: .leading, spacing: 4) {
         Text(item.remainingText)
           .font(.subheadline)
@@ -181,6 +182,7 @@ struct ItemRow: View {
         }
         ProgressView(value: min(item.progress(), 1))
           .controlSize(.small)
+          .tint(item.status().progressTint)
         StatusLabel(item: item)
         ItemUsageSummary(item: item)
       }
@@ -198,6 +200,16 @@ private struct ProgressText: View {
       .font(featured ? .title2.bold() : .subheadline.bold())
       .monospacedDigit()
       .foregroundStyle(.primary)
+  }
+}
+
+extension ReplacementStatus {
+  fileprivate var progressTint: Color {
+    switch self {
+    case .stillUsing: .accentColor
+    case .considerReplacing: .orange
+    case .goalAchieved: .green
+    }
   }
 }
 
@@ -229,4 +241,33 @@ struct StatusLabel: View {
   }
 }
 
-#Preview { ContentView().modelContainer(for: Item.self, inMemory: true) }
+private enum ContentViewPreview {
+  static func makeContainer() -> ModelContainer {
+    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
+    do {
+      let container = try ModelContainer(for: Item.self, configurations: configuration)
+      let calendar = Calendar.current
+      let now = Date.now
+      container.mainContext.insert(
+        Item(
+          name: "毎日使うバッグ", category: .bag,
+          purchaseDate: calendar.date(byAdding: .month, value: -3, to: now) ?? now,
+          purchasePrice: 80_000, targetMonths: 12))
+      container.mainContext.insert(
+        Item(
+          name: "見直しを考えるスマホ", category: .phone,
+          purchaseDate: calendar.date(byAdding: .month, value: -11, to: now) ?? now,
+          purchasePrice: 120_000, targetMonths: 12))
+      container.mainContext.insert(
+        Item(
+          name: "長く使ったカメラ", category: .camera,
+          purchaseDate: calendar.date(byAdding: .month, value: -18, to: now) ?? now,
+          purchasePrice: 200_000, targetMonths: 12))
+      return container
+    } catch {
+      fatalError("Failed to create ContentView preview container: \(error)")
+    }
+  }
+}
+
+#Preview { ContentView().modelContainer(ContentViewPreview.makeContainer()) }
