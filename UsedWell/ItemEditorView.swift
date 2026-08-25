@@ -109,7 +109,7 @@ struct ItemEditorView: View {
             Button("キャンセル") { showsPurchaseDatePicker = false }
           }
           ToolbarItem(placement: .confirmationAction) {
-            Button("決定") {
+            Button("完了") {
               purchaseDate = Calendar.current.startOfDay(for: draftPurchaseDate)
               showsPurchaseDatePicker = false
             }
