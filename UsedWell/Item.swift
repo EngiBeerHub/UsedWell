@@ -73,19 +73,38 @@ enum ReplacementStatus: Int, Comparable {
   }
   var isCompleted: Bool { completedDate != nil }
   func referenceDate(asOf date: Date = .now) -> Date { completedDate ?? date }
-  func targetDate(calendar: Calendar = .current) -> Date {
-    calendar.date(byAdding: .month, value: targetMonths, to: purchaseDate) ?? purchaseDate
+
+  /// Purchase dates represent local calendar days rather than moments in time.
+  func purchaseDay(calendar: Calendar = .current) -> Date {
+    calendar.startOfDay(for: purchaseDate)
   }
+
+  func referenceDay(asOf date: Date = .now, calendar: Calendar = .current) -> Date {
+    calendar.startOfDay(for: referenceDate(asOf: date))
+  }
+
+  func targetDate(calendar: Calendar = .current) -> Date {
+    calendar.date(byAdding: .month, value: targetMonths, to: purchaseDay(calendar: calendar))
+      ?? purchaseDay(calendar: calendar)
+  }
+
   func elapsedDays(asOf date: Date = .now, calendar: Calendar = .current) -> Int {
     max(
-      1, calendar.dateComponents([.day], from: purchaseDate, to: referenceDate(asOf: date)).day ?? 1
+      1,
+      calendar.dateComponents(
+        [.day], from: purchaseDay(calendar: calendar),
+        to: referenceDay(asOf: date, calendar: calendar)
+      ).day ?? 1
     )
   }
+
   func targetDays(calendar: Calendar = .current) -> Int {
     max(
       1,
-      calendar.dateComponents([.day], from: purchaseDate, to: targetDate(calendar: calendar)).day
-        ?? 1)
+      calendar.dateComponents(
+        [.day], from: purchaseDay(calendar: calendar), to: targetDate(calendar: calendar)
+      ).day ?? 1
+    )
   }
   func progress(asOf date: Date = .now, calendar: Calendar = .current) -> Double {
     Double(elapsedDays(asOf: date, calendar: calendar)) / Double(targetDays(calendar: calendar))
@@ -104,9 +123,15 @@ enum ReplacementStatus: Int, Comparable {
   }
   func extendedDailyCost(asOf date: Date = .now, calendar: Calendar = .current) -> Double {
     let extendedDate =
-      calendar.date(byAdding: .year, value: 1, to: referenceDate(asOf: date)) ?? date
+      calendar.date(
+        byAdding: .year, value: 1, to: referenceDay(asOf: date, calendar: calendar)
+      ) ?? referenceDay(asOf: date, calendar: calendar)
     let days = max(
-      1, calendar.dateComponents([.day], from: purchaseDate, to: extendedDate).day ?? 1)
+      1,
+      calendar.dateComponents(
+        [.day], from: purchaseDay(calendar: calendar), to: extendedDate
+      ).day ?? 1
+    )
     return Double(purchasePrice) / Double(days)
   }
   func reviewPriority(asOf date: Date = .now) -> (Int, Double) {
@@ -115,7 +140,8 @@ enum ReplacementStatus: Int, Comparable {
 
   func usageDurationText(asOf date: Date = .now, calendar: Calendar = .current) -> String {
     let components = calendar.dateComponents(
-      [.year, .month, .day], from: purchaseDate, to: referenceDate(asOf: date))
+      [.year, .month, .day], from: purchaseDay(calendar: calendar),
+      to: referenceDay(asOf: date, calendar: calendar))
     if let years = components.year, years > 0 { return "\(years)年\(components.month ?? 0)か月" }
     if let months = components.month, months > 0 { return "\(months)か月" }
     return "\(max(0, components.day ?? 0))日"
@@ -123,13 +149,11 @@ enum ReplacementStatus: Int, Comparable {
   func remainingText(
     asOf date: Date = .now, calendar: Calendar = .current, usesDayPrecision: Bool = false
   ) -> String {
-    let referenceDate = referenceDate(asOf: date)
+    let referenceDate = referenceDay(asOf: date, calendar: calendar)
     let targetDate = targetDate(calendar: calendar)
+    let days = calendar.dateComponents([.day], from: referenceDate, to: targetDate).day ?? 0
+    if days == 0 { return "今日が目標日です" }
     if usesDayPrecision {
-      let referenceDay = calendar.startOfDay(for: referenceDate)
-      let targetDay = calendar.startOfDay(for: targetDate)
-      let days = calendar.dateComponents([.day], from: referenceDay, to: targetDay).day ?? 0
-      if days == 0 { return "今日が目標日です" }
       if days > 0 && days < 30 { return "目標まであと\(days)日" }
       if days < 0 && days > -30 { return "目標を\(-days)日超えて使えています" }
     }
@@ -162,6 +186,35 @@ enum ReplacementStatus: Int, Comparable {
   var completedPeriodText: String {
     "\(purchaseDate.japaneseDateText) 〜 \((completedDate ?? referenceDate()).japaneseDateText)"
   }
+
+  static func repairDuplicateNotificationIDs(in items: [Item]) -> NotificationIDRepair {
+    let duplicateIDs = Set(
+      Dictionary(grouping: items, by: \.notificationID).compactMap { id, items in
+        items.count > 1 ? id : nil
+      }
+    )
+    guard !duplicateIDs.isEmpty else { return .none }
+
+    var usedIDs = Set(items.map(\.notificationID)).subtracting(duplicateIDs)
+    var repairedItems: [Item] = []
+    for item in items where duplicateIDs.contains(item.notificationID) {
+      var repairedID = UUID()
+      while usedIDs.contains(repairedID) {
+        repairedID = UUID()
+      }
+      item.notificationID = repairedID
+      usedIDs.insert(repairedID)
+      repairedItems.append(item)
+    }
+    return NotificationIDRepair(staleIDs: duplicateIDs, repairedItems: repairedItems)
+  }
+}
+
+struct NotificationIDRepair {
+  static let none = NotificationIDRepair(staleIDs: [], repairedItems: [])
+
+  let staleIDs: Set<UUID>
+  let repairedItems: [Item]
 }
 
 extension Date {

@@ -2,8 +2,9 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+  @Environment(\.modelContext) private var modelContext
   @Query private var items: [Item]
-  @State private var navigationPath: [UUID] = []
+  @State private var navigationPath: [PersistentIdentifier] = []
   @State private var notificationNavigation = NotificationNavigation.shared
   @State private var showsAdd = false
   @State private var showsNotificationExplanation = false
@@ -47,12 +48,12 @@ struct ContentView: View {
           List {
             Section("次に見直すもの") {
               if let item = activeItems.first {
-                NavigationLink(value: item.notificationID) { FeaturedItemCard(item: item) }
+                NavigationLink(value: item.persistentModelID) { FeaturedItemCard(item: item) }
               }
             }
             Section("使用中の愛用品") {
               ForEach(activeItems) { item in
-                NavigationLink(value: item.notificationID) { ItemRow(item: item) }
+                NavigationLink(value: item.persistentModelID) { ItemRow(item: item) }
               }
             }
             Section {
@@ -70,8 +71,8 @@ struct ContentView: View {
           Button("愛用品を追加", systemImage: "plus") { showsAdd = true }
         }
       }
-      .navigationDestination(for: UUID.self) { itemID in
-        if let item = items.first(where: { $0.notificationID == itemID }) {
+      .navigationDestination(for: PersistentIdentifier.self) { persistentModelID in
+        if let item = items.first(where: { $0.persistentModelID == persistentModelID }) {
           ItemDetailView(item: item, onAddReplacement: { showsAdd = true })
         } else {
           ContentUnavailableView("記録が見つかりません", systemImage: "questionmark.folder")
@@ -94,7 +95,14 @@ struct ContentView: View {
     .onChange(of: notificationNavigation.itemID) { _, itemID in
       openNotificationItem(itemID)
     }
-    .task { openNotificationItem(notificationNavigation.itemID) }
+    .onChange(of: items.map(\.persistentModelID)) { _, _ in
+      Task { await repairLegacyNotificationIDs() }
+      openNotificationItem(notificationNavigation.itemID)
+    }
+    .task {
+      await repairLegacyNotificationIDs()
+      openNotificationItem(notificationNavigation.itemID)
+    }
   }
 
   private func handleAddDismiss() {
@@ -123,9 +131,23 @@ struct ContentView: View {
   }
 
   private func openNotificationItem(_ itemID: UUID?) {
-    guard let itemID, items.contains(where: { $0.notificationID == itemID }) else { return }
-    navigationPath = [itemID]
+    guard let itemID, let item = items.first(where: { $0.notificationID == itemID }) else { return }
+    navigationPath = [item.persistentModelID]
     notificationNavigation.itemID = nil
+  }
+
+  private func repairLegacyNotificationIDs() async {
+    let repair = Item.repairDuplicateNotificationIDs(in: items)
+    guard !repair.repairedItems.isEmpty else { return }
+    do {
+      try modelContext.save()
+    } catch {
+      return
+    }
+    repair.staleIDs.forEach(NotificationScheduler.shared.cancel)
+    for item in repair.repairedItems where !item.isCompleted {
+      await NotificationScheduler.shared.rescheduleIfAuthorized(ItemNotificationDetails(item: item))
+    }
   }
 }
 
