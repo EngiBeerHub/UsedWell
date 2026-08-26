@@ -9,9 +9,12 @@ struct ItemEditorView: View {
   @State private var name: String
   @State private var category: ItemCategory
   @State private var purchaseDate: Date
+  @State private var draftPurchaseDate: Date
   @State private var purchasePrice: Int?
   @State private var targetYears: Int
   @State private var targetAdditionalMonths: Int
+  @State private var showsPurchaseDatePicker = false
+  @State private var purchaseDatePickerDetent: PresentationDetent = .medium
 
   init(
     item: Item? = nil,
@@ -22,6 +25,7 @@ struct ItemEditorView: View {
     _name = State(initialValue: item?.name ?? "")
     _category = State(initialValue: item?.category ?? .phone)
     _purchaseDate = State(initialValue: item?.purchaseDate ?? .now)
+    _draftPurchaseDate = State(initialValue: item?.purchaseDate ?? .now)
     _purchasePrice = State(initialValue: item?.purchasePrice)
     let initialTargetMonths = item?.targetMonths ?? 36
     _targetYears = State(initialValue: initialTargetMonths / 12)
@@ -38,8 +42,14 @@ struct ItemEditorView: View {
         }
       }
       Section("購入情報") {
-        DatePicker("購入日", selection: $purchaseDate, in: ...Date.now, displayedComponents: .date)
-          .environment(\.locale, Locale(identifier: "ja_JP"))
+        Button {
+          draftPurchaseDate = purchaseDate
+          purchaseDatePickerDetent = .medium
+          showsPurchaseDatePicker = true
+        } label: {
+          LabeledContent("購入日", value: purchaseDate.japaneseDateText)
+        }
+        .accessibilityIdentifier("purchase-date-picker")
         LabeledContent("購入価格") {
           HStack(spacing: 4) {
             Text("¥").foregroundStyle(.secondary)
@@ -86,6 +96,31 @@ struct ItemEditorView: View {
     .onChange(of: targetYears) { _, newValue in
       if newValue == 20 { targetAdditionalMonths = 0 }
     }
+    .sheet(isPresented: $showsPurchaseDatePicker) {
+      NavigationStack {
+        DatePicker(
+          "購入日", selection: $draftPurchaseDate, in: ...Date.now, displayedComponents: .date
+        )
+        .datePickerStyle(.graphical)
+        .environment(\.locale, Locale(identifier: "ja_JP"))
+        .padding()
+        .navigationTitle("購入日")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+          ToolbarItem(placement: .cancellationAction) {
+            Button("キャンセル") { showsPurchaseDatePicker = false }
+          }
+          ToolbarItem(placement: .confirmationAction) {
+            Button("完了") {
+              purchaseDate = Calendar.current.startOfDay(for: draftPurchaseDate)
+              showsPurchaseDatePicker = false
+            }
+          }
+        }
+      }
+      .presentationDetents([.medium, .large], selection: $purchaseDatePickerDetent)
+      .presentationDragIndicator(.visible)
+    }
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
   private var isValid: Bool {
@@ -98,13 +133,14 @@ struct ItemEditorView: View {
     if let item {
       item.name = cleanName
       item.category = category
-      item.purchaseDate = purchaseDate
+      item.purchaseDate = Calendar.current.startOfDay(for: purchaseDate)
       item.purchasePrice = purchasePrice ?? 0
       item.targetMonths = targetMonths
       savedItem = item
     } else {
       let newItem = Item(
-        name: cleanName, category: category, purchaseDate: purchaseDate,
+        name: cleanName, category: category,
+        purchaseDate: Calendar.current.startOfDay(for: purchaseDate),
         purchasePrice: purchasePrice ?? 0, targetMonths: targetMonths)
       modelContext.insert(newItem)
       savedItem = newItem

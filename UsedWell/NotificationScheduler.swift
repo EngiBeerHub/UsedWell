@@ -54,18 +54,20 @@ enum NotificationPlanner {
   static func plans(
     for item: ItemNotificationDetails, after date: Date = .now, calendar: Calendar = .current
   ) -> [PlannedNotification] {
-    guard !item.isCompleted,
-      let targetDate = calendar.date(
-        byAdding: .month, value: item.targetMonths, to: item.purchaseDate)
+    guard !item.isCompleted else { return [] }
+
+    let purchaseDay = calendar.startOfDay(for: item.purchaseDate)
+    guard let targetDay = calendar.date(byAdding: .month, value: item.targetMonths, to: purchaseDay)
     else { return [] }
-
     let targetDays = max(
-      1, calendar.dateComponents([.day], from: item.purchaseDate, to: targetDate).day ?? 1)
+      1, calendar.dateComponents([.day], from: purchaseDay, to: targetDay).day ?? 1)
     let reviewDays = Int(ceil(Double(targetDays) * 0.9))
-    let reviewDate = calendar.date(byAdding: .day, value: reviewDays, to: item.purchaseDate)
+    let reviewDay = calendar.date(byAdding: .day, value: reviewDays, to: purchaseDay)
 
-    return [(.review, reviewDate), (.goal, targetDate)].compactMap { milestone, milestoneDate in
-      guard let milestoneDate else { return nil }
+    return [(.review, reviewDay), (.goal, targetDay)].compactMap { milestone, milestoneDay in
+      guard let milestoneDay,
+        let milestoneDate = calendar.date(bySettingHour: 9, minute: 0, second: 0, of: milestoneDay)
+      else { return nil }
       guard milestoneDate > date else { return nil }
       return PlannedNotification(
         identifier: identifier(itemID: item.id, milestone: milestone),
