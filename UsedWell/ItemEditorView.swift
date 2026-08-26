@@ -14,6 +14,7 @@ struct ItemEditorView: View {
   @State private var targetYears: Int
   @State private var targetAdditionalMonths: Int
   @State private var showsPurchaseDatePicker = false
+  @State private var purchaseDatePickerDetent: PresentationDetent = .medium
 
   init(
     item: Item? = nil,
@@ -43,6 +44,7 @@ struct ItemEditorView: View {
       Section("購入情報") {
         Button {
           draftPurchaseDate = purchaseDate
+          purchaseDatePickerDetent = .medium
           showsPurchaseDatePicker = true
         } label: {
           LabeledContent("購入日", value: purchaseDate.japaneseDateText)
@@ -116,6 +118,8 @@ struct ItemEditorView: View {
           }
         }
       }
+      .presentationDetents([.medium, .large], selection: $purchaseDatePickerDetent)
+      .presentationDragIndicator(.visible)
     }
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
