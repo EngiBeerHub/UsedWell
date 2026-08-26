@@ -12,6 +12,15 @@ import Testing
 
   private var start: Date { date(1970, 1, 1) }
 
+  @Test func purchasePriceValidationUsesAllowedRange() {
+    #expect(PurchasePrice.validationMessage(for: nil) != nil)
+    #expect(PurchasePrice.validationMessage(for: 0) != nil)
+    #expect(PurchasePrice.validationMessage(for: 1) == nil)
+    #expect(PurchasePrice.validationMessage(for: 100_000) == nil)
+    #expect(PurchasePrice.validationMessage(for: 9_999_999) == nil)
+    #expect(PurchasePrice.validationMessage(for: 10_000_000) != nil)
+  }
+
   @Test func progressStatusBoundaries() {
     let item = Item(
       name: "Phone", category: .phone, purchaseDate: start, purchasePrice: 120_000, targetMonths: 1)
