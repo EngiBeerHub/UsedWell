@@ -41,7 +41,7 @@ struct ItemEditorView: View {
           }
         }
       }
-      Section("購入情報") {
+      Section {
         Button {
           draftPurchaseDate = purchaseDate
           purchaseDatePickerDetent = .medium
@@ -58,6 +58,12 @@ struct ItemEditorView: View {
               .multilineTextAlignment(.trailing)
               .accessibilityIdentifier("purchase-price")
           }
+        }
+      } header: {
+        Text("購入情報")
+      } footer: {
+        if let purchasePriceValidationMessage {
+          Text(purchasePriceValidationMessage).foregroundStyle(.red)
         }
       }
       Section {
@@ -123,25 +129,29 @@ struct ItemEditorView: View {
     }
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
+  private var purchasePriceValidationMessage: String? {
+    PurchasePrice.validationMessage(for: purchasePrice)
+  }
   private var isValid: Bool {
-    !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && purchasePrice != nil
-      && (purchasePrice ?? -1) >= 0 && targetMonths > 0
+    !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+      && purchasePriceValidationMessage == nil && targetMonths > 0
   }
   private func save() {
+    guard isValid, let purchasePrice else { return }
     let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
     let savedItem: Item
     if let item {
       item.name = cleanName
       item.category = category
       item.purchaseDate = Calendar.current.startOfDay(for: purchaseDate)
-      item.purchasePrice = purchasePrice ?? 0
+      item.purchasePrice = purchasePrice
       item.targetMonths = targetMonths
       savedItem = item
     } else {
       let newItem = Item(
         name: cleanName, category: category,
         purchaseDate: Calendar.current.startOfDay(for: purchaseDate),
-        purchasePrice: purchasePrice ?? 0, targetMonths: targetMonths)
+        purchasePrice: purchasePrice, targetMonths: targetMonths)
       modelContext.insert(newItem)
       savedItem = newItem
     }

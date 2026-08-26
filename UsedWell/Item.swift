@@ -44,6 +44,19 @@ enum ReplacementStatus: Int, Comparable {
   }
 }
 
+enum PurchasePrice {
+  static let allowedRange = 1...9_999_999
+
+  static func validationMessage(for value: Int?) -> String? {
+    guard let value else { return "購入価格を入力してください" }
+    guard value >= allowedRange.lowerBound else { return "購入価格は1円以上で入力してください" }
+    guard value <= allowedRange.upperBound else {
+      return "購入価格は9,999,999円以下で入力してください"
+    }
+    return nil
+  }
+}
+
 @Model final class Item {
   var notificationID: UUID = UUID()
   var name: String
