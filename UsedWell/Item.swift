@@ -58,6 +58,9 @@ enum PurchasePrice {
 }
 
 @Model final class Item {
+  /// Stable app-owned identity for navigation. Unlike `persistentModelID`, this does not change
+  /// when SwiftData saves a newly inserted model and replaces its temporary identifier.
+  var navigationID: UUID = UUID()
   var notificationID: UUID = UUID()
   var name: String
   var categoryRawValue: String

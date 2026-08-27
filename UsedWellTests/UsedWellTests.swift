@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 
 @testable import UsedWell
@@ -311,5 +312,80 @@ import Testing
 
   private func date(_ year: Int, _ month: Int, _ day: Int, hour: Int = 0) -> Date {
     calendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour))!
+  }
+}
+
+@MainActor struct NavigationIdentityTests {
+  @Test func navigationIDSurvivesTemporaryPersistentIdentifierRemapping() throws {
+    let container = try ModelContainer(
+      for: Item.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let modelContext = container.mainContext
+    let item = Item(
+      name: "Phone", category: .phone, purchaseDate: .now, purchasePrice: 100_000,
+      targetMonths: 24)
+    let navigationID = item.navigationID
+
+    modelContext.insert(item)
+    let temporaryPersistentModelID = item.persistentModelID
+
+    try modelContext.save()
+
+    #expect(item.persistentModelID != temporaryPersistentModelID)
+    #expect(item.navigationID == navigationID)
+    let descriptor = FetchDescriptor<Item>(
+      predicate: #Predicate { $0.navigationID == navigationID })
+    #expect(try modelContext.fetch(descriptor).map(\.navigationID) == [navigationID])
+  }
+
+  @Test func navigationIDSurvivesEveryEditableFieldSave() throws {
+    let container = try ModelContainer(
+      for: Item.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let modelContext = container.mainContext
+    let item = Item(
+      name: "Phone", category: .phone, purchaseDate: .now, purchasePrice: 100_000,
+      targetMonths: 24)
+    modelContext.insert(item)
+    try modelContext.save()
+    let navigationID = item.navigationID
+
+    item.purchasePrice = 120_000
+    try modelContext.save()
+    #expect(item.navigationID == navigationID)
+
+    item.name = "Updated Phone"
+    try modelContext.save()
+    #expect(item.navigationID == navigationID)
+
+    item.category = .camera
+    try modelContext.save()
+    #expect(item.navigationID == navigationID)
+
+    item.purchaseDate = Calendar.current.date(byAdding: .day, value: -1, to: item.purchaseDate)!
+    try modelContext.save()
+    #expect(item.navigationID == navigationID)
+
+    item.targetMonths = 36
+    try modelContext.save()
+    #expect(item.navigationID == navigationID)
+  }
+
+  @Test func navigationIDResolvesTheCorrectItemAmongMultipleItems() throws {
+    let container = try ModelContainer(
+      for: Item.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let modelContext = container.mainContext
+    let firstItem = Item(
+      name: "First", category: .phone, purchaseDate: .now, purchasePrice: 100_000,
+      targetMonths: 24)
+    let secondItem = Item(
+      name: "Second", category: .camera, purchaseDate: .now, purchasePrice: 200_000,
+      targetMonths: 36)
+    modelContext.insert(firstItem)
+    modelContext.insert(secondItem)
+    try modelContext.save()
+
+    let navigationID = secondItem.navigationID
+    let descriptor = FetchDescriptor<Item>(
+      predicate: #Predicate { $0.navigationID == navigationID })
+    #expect(try modelContext.fetch(descriptor).map(\.name) == ["Second"])
   }
 }

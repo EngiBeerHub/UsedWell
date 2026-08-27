@@ -4,7 +4,7 @@ import SwiftUI
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @Query private var items: [Item]
-  @State private var navigationPath: [PersistentIdentifier] = []
+  @State private var navigationPath: [UUID] = []
   @State private var notificationNavigation = NotificationNavigation.shared
   @State private var showsAdd = false
   @State private var showsNotificationExplanation = false
@@ -48,12 +48,12 @@ struct ContentView: View {
           List {
             Section("次に見直すもの") {
               if let item = activeItems.first {
-                NavigationLink(value: item.persistentModelID) { FeaturedItemCard(item: item) }
+                NavigationLink(value: item.navigationID) { FeaturedItemCard(item: item) }
               }
             }
             Section("使用中の愛用品") {
               ForEach(activeItems) { item in
-                NavigationLink(value: item.persistentModelID) { ItemRow(item: item) }
+                NavigationLink(value: item.navigationID) { ItemRow(item: item) }
               }
             }
             Section {
@@ -71,8 +71,8 @@ struct ContentView: View {
           Button("愛用品を追加", systemImage: "plus") { showsAdd = true }
         }
       }
-      .navigationDestination(for: PersistentIdentifier.self) { persistentModelID in
-        if let item = items.first(where: { $0.persistentModelID == persistentModelID }) {
+      .navigationDestination(for: UUID.self) { navigationID in
+        if let item = items.first(where: { $0.navigationID == navigationID }) {
           ItemDetailView(item: item, onAddReplacement: { showsAdd = true })
         } else {
           ContentUnavailableView("記録が見つかりません", systemImage: "questionmark.folder")
@@ -95,7 +95,7 @@ struct ContentView: View {
     .onChange(of: notificationNavigation.itemID) { _, itemID in
       openNotificationItem(itemID)
     }
-    .onChange(of: items.map(\.persistentModelID)) { _, _ in
+    .onChange(of: items.map(\.navigationID)) { _, _ in
       Task { await repairLegacyNotificationIDs() }
       openNotificationItem(notificationNavigation.itemID)
     }
@@ -132,7 +132,7 @@ struct ContentView: View {
 
   private func openNotificationItem(_ itemID: UUID?) {
     guard let itemID, let item = items.first(where: { $0.notificationID == itemID }) else { return }
-    navigationPath = [item.persistentModelID]
+    navigationPath = [item.navigationID]
     notificationNavigation.itemID = nil
   }
 
