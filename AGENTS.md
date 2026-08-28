@@ -11,17 +11,17 @@
 
 ## Product source of truth
 
-- Read `docs/product.md` before making product or UX decisions.
-- Treat `docs/product.md` as the source of truth for the current product concept, MVP scope, and product rules.
-- Do not introduce behavior that conflicts with `docs/product.md` without raising the product decision first.
-- If an implementation change makes `docs/product.md` inaccurate, update it to represent the new current state.
+- Read `product.md` before making product or UX decisions.
+- Treat `product.md` as the source of truth for the current product concept, MVP scope, and product rules.
+- Do not introduce behavior that conflicts with `product.md` without raising the product decision first.
+- If an implementation change makes `product.md` inaccurate, update it to represent the new current state.
 
 ## Development workflow
 
-- Treat the current Chat/Codex handoff, `docs/product.md`, and the existing codebase as the inputs for the implementation task.
+- Treat the current Chat/Codex handoff, `product.md`, and the existing codebase as the inputs for the implementation task.
 - Product WHAT / WHY and scope decisions belong to the PM-side Chat; implementation HOW should be decided autonomously when it does not change agreed product behavior.
 - Do not stop for approval of implementation-only decisions.
-- Escalate only when implementation requires a new product or UX decision, changes MVP scope, or conflicts with `docs/product.md`.
+- Escalate only when implementation requires a new product or UX decision, changes MVP scope, or conflicts with `product.md`.
 - For substantive implementation work, complete the change through implementation, validation, commit, push, and GitHub PR creation when repository access allows it.
 - Use the GitHub PR as the primary implementation handoff.
 - PR descriptions should include:
@@ -102,7 +102,7 @@ Raise the issue when:
 
 - the agreed MVP scope would need to change;
 - a new UX or product rule is required;
-- `docs/product.md` is ambiguous or internally conflicting;
+- `product.md` is ambiguous or internally conflicting;
 - implementation would materially change the meaning of an existing product rule.
 
 Implementation details that do not change product behavior should be decided autonomously.
