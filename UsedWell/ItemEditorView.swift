@@ -65,7 +65,7 @@ struct ItemEditorView: View {
         .accessibilityValue(showsPurchaseDatePicker ? "展開中" : "折りたたみ")
         if showsPurchaseDatePicker {
           DatePicker(
-            "購入日", selection: purchaseDateBinding, in: ...Date.now,
+            "購入日", selection: $purchaseDate, in: ...Date.now,
             displayedComponents: .date
           )
           .datePickerStyle(.graphical)
@@ -126,12 +126,6 @@ struct ItemEditorView: View {
     .onChange(of: targetYears) { _, newValue in
       if newValue == 20 { targetAdditionalMonths = 0 }
     }
-  }
-  private var purchaseDateBinding: Binding<Date> {
-    Binding(
-      get: { purchaseDate },
-      set: { purchaseDate = Calendar.current.startOfDay(for: $0) }
-    )
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
   private var purchasePriceValidationMessage: String? {
