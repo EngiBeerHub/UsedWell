@@ -110,6 +110,7 @@ struct ItemEditorView: View {
         .datePickerStyle(.graphical)
         .environment(\.locale, Locale(identifier: "ja_JP"))
         .padding()
+        .frame(maxHeight: .infinity, alignment: .top)
         .navigationTitle("購入日")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
