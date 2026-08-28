@@ -2,6 +2,11 @@ import SwiftData
 import SwiftUI
 
 struct ItemEditorView: View {
+  private enum Field {
+    case name
+    case purchasePrice
+  }
+
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item?
@@ -9,11 +14,11 @@ struct ItemEditorView: View {
   @State private var name: String
   @State private var category: ItemCategory
   @State private var purchaseDate: Date
-  @State private var draftPurchaseDate: Date
   @State private var purchasePrice: Int?
   @State private var targetYears: Int
   @State private var targetAdditionalMonths: Int
   @State private var showsPurchaseDatePicker = false
+  @FocusState private var focusedField: Field?
 
   init(
     item: Item? = nil,
@@ -24,7 +29,6 @@ struct ItemEditorView: View {
     _name = State(initialValue: item?.name ?? "")
     _category = State(initialValue: item?.category ?? .phone)
     _purchaseDate = State(initialValue: item?.purchaseDate ?? .now)
-    _draftPurchaseDate = State(initialValue: item?.purchaseDate ?? .now)
     _purchasePrice = State(initialValue: item?.purchasePrice)
     let initialTargetMonths = item?.targetMonths ?? 36
     _targetYears = State(initialValue: initialTargetMonths / 12)
@@ -33,7 +37,9 @@ struct ItemEditorView: View {
   var body: some View {
     Form {
       Section("愛用品") {
-        TextField("名前", text: $name).accessibilityIdentifier("item-name")
+        TextField("名前", text: $name)
+          .focused($focusedField, equals: .name)
+          .accessibilityIdentifier("item-name")
         Picker("カテゴリ", selection: $category) {
           ForEach(ItemCategory.allCases) { category in
             Label(category.rawValue, systemImage: category.symbolName).tag(category)
@@ -42,18 +48,38 @@ struct ItemEditorView: View {
       }
       Section {
         Button {
-          draftPurchaseDate = purchaseDate
-          showsPurchaseDatePicker = true
+          focusedField = nil
+          showsPurchaseDatePicker.toggle()
         } label: {
-          LabeledContent("購入日", value: purchaseDate.japaneseDateText)
+          LabeledContent {
+            HStack(spacing: 8) {
+              Text(purchaseDate.japaneseDateText)
+              Image(systemName: showsPurchaseDatePicker ? "chevron.up" : "chevron.down")
+                .foregroundStyle(.secondary)
+            }
+          } label: {
+            Text("購入日")
+          }
         }
         .accessibilityIdentifier("purchase-date-picker")
+        .accessibilityValue(showsPurchaseDatePicker ? "展開中" : "折りたたみ")
+        if showsPurchaseDatePicker {
+          DatePicker(
+            "購入日", selection: purchaseDateBinding, in: ...Date.now,
+            displayedComponents: .date
+          )
+          .datePickerStyle(.graphical)
+          .environment(\.locale, Locale(identifier: "ja_JP"))
+          .labelsHidden()
+          .accessibilityIdentifier("inline-purchase-date-picker")
+        }
         LabeledContent("購入価格") {
           HStack(spacing: 4) {
             Text("¥").foregroundStyle(.secondary)
             TextField("0", value: $purchasePrice, format: .number)
               .keyboardType(.numberPad)
               .multilineTextAlignment(.trailing)
+              .focused($focusedField, equals: .purchasePrice)
               .accessibilityIdentifier("purchase-price")
           }
         }
@@ -100,30 +126,12 @@ struct ItemEditorView: View {
     .onChange(of: targetYears) { _, newValue in
       if newValue == 20 { targetAdditionalMonths = 0 }
     }
-    .sheet(isPresented: $showsPurchaseDatePicker) {
-      NavigationStack {
-        DatePicker(
-          "購入日", selection: $draftPurchaseDate, in: ...Date.now, displayedComponents: .date
-        )
-        .datePickerStyle(.graphical)
-        .environment(\.locale, Locale(identifier: "ja_JP"))
-        .padding()
-        .navigationTitle("購入日")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-          ToolbarItem(placement: .cancellationAction) {
-            Button("キャンセル") { showsPurchaseDatePicker = false }
-          }
-          ToolbarItem(placement: .confirmationAction) {
-            Button("完了") {
-              purchaseDate = Calendar.current.startOfDay(for: draftPurchaseDate)
-              showsPurchaseDatePicker = false
-            }
-          }
-        }
-      }
-      .presentationDragIndicator(.visible)
-    }
+  }
+  private var purchaseDateBinding: Binding<Date> {
+    Binding(
+      get: { purchaseDate },
+      set: { purchaseDate = Calendar.current.startOfDay(for: $0) }
+    )
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
   private var purchasePriceValidationMessage: String? {

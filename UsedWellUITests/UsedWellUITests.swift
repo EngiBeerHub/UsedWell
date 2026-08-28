@@ -50,6 +50,9 @@ final class UsedWellUITests: XCTestCase {
     let initialPurchaseDateLabel = purchaseDateButton.label
     purchaseDateButton.tap()
 
+    let inlineDatePicker = app.datePickers["inline-purchase-date-picker"]
+    XCTAssertTrue(inlineDatePicker.waitForExistence(timeout: 2))
+
     let yearMonthButton = app.buttons["DatePicker.Show"]
     XCTAssertTrue(yearMonthButton.waitForExistence(timeout: 2))
     let calendarHeaderY = yearMonthButton.frame.minY
@@ -86,8 +89,10 @@ final class UsedWellUITests: XCTestCase {
     ).firstMatch
     XCTAssertTrue(calendarDay.waitForExistence(timeout: 2))
     calendarDay.tap()
-    app.buttons["完了"].tap()
     XCTAssertNotEqual(purchaseDateButton.label, initialPurchaseDateLabel)
+
+    purchaseDateButton.tap()
+    XCTAssertFalse(inlineDatePicker.waitForExistence(timeout: 1))
   }
 
   private func addScreenshot(named name: String, app: XCUIApplication) {
