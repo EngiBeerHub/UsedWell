@@ -44,21 +44,25 @@
 
 - Use `swift-format` to keep Swift code consistently formatted.
 - Use SwiftLint for lightweight static analysis.
-- Both tools are available as command-line tools in the development environment.
+- Use `swift-complexity UsedWell --recursive --cognitive-only --threshold 11` to detect code that is becoming difficult to understand.
+- These tools are available as command-line tools in the development environment.
 - Prefer the existing/default configuration and keep custom rules minimal unless there is a concrete reason to add them.
 - Do not suppress lint violations merely to make checks pass unless the rule is genuinely inappropriate for the code.
-- Before considering implementation complete, ensure formatting and lint checks pass.
+- When Cognitive Complexity reaches the threshold, reconsider control flow and responsibility boundaries instead of splitting code only to lower the number, and do not suppress the violation without a concrete reason.
+- Before considering implementation complete, ensure formatting, lint, and Cognitive Complexity checks pass.
 
 ## Validation
 
 - Build the application after meaningful implementation changes.
 - Add automated tests where they provide clear value, especially for calculation and state-transition rules.
-- Before considering implementation complete, verify:
-  - `swift-format` passes;
-  - SwiftLint passes;
-  - the application builds successfully;
-  - relevant automated tests pass;
-  - the key product flows work as intended.
+- Before considering implementation complete, validate in this order:
+  1. `swift-format` passes;
+  2. SwiftLint passes;
+  3. `swift-complexity` passes;
+  4. the application builds successfully;
+  5. relevant automated tests pass;
+
+- Also verify that the key product flows work as intended.
 
 Key product flows include:
 
