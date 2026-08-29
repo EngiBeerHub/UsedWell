@@ -203,6 +203,28 @@ enum PurchasePrice {
     "\(purchaseDate.japaneseDateText) 〜 \((completedDate ?? referenceDate()).japaneseDateText)"
   }
 
+  static func repairDuplicateNavigationIDs(in items: [Item]) -> [Item] {
+    let duplicateIDs = Set(
+      Dictionary(grouping: items, by: \.navigationID).compactMap { id, items in
+        items.count > 1 ? id : nil
+      }
+    )
+    guard !duplicateIDs.isEmpty else { return [] }
+
+    var usedIDs = Set(items.map(\.navigationID)).subtracting(duplicateIDs)
+    var repairedItems: [Item] = []
+    for item in items where duplicateIDs.contains(item.navigationID) {
+      var repairedID = UUID()
+      while usedIDs.contains(repairedID) {
+        repairedID = UUID()
+      }
+      item.navigationID = repairedID
+      usedIDs.insert(repairedID)
+      repairedItems.append(item)
+    }
+    return repairedItems
+  }
+
   static func repairDuplicateNotificationIDs(in items: [Item]) -> NotificationIDRepair {
     let duplicateIDs = Set(
       Dictionary(grouping: items, by: \.notificationID).compactMap { id, items in
