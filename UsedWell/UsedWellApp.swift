@@ -18,7 +18,12 @@ struct UsedWellApp: App {
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
     do {
-      return try ModelContainer(for: schema, configurations: [modelConfiguration])
+      let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+      let items = try container.mainContext.fetch(FetchDescriptor<Item>())
+      if !Item.repairDuplicateNavigationIDs(in: items).isEmpty {
+        try container.mainContext.save()
+      }
+      return container
     } catch {
       fatalError("Could not create ModelContainer: \(error)")
     }
