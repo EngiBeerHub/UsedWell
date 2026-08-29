@@ -34,6 +34,70 @@ final class UsedWellUITests: XCTestCase {
   }
 
   @MainActor
+  func testPurchaseDatePickerLayoutStaysStableDuringRepeatedWheelChanges() throws {
+    let app = XCUIApplication()
+    app.launch()
+
+    let firstItemButton = app.buttons["最初の愛用品を登録"]
+    if firstItemButton.waitForExistence(timeout: 2) {
+      firstItemButton.tap()
+    } else {
+      app.buttons["愛用品を追加"].tap()
+    }
+
+    let purchaseDateButton = app.buttons["purchase-date-picker"]
+    XCTAssertTrue(purchaseDateButton.waitForExistence(timeout: 2))
+    let initialPurchaseDateLabel = purchaseDateButton.label
+    purchaseDateButton.tap()
+
+    let yearMonthButton = app.buttons["DatePicker.Show"]
+    XCTAssertTrue(yearMonthButton.waitForExistence(timeout: 2))
+    let calendarHeaderY = yearMonthButton.frame.minY
+    yearMonthButton.tap()
+
+    let yearWheel = app.pickerWheels.element(boundBy: 0)
+    let monthWheel = app.pickerWheels.element(boundBy: 1)
+    XCTAssertTrue(yearWheel.waitForExistence(timeout: 2))
+    XCTAssertTrue(monthWheel.exists)
+    let wheelY = monthWheel.frame.minY
+    addScreenshot(named: "Year-Month Selector Before Stress", app: app)
+
+    for _ in 0..<6 {
+      monthWheel.swipeDown()
+      XCTAssertEqual(monthWheel.frame.minY, wheelY, accuracy: 1)
+    }
+    yearWheel.swipeDown()
+    XCTAssertEqual(monthWheel.frame.minY, wheelY, accuracy: 1)
+    addScreenshot(named: "Year-Month Selector After Stress", app: app)
+
+    app.buttons["DatePicker.Hide"].tap()
+    XCTAssertEqual(yearMonthButton.frame.minY, calendarHeaderY, accuracy: 1)
+    addScreenshot(named: "Calendar After First Stress Cycle", app: app)
+
+    yearMonthButton.tap()
+    monthWheel.swipeUp()
+    yearWheel.swipeUp()
+    app.buttons["DatePicker.Hide"].tap()
+    XCTAssertEqual(yearMonthButton.frame.minY, calendarHeaderY, accuracy: 1)
+    addScreenshot(named: "Calendar After Second Stress Cycle", app: app)
+
+    let calendarDay = app.buttons.matching(
+      NSPredicate(format: "label MATCHES %@", ".*day, .* [0-9]+$")
+    ).firstMatch
+    XCTAssertTrue(calendarDay.waitForExistence(timeout: 2))
+    calendarDay.tap()
+    app.buttons["完了"].tap()
+    XCTAssertNotEqual(purchaseDateButton.label, initialPurchaseDateLabel)
+  }
+
+  private func addScreenshot(named name: String, app: XCUIApplication) {
+    let attachment = XCTAttachment(screenshot: app.screenshot())
+    attachment.name = name
+    attachment.lifetime = .keepAlways
+    add(attachment)
+  }
+
+  @MainActor
   func testLaunchPerformance() throws {
     // This measures how long it takes to launch your application.
     measure(metrics: [XCTApplicationLaunchMetric()]) {
