@@ -34,21 +34,18 @@ final class UsedWellUITests: XCTestCase {
   }
 
   @MainActor
-  func testPurchaseDatePickerLayoutStaysStableDuringRepeatedWheelChanges() throws {
+  func testCompactPurchaseDatePickerStaysStableDuringRepeatedChanges() throws {
     let app = XCUIApplication()
     app.launch()
+    openItemEditor(in: app)
 
-    let firstItemButton = app.buttons["最初の愛用品を登録"]
-    if firstItemButton.waitForExistence(timeout: 2) {
-      firstItemButton.tap()
-    } else {
-      app.buttons["愛用品を追加"].tap()
-    }
-
-    let purchaseDateButton = app.buttons["purchase-date-picker"]
+    let purchaseDatePicker = app.datePickers["purchase-date-picker"]
+    XCTAssertTrue(purchaseDatePicker.waitForExistence(timeout: 2))
+    let purchaseDateButton = purchaseDateButton(in: app)
     XCTAssertTrue(purchaseDateButton.waitForExistence(timeout: 2))
-    let initialPurchaseDateLabel = purchaseDateButton.label
-    purchaseDateButton.tap()
+    let initialPurchaseDateValue = purchaseDateButton.value as? String
+    let purchaseDateFrame = purchaseDatePicker.frame
+    purchaseDatePicker.tap()
 
     let yearMonthButton = app.buttons["DatePicker.Show"]
     XCTAssertTrue(yearMonthButton.waitForExistence(timeout: 2))
@@ -73,21 +70,59 @@ final class UsedWellUITests: XCTestCase {
     app.buttons["DatePicker.Hide"].tap()
     XCTAssertEqual(yearMonthButton.frame.minY, calendarHeaderY, accuracy: 1)
     addScreenshot(named: "Calendar After First Stress Cycle", app: app)
+    dismissCompactDatePicker(in: app)
+    assertFrame(of: purchaseDatePicker, equals: purchaseDateFrame)
 
+    purchaseDatePicker.tap()
+    XCTAssertTrue(yearMonthButton.waitForExistence(timeout: 2))
     yearMonthButton.tap()
+    XCTAssertTrue(monthWheel.waitForExistence(timeout: 2))
     monthWheel.swipeUp()
     yearWheel.swipeUp()
     app.buttons["DatePicker.Hide"].tap()
     XCTAssertEqual(yearMonthButton.frame.minY, calendarHeaderY, accuracy: 1)
     addScreenshot(named: "Calendar After Second Stress Cycle", app: app)
+    dismissCompactDatePicker(in: app)
+    assertFrame(of: purchaseDatePicker, equals: purchaseDateFrame)
 
+    purchaseDatePicker.tap()
+    selectFirstCalendarDay(in: app)
+    dismissCompactDatePicker(in: app)
+    XCTAssertTrue(purchaseDateButton.waitForExistence(timeout: 2))
+    assertFrame(of: purchaseDatePicker, equals: purchaseDateFrame)
+    XCTAssertNotEqual(purchaseDateButton.value as? String, initialPurchaseDateValue)
+  }
+
+  private func openItemEditor(in app: XCUIApplication) {
+    let firstItemButton = app.buttons["最初の愛用品を登録"]
+    if firstItemButton.waitForExistence(timeout: 2) {
+      firstItemButton.tap()
+    } else {
+      app.buttons["愛用品を追加"].tap()
+    }
+  }
+
+  private func purchaseDateButton(in app: XCUIApplication) -> XCUIElement {
+    app.buttons.matching(
+      NSPredicate(format: "value MATCHES %@", "[0-9]{4}/[0-9]{2}/[0-9]{2}")
+    ).firstMatch
+  }
+
+  private func selectFirstCalendarDay(in app: XCUIApplication) {
     let calendarDay = app.buttons.matching(
       NSPredicate(format: "label MATCHES %@", ".*day, .* [0-9]+$")
     ).firstMatch
     XCTAssertTrue(calendarDay.waitForExistence(timeout: 2))
     calendarDay.tap()
-    app.buttons["完了"].tap()
-    XCTAssertNotEqual(purchaseDateButton.label, initialPurchaseDateLabel)
+  }
+
+  private func assertFrame(of element: XCUIElement, equals frame: CGRect) {
+    XCTAssertEqual(element.frame.minY, frame.minY, accuracy: 1)
+    XCTAssertEqual(element.frame.height, frame.height, accuracy: 1)
+  }
+
+  private func dismissCompactDatePicker(in app: XCUIApplication) {
+    app.navigationBars.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
   }
 
   private func addScreenshot(named name: String, app: XCUIApplication) {
