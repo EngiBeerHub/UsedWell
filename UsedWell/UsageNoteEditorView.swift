@@ -35,8 +35,11 @@ struct UsageNoteEditorView: View {
       }
       if note != nil {
         Section {
-          Button("このメモを削除", systemImage: "trash", role: .destructive) {
+          Button(role: .destructive) {
             showsDeleteConfirmation = true
+          } label: {
+            Label("このメモを削除", systemImage: "trash")
+              .foregroundStyle(.red)
           }
           .accessibilityIdentifier("delete-usage-note")
         }
