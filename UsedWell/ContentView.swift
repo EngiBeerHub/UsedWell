@@ -239,9 +239,11 @@ private struct ItemUsageSummary: View {
   let item: Item
 
   var body: some View {
-    Text("使用期間 \(item.usageDurationText) ・ 1日 \(item.dailyCostText)")
-      .font(.caption)
-      .foregroundStyle(.secondary)
+    Text(
+      "使用期間 \(item.usageDurationText) / 目標\(item.targetDurationText) ・ 1日 \(item.dailyCostText)"
+    )
+    .font(.caption)
+    .foregroundStyle(.secondary)
   }
 }
 
