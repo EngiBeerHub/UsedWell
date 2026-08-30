@@ -10,6 +10,7 @@ struct ItemDetailView: View {
   @State private var showsCompleteConfirmation = false
   @State private var showsDeleteConfirmation = false
   @State private var showsCompletionResult = false
+  @State private var usageNoteEditorDestination: UsageNoteEditorDestination?
   var body: some View {
     List {
       Section {
@@ -64,6 +65,7 @@ struct ItemDetailView: View {
           Text("長く使うほど、1日あたりのコストは下がります。")
         }
       }
+      usageNotesSection
       if !item.isCompleted {
         Section {
           Button("買い替え完了にする", systemImage: "checkmark.circle") { showsCompleteConfirmation = true }
@@ -91,6 +93,11 @@ struct ItemDetailView: View {
         ItemEditorView(item: item) { item, _ in
           Task { await NotificationScheduler.shared.rescheduleIfAuthorized(item) }
         }
+      }
+    }
+    .sheet(item: $usageNoteEditorDestination) { destination in
+      NavigationStack {
+        UsageNoteEditorView(item: item, note: destination.note)
       }
     }
     .alert("買い替え完了にしますか？", isPresented: $showsCompleteConfirmation) {
@@ -131,6 +138,61 @@ struct ItemDetailView: View {
     return "最終使用期間は\(item.usageDurationText)、1日あたり\(cost)でした。"
   }
 
+  @ViewBuilder private var usageNotesSection: some View {
+    Section {
+      if item.sortedUsageNotes.isEmpty {
+        VStack(alignment: .leading, spacing: 10) {
+          Label("使っていて感じたことを残せます", systemImage: "note.text")
+            .font(.subheadline.weight(.semibold))
+          Text("気になったことや、まだ十分使えると感じたことを、日付付きで振り返れます。")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+          Button("最初のメモを追加", systemImage: "plus") {
+            presentUsageNoteEditor()
+          }
+          .accessibilityIdentifier("add-first-usage-note")
+        }
+        .padding(.vertical, 4)
+      } else {
+        ForEach(item.sortedUsageNotes) { note in
+          Button {
+            presentUsageNoteEditor(note)
+          } label: {
+            VStack(alignment: .leading, spacing: 5) {
+              Text(note.date.japaneseDateText)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+              Text(note.text)
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+          }
+          .buttonStyle(.plain)
+          .accessibilityIdentifier("usage-note-row")
+        }
+      }
+    } header: {
+      HStack {
+        Text("使用メモ")
+        Spacer()
+        if !item.sortedUsageNotes.isEmpty {
+          Button("メモを追加", systemImage: "plus") {
+            presentUsageNoteEditor()
+          }
+          .labelStyle(.iconOnly)
+          .accessibilityLabel("メモを追加")
+          .accessibilityIdentifier("add-usage-note")
+        }
+      }
+    }
+  }
+
+  private func presentUsageNoteEditor(_ note: UsageNote? = nil) {
+    usageNoteEditorDestination = UsageNoteEditorDestination(note: note)
+  }
+
   private var progressTint: Color {
     if item.isCompleted { return .green }
     switch item.status() {
@@ -139,6 +201,11 @@ struct ItemDetailView: View {
     case .goalAchieved: return .green
     }
   }
+}
+
+private struct UsageNoteEditorDestination: Identifiable {
+  let id = UUID()
+  let note: UsageNote?
 }
 
 private struct CostRow: View {

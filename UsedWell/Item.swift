@@ -69,6 +69,8 @@ enum PurchasePrice {
   var targetMonths: Int
   var completedDate: Date?
   var createdAt: Date
+  @Relationship(deleteRule: .cascade, inverse: \UsageNote.item)
+  var usageNotes: [UsageNote] = []
 
   init(
     name: String, category: ItemCategory, purchaseDate: Date, purchasePrice: Int, targetMonths: Int,
@@ -201,6 +203,12 @@ enum PurchasePrice {
   }
   var completedPeriodText: String {
     "\(purchaseDate.japaneseDateText) 〜 \((completedDate ?? referenceDate()).japaneseDateText)"
+  }
+  var sortedUsageNotes: [UsageNote] {
+    usageNotes.sorted {
+      if $0.date != $1.date { return $0.date > $1.date }
+      return $0.createdAt > $1.createdAt
+    }
   }
 
   static func repairDuplicateNavigationIDs(in items: [Item]) -> [Item] {

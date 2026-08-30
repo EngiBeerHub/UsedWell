@@ -267,7 +267,8 @@ private enum ContentViewPreview {
   static func makeContainer() -> ModelContainer {
     let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
     do {
-      let container = try ModelContainer(for: Item.self, configurations: configuration)
+      let container = try ModelContainer(
+        for: Item.self, UsageNote.self, configurations: configuration)
       let calendar = Calendar.current
       let now = Date.now
       container.mainContext.insert(
