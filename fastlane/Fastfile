@@ -8,7 +8,6 @@ PROJECT = File.join(REPOSITORY_ROOT, "UsedWell.xcodeproj")
 SCHEME = "UsedWell"
 APP_IDENTIFIER = "com.engibeer.UsedWell"
 TEAM_ID = "4S4388AJ99"
-APP_STORE_PROFILE = "UsedWell PR32 Internal 20260830053829"
 
 def required_environment_value(name)
   value = ENV[name]
@@ -38,6 +37,7 @@ platform :ios do
     key_id = required_environment_value("ASC_KEY_ID")
     issuer_id = required_environment_value("ASC_ISSUER_ID")
     key_path = File.expand_path(required_environment_value("ASC_KEY_PATH"))
+    profile_name = required_environment_value("APP_STORE_PROFILE_NAME")
 
     UI.user_error!("App Store Connect API key not found: #{key_path}") unless File.file?(key_path)
 
@@ -83,7 +83,7 @@ platform :ios do
         signingStyle: "manual",
         signingCertificate: "Apple Distribution",
         provisioningProfiles: {
-          APP_IDENTIFIER => APP_STORE_PROFILE
+          APP_IDENTIFIER => profile_name
         }
       }
     )
