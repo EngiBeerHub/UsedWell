@@ -1,0 +1,112 @@
+require "shellwords"
+require "xcodeproj"
+
+default_platform(:ios)
+
+REPOSITORY_ROOT = File.expand_path("..", __dir__)
+PROJECT = File.join(REPOSITORY_ROOT, "UsedWell.xcodeproj")
+SCHEME = "UsedWell"
+APP_IDENTIFIER = "com.engibeer.UsedWell"
+TEAM_ID = "4S4388AJ99"
+APP_STORE_PROFILE = "UsedWell PR32 Internal 20260830053829"
+
+def required_environment_value(name)
+  value = ENV[name]
+  UI.user_error!("Missing required environment variable: #{name}") if value.to_s.strip.empty?
+  value
+end
+
+def release_marketing_version
+  project = Xcodeproj::Project.open(PROJECT)
+  target = project.targets.find { |candidate| candidate.name == SCHEME }
+  UI.user_error!("Xcode target not found: #{SCHEME}") unless target
+
+  configuration = target.build_configurations.find { |candidate| candidate.name == "Release" }
+  UI.user_error!("Release configuration not found for target: #{SCHEME}") unless configuration
+
+  version = configuration.build_settings["MARKETING_VERSION"]
+  UI.user_error!("MARKETING_VERSION is missing from the Release configuration") if version.to_s.empty?
+
+  version
+end
+
+platform :ios do
+  desc "Archive and upload the current commit to TestFlight Internal Only"
+  lane :beta do
+    ensure_git_status_clean(show_uncommitted_changes: true)
+
+    key_id = required_environment_value("ASC_KEY_ID")
+    issuer_id = required_environment_value("ASC_ISSUER_ID")
+    key_path = File.expand_path(required_environment_value("ASC_KEY_PATH"))
+
+    UI.user_error!("App Store Connect API key not found: #{key_path}") unless File.file?(key_path)
+
+    api_key = app_store_connect_api_key(
+      key_id: key_id,
+      issuer_id: issuer_id,
+      key_filepath: key_path
+    )
+
+    version = release_marketing_version
+    previous_build = latest_testflight_build_number(
+      api_key: api_key,
+      app_identifier: APP_IDENTIFIER,
+      version: version,
+      initial_build_number: 0
+    )
+    commit = last_git_commit[:commit_hash]
+
+    UI.message("Distributing commit: #{commit}")
+    UI.message("Marketing version: #{version}")
+    UI.message("Latest TestFlight build before upload: #{previous_build}")
+
+    authentication_args = [
+      "-allowProvisioningUpdates",
+      "-authenticationKeyPath #{Shellwords.escape(key_path)}",
+      "-authenticationKeyID #{Shellwords.escape(key_id)}",
+      "-authenticationKeyIssuerID #{Shellwords.escape(issuer_id)}"
+    ].join(" ")
+
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      configuration: "Release",
+      clean: true,
+      xcargs: authentication_args,
+      export_options: {
+        destination: "upload",
+        method: "app-store",
+        manageAppVersionAndBuildNumber: true,
+        testFlightInternalTestingOnly: true,
+        teamID: TEAM_ID,
+        uploadSymbols: true,
+        signingStyle: "manual",
+        signingCertificate: "Apple Distribution",
+        provisioningProfiles: {
+          APP_IDENTIFIER => APP_STORE_PROFILE
+        }
+      }
+    )
+
+    uploaded_build = previous_build
+    18.times do
+      uploaded_build = latest_testflight_build_number(
+        api_key: api_key,
+        app_identifier: APP_IDENTIFIER,
+        version: version,
+        initial_build_number: 0
+      )
+      break if uploaded_build.to_i > previous_build.to_i
+
+      UI.message("Waiting for App Store Connect to register the uploaded build...")
+      sleep(10)
+    end
+
+    if uploaded_build.to_i <= previous_build.to_i
+      UI.user_error!("Upload finished, but a new TestFlight build was not visible within 3 minutes")
+    end
+
+    UI.success("TestFlight Internal Only upload completed: #{version} (#{uploaded_build})")
+    UI.success("Git commit: #{commit}")
+  end
+end
