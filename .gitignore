@@ -1,1 +1,12 @@
 pr_evidence/
+.env
+.env.*
+**/xcuserdata/
+fastlane/Preview.html
+fastlane/README.md
+fastlane/report.xml
+fastlane/screenshots/
+fastlane/test_output/
+build/
+*.ipa
+*.dSYM.zip
