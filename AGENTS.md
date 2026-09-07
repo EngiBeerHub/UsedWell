@@ -22,23 +22,19 @@
 - Product WHAT / WHY and scope decisions belong to the PM-side Chat; implementation HOW should be decided autonomously when it does not change agreed product behavior.
 - Do not stop for approval of implementation-only decisions.
 - Escalate only when implementation requires a new product or UX decision, changes the agreed product scope, or conflicts with `product.md`.
+- Use a GitHub Issue when the work has ongoing tracking value; an Issue is not required for every task.
+- Treat Slack as a temporary, task-level coordination channel between the PM-side Chat and Codex, not as the canonical source for product specifications or implementation history.
+- When a task is handed off through Slack with a designated thread, use that thread as the coordination origin for the task.
 - For substantive implementation work, complete the change through implementation, validation, commit, push, and GitHub PR creation when repository access allows it.
 - Treat Git and the GitHub PR as the canonical implementation history and final handoff.
-- Use a GitHub Issue when the work has ongoing tracking value; an Issue is not required for every task.
+- After implementation, validation, and PR creation for a Slack-originated task, reply in the same designated thread with the PR URL, a concise validation summary, and UI evidence when visual review by the PM-side Chat is useful.
+- Do not add fixed Slack channel IDs, thread URLs, or task-specific Slack details to repository documentation.
 - PR descriptions should include:
   - Summary
   - Validation
   - Notes
 - Do not create separate Markdown files for implementation summaries or handoff notes.
 - Small, low-risk changes may be completed without a PR when explicitly appropriate.
-
-## Slack workflow
-
-- Treat Slack as a temporary, task-level coordination channel between the PM-side Chat and Codex, not as the canonical source for product specifications or implementation history.
-- When a task is handed off through Slack with a designated thread, use that thread as the coordination origin for the task.
-- After implementation, validation, and PR creation, reply in the same designated thread with the PR URL and a concise validation summary.
-- Include UI evidence in that thread when visual review by the PM-side Chat is useful.
-- Do not add fixed Slack channel IDs, thread URLs, or task-specific Slack details to repository documentation.
 
 ## Implementation principles
 
