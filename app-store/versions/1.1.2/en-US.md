@@ -95,7 +95,7 @@ This update also adds region-aware currency and date formatting while preserving
 
 ### Keywords
 
-purchase,date,gadget,belongings,usage,cost,day,history,notes,item,goal,device,upgrade
+replacement,owned,ownership,gadget,belongings,purchase,cost,upgrade,item,lifespan,duration
 
 ### Version
 
