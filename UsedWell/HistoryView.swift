@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct HistoryView: View {
+  @Environment(\.locale) private var locale
   @Query private var items: [Item]
   private var completedItems: [Item] {
     items.filter(\.isCompleted).sorted {
@@ -22,13 +23,14 @@ struct HistoryView: View {
             VStack(alignment: .leading, spacing: 5) {
               Text(item.name).font(.headline).foregroundStyle(.primary)
               HStack(spacing: 4) {
-                Text("\(item.usageDurationText)使用")
+                Text("\(item.usageDurationText(locale: locale))使用")
                 Text("·")
-                Text(
-                  "\(item.currentDailyCost(), format: .currency(code: "JPY").precision(.fractionLength(0))) / 日"
-                )
+                let cost = item.currentDailyCost().formatted(
+                  .currency(code: locale.currency?.identifier ?? "JPY")
+                    .precision(.fractionLength(0)).locale(locale))
+                Text("\(cost) / 日")
               }.font(.subheadline.weight(.medium)).foregroundStyle(.primary)
-              Text(item.completedPeriodText)
+              Text(item.completedPeriodText(locale: locale))
                 .font(.caption).foregroundStyle(.secondary)
             }
           }
