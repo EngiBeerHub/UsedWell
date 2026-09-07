@@ -12,7 +12,7 @@
 ## Product source of truth
 
 - Read `product.md` before making product or UX decisions.
-- Treat `product.md` as the source of truth for the current product concept, MVP scope, and product rules.
+- Treat `product.md` as the source of truth for the current product concept, product scope, and product rules.
 - Do not introduce behavior that conflicts with `product.md` without raising the product decision first.
 - If an implementation change makes `product.md` inaccurate, update it to represent the new current state.
 
@@ -21,15 +21,24 @@
 - Treat the current Chat/Codex handoff, `product.md`, and the existing codebase as the inputs for the implementation task.
 - Product WHAT / WHY and scope decisions belong to the PM-side Chat; implementation HOW should be decided autonomously when it does not change agreed product behavior.
 - Do not stop for approval of implementation-only decisions.
-- Escalate only when implementation requires a new product or UX decision, changes MVP scope, or conflicts with `product.md`.
+- Escalate only when implementation requires a new product or UX decision, changes the agreed product scope, or conflicts with `product.md`.
 - For substantive implementation work, complete the change through implementation, validation, commit, push, and GitHub PR creation when repository access allows it.
-- Use the GitHub PR as the primary implementation handoff.
+- Treat Git and the GitHub PR as the canonical implementation history and final handoff.
+- Use a GitHub Issue when the work has ongoing tracking value; an Issue is not required for every task.
 - PR descriptions should include:
   - Summary
   - Validation
   - Notes
 - Do not create separate Markdown files for implementation summaries or handoff notes.
 - Small, low-risk changes may be completed without a PR when explicitly appropriate.
+
+## Slack workflow
+
+- Treat Slack as a temporary, task-level coordination channel between the PM-side Chat and Codex, not as the canonical source for product specifications or implementation history.
+- When a task is handed off through Slack with a designated thread, use that thread as the coordination origin for the task.
+- After implementation, validation, and PR creation, reply in the same designated thread with the PR URL and a concise validation summary.
+- Include UI evidence in that thread when visual review by the PM-side Chat is useful.
+- Do not add fixed Slack channel IDs, thread URLs, or task-specific Slack details to repository documentation.
 
 ## Implementation principles
 
@@ -47,18 +56,20 @@
 - Both tools are available as command-line tools in the development environment.
 - Prefer the existing/default configuration and keep custom rules minimal unless there is a concrete reason to add them.
 - Do not suppress lint violations merely to make checks pass unless the rule is genuinely inappropriate for the code.
-- Before considering implementation complete, ensure formatting and lint checks pass.
+- Before considering substantive implementation complete, ensure formatting and lint checks pass.
 
 ## Validation
 
+- Choose validation that provides sufficient confidence for the risk and scope of the change.
 - Build the application after meaningful implementation changes.
 - Add automated tests where they provide clear value, especially for calculation and state-transition rules.
-- Before considering implementation complete, verify:
+- Before considering substantive implementation complete, verify:
   - `swift-format` passes;
   - SwiftLint passes;
   - the application builds successfully;
   - relevant automated tests pass;
   - the key product flows work as intended.
+- When the same implementation has already completed sufficient validation and acceptance, do not mechanically repeat identical quality checks at each subsequent release, distribution, or App Store submission step.
 
 Key product flows include:
 
@@ -76,7 +87,7 @@ Key product flows include:
 - Validate the states relevant to the change, including navigation, sheets, scrolling, input, and empty or error states where applicable.
 - Check for obvious layout, readability, and interaction issues.
 - Choose an appropriate validation method for the change, such as Simulator interaction, UI tests, or other available tools.
-- When a UI change has meaningful visual or interaction impact, include useful UI evidence in the PR.
+- When a UI change has meaningful visual or interaction impact, provide useful UI evidence through the designated task handoff channel.
 - UI evidence may include screenshots of relevant states, multiple screenshots when state differences matter, or a screen recording when motion or interaction is important.
 - Record the environment and validation method briefly in the PR `Validation` section.
 
@@ -98,9 +109,9 @@ Key product flows include:
 
 Do not guess when implementation requires a new product decision.
 
-Raise the issue when:
+Escalate to the PM-side Chat when:
 
-- the agreed MVP scope would need to change;
+- the agreed product scope would need to change;
 - a new UX or product rule is required;
 - `product.md` is ambiguous or internally conflicting;
 - implementation would materially change the meaning of an existing product rule.
