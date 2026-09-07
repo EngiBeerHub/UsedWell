@@ -12,6 +12,13 @@ import SwiftUI
 struct UsedWellApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
   var sharedModelContainer: ModelContainer = {
+    #if DEBUG
+      if let mode = ScreenshotFixtures.mode {
+        do { return try ScreenshotFixtures.makeContainer(mode: mode) } catch {
+          fatalError("Failed to create isolated fixtures: \(error)")
+        }
+      }
+    #endif
     let schema = Schema([Item.self, UsageNote.self])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -27,9 +34,23 @@ struct UsedWellApp: App {
     }
   }()
 
+  private let preferences: UserDefaults = {
+    #if DEBUG
+      if ScreenshotFixtures.mode != nil {
+        let suiteName = "UsedWell.UITests"
+        let defaults = UserDefaults(suiteName: suiteName) ?? .standard
+        if ProcessInfo.processInfo.environment["USEDWELL_RESET_PREFERENCES"] == "1" {
+          defaults.removePersistentDomain(forName: suiteName)
+        }
+        return defaults
+      }
+    #endif
+    return .standard
+  }()
+
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      ContentView().defaultAppStorage(preferences)
     }
     .modelContainer(sharedModelContainer)
   }

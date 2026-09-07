@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct ItemEditorView: View {
+  @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item?
@@ -33,7 +34,8 @@ struct ItemEditorView: View {
         TextField("名前", text: $name).accessibilityIdentifier("item-name")
         Picker("カテゴリ", selection: $category) {
           ForEach(ItemCategory.allCases) { category in
-            Label(category.rawValue, systemImage: category.symbolName).tag(category)
+            Label(category.displayName(locale: locale), systemImage: category.symbolName).tag(
+              category)
           }
         }
       }
@@ -41,15 +43,17 @@ struct ItemEditorView: View {
         DatePicker(
           "購入日", selection: $purchaseDate, in: ...Date.now, displayedComponents: .date
         )
-        .environment(\.locale, Locale(identifier: "ja_JP"))
+
         .accessibilityIdentifier("purchase-date-picker")
         LabeledContent("購入価格") {
           HStack(spacing: 4) {
-            Text("¥").foregroundStyle(.secondary)
+            Text(locale.currencySymbol ?? locale.currency?.identifier ?? "").foregroundStyle(
+              .secondary)
             TextField("0", value: $purchasePrice, format: .number)
               .keyboardType(.numberPad)
               .multilineTextAlignment(.trailing)
               .accessibilityIdentifier("purchase-price")
+              .accessibilityLabel("購入価格")
           }
         }
       } header: {
@@ -73,7 +77,12 @@ struct ItemEditorView: View {
         Text("この愛用品を使いたい期間の目安です。")
       }
     }
-    .navigationTitle(item == nil ? "愛用品を追加" : "登録内容を編集").navigationBarTitleDisplayMode(.inline)
+    .navigationTitle(
+      item == nil
+        ? String(localized: LocalizedStringResource("愛用品を追加", locale: locale))
+        : String(localized: LocalizedStringResource("登録内容を編集", locale: locale))
+    )
+    .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -98,7 +107,7 @@ struct ItemEditorView: View {
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
   private var purchasePriceValidationMessage: String? {
-    PurchasePrice.validationMessage(for: purchasePrice)
+    PurchasePrice.validationMessage(for: purchasePrice, locale: locale)
   }
   private var isValid: Bool {
     !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

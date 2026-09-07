@@ -11,6 +11,18 @@ enum ItemCategory: String, CaseIterable, Codable, Identifiable {
   case audio = "オーディオ"
   case other = "その他"
   var id: Self { self }
+  func displayName(locale: Locale = .current) -> String {
+    switch self {
+    case .phone: String(localized: LocalizedStringResource("スマートフォン", locale: locale))
+    case .computer: String(localized: LocalizedStringResource("パソコン", locale: locale))
+    case .watch: String(localized: LocalizedStringResource("時計", locale: locale))
+    case .camera: String(localized: LocalizedStringResource("カメラ", locale: locale))
+    case .bag: String(localized: LocalizedStringResource("バッグ", locale: locale))
+    case .wallet: String(localized: LocalizedStringResource("財布", locale: locale))
+    case .audio: String(localized: LocalizedStringResource("オーディオ", locale: locale))
+    case .other: String(localized: LocalizedStringResource("その他", locale: locale))
+    }
+  }
   var symbolName: String {
     switch self {
     case .phone: "iphone"
@@ -28,18 +40,20 @@ enum ItemCategory: String, CaseIterable, Codable, Identifiable {
 enum ReplacementStatus: Int, Comparable {
   case stillUsing, considerReplacing, goalAchieved
   static func < (lhs: Self, rhs: Self) -> Bool { lhs.rawValue < rhs.rawValue }
-  var title: String {
+  func title(locale: Locale = .current) -> String {
     switch self {
-    case .stillUsing: "まだ使いたい"
-    case .considerReplacing: "買い替えを考え始める"
-    case .goalAchieved: "目標達成"
+    case .stillUsing: String(localized: LocalizedStringResource("まだ使いたい", locale: locale))
+    case .considerReplacing:
+      String(localized: LocalizedStringResource("買い替えを考え始める", locale: locale))
+    case .goalAchieved: String(localized: LocalizedStringResource("目標達成", locale: locale))
     }
   }
   var symbolName: String {
     switch self {
     case .stillUsing: "leaf.fill"
     case .considerReplacing: "eye.fill"
-    case .goalAchieved: "checkmark.seal.fill"
+    case .goalAchieved:
+      "checkmark.seal.fill"
     }
   }
 }
@@ -47,11 +61,23 @@ enum ReplacementStatus: Int, Comparable {
 enum PurchasePrice {
   static let allowedRange = 1...9_999_999
 
-  static func validationMessage(for value: Int?) -> String? {
-    guard let value else { return "購入価格を入力してください" }
-    guard value >= allowedRange.lowerBound else { return "購入価格は1円以上で入力してください" }
+  static func validationMessage(for value: Int?, locale: Locale = .current) -> String? {
+    guard let value else {
+      return String(localized: LocalizedStringResource("購入価格を入力してください", locale: locale))
+    }
+    let format = IntegerFormatStyle<Int>.Currency(code: locale.currency?.identifier ?? "JPY")
+      .precision(.fractionLength(0)).locale(locale)
+    guard value >= allowedRange.lowerBound else {
+      return String(
+        localized: LocalizedStringResource(
+          "購入価格は\(allowedRange.lowerBound.formatted(format))以上で入力してください",
+          locale: locale))
+    }
     guard value <= allowedRange.upperBound else {
-      return "購入価格は9,999,999円以下で入力してください"
+      return String(
+        localized: LocalizedStringResource(
+          "購入価格は\(allowedRange.upperBound.formatted(format))以下で入力してください",
+          locale: locale))
     }
     return nil
   }
@@ -156,53 +182,100 @@ enum PurchasePrice {
     (status(asOf: date).rawValue, progress(asOf: date))
   }
 
-  func usageDurationText(asOf date: Date = .now, calendar: Calendar = .current) -> String {
+  func usageDurationText(
+    asOf date: Date = .now, calendar: Calendar = .current, locale: Locale = .current
+  ) -> String {
     let components = calendar.dateComponents(
       [.year, .month, .day], from: purchaseDay(calendar: calendar),
       to: referenceDay(asOf: date, calendar: calendar))
-    if let years = components.year, years > 0 { return "\(years)年\(components.month ?? 0)か月" }
-    if let months = components.month, months > 0 { return "\(months)か月" }
-    return "\(max(0, components.day ?? 0))日"
+    if let years = components.year, years > 0 {
+      return Self.durationText(
+        years: years, months: components.month ?? 0, includesZeroMonths: true, locale: locale)
+    }
+    if let months = components.month, months > 0 {
+      return String(localized: LocalizedStringResource("\(months)か月", locale: locale))
+    }
+    return String(
+      localized: LocalizedStringResource("\(max(0, components.day ?? 0))日", locale: locale))
   }
   func remainingText(
-    asOf date: Date = .now, calendar: Calendar = .current, usesDayPrecision: Bool = false
+    asOf date: Date = .now, calendar: Calendar = .current, usesDayPrecision: Bool = false,
+    locale: Locale = .current
   ) -> String {
     let referenceDate = referenceDay(asOf: date, calendar: calendar)
     let targetDate = targetDate(calendar: calendar)
     let days = calendar.dateComponents([.day], from: referenceDate, to: targetDate).day ?? 0
-    if days == 0 { return "今日が目標日です" }
+    if days == 0 { return String(localized: LocalizedStringResource("今日が目標日です", locale: locale)) }
     if usesDayPrecision {
-      if days > 0 && days < 30 { return "目標まであと\(days)日" }
-      if days < 0 && days > -30 { return "目標を\(-days)日超えて使えています" }
+      if days > 0 && days < 30 {
+        return String(
+          localized: LocalizedStringResource(
+            "目標まであと\(String(localized: LocalizedStringResource("\(days)日", locale: locale)))",
+            locale: locale))
+      }
+      if days < 0 && days > -30 {
+        return String(
+          localized: LocalizedStringResource(
+            "目標を\(String(localized: LocalizedStringResource("\(-days)日", locale: locale)))超えて使えています",
+            locale: locale))
+      }
     }
     if referenceDate <= targetDate {
+      let duration = yearMonthDurationText(
+        from: referenceDate, to: targetDate, calendar: calendar, locale: locale)
       return
-        "目標まであと約\(yearMonthDurationText(from: referenceDate, to: targetDate, calendar: calendar))"
+        String(
+          localized: LocalizedStringResource(
+            "目標まであと約\(duration)",
+            locale: locale))
     }
+    let duration = yearMonthDurationText(
+      from: targetDate, to: referenceDate, calendar: calendar, locale: locale)
     return
-      "目標を約\(yearMonthDurationText(from: targetDate, to: referenceDate, calendar: calendar))超えて使えています"
+      String(
+        localized: LocalizedStringResource(
+          "目標を約\(duration)超えて使えています",
+          locale: locale))
   }
 
-  private func yearMonthDurationText(from start: Date, to end: Date, calendar: Calendar) -> String {
+  private func yearMonthDurationText(
+    from start: Date, to end: Date, calendar: Calendar, locale: Locale
+  ) -> String {
     let components = calendar.dateComponents([.year, .month], from: start, to: end)
     let years = max(0, components.year ?? 0)
     let months = max(0, components.month ?? 0)
-    if years > 0 && months > 0 { return "\(years)年\(months)か月" }
-    if years > 0 { return "\(years)年" }
-    return "\(max(1, months))か月"
+    if years > 0 && months > 0 {
+      return Self.durationText(years: years, months: months, locale: locale)
+    }
+    if years > 0 { return String(localized: LocalizedStringResource("\(years)年", locale: locale)) }
+    return String(localized: LocalizedStringResource("\(max(1, months))か月", locale: locale))
+  }
+
+  private static func durationText(
+    years: Int, months: Int, includesZeroMonths: Bool = false, locale: Locale
+  ) -> String {
+    let yearText = String(localized: LocalizedStringResource("\(years)年", locale: locale))
+    if months == 0 && !includesZeroMonths { return yearText }
+    let monthText = String(localized: LocalizedStringResource("\(months)か月", locale: locale))
+    return String(localized: LocalizedStringResource("\(yearText)\(monthText)", locale: locale))
   }
 
   var usageDurationText: String { usageDurationText() }
   var remainingText: String { remainingText() }
-  var targetDurationText: String {
+  var targetDurationText: String { targetDurationText(locale: .current) }
+  func targetDurationText(locale: Locale) -> String {
     let years = targetMonths / 12
     let months = targetMonths % 12
-    if years > 0 && months > 0 { return "\(years)年\(months)か月" }
-    if years > 0 { return "\(years)年" }
-    return "\(months)か月"
+    if years > 0 && months > 0 {
+      return Self.durationText(years: years, months: months, locale: locale)
+    }
+    if years > 0 { return String(localized: LocalizedStringResource("\(years)年", locale: locale)) }
+    return String(localized: LocalizedStringResource("\(months)か月", locale: locale))
   }
-  var completedPeriodText: String {
-    "\(purchaseDate.japaneseDateText) 〜 \((completedDate ?? referenceDate()).japaneseDateText)"
+  func completedPeriodText(locale: Locale = .current) -> String {
+    let start = purchaseDate.localizedDateText(locale: locale)
+    let end = (completedDate ?? referenceDate()).localizedDateText(locale: locale)
+    return String(localized: LocalizedStringResource("\(start) 〜 \(end)", locale: locale))
   }
   var sortedUsageNotes: [UsageNote] {
     usageNotes.sorted {
@@ -264,7 +337,7 @@ struct NotificationIDRepair {
 }
 
 extension Date {
-  var japaneseDateText: String {
-    formatted(Date.FormatStyle().year().month().day().locale(Locale(identifier: "ja_JP")))
+  func localizedDateText(locale: Locale = .current) -> String {
+    formatted(Date.FormatStyle().year().month().day().locale(locale))
   }
 }

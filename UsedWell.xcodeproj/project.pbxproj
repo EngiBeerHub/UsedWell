@@ -187,9 +187,10 @@
 				};
 			};
 			buildConfigurationList = 778E0C20303B149F00E83162 /* Build configuration list for PBXProject "UsedWell" */;
-			developmentRegion = en;
+			developmentRegion = ja;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				ja,
 				en,
 				Base,
 			);

@@ -2,7 +2,12 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+  @Environment(\.locale) private var locale
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.scenePhase) private var scenePhase
+  @AppStorage(RegionNotice.defaultsKey) private var acknowledgedRegion: String?
+  @State private var noticeRegion: String?
+  @State private var showsRegionNotice = false
   @Query private var items: [Item]
   @State private var navigationPath: [UUID] = []
   @State private var notificationNavigation = NotificationNavigation.shared
@@ -31,7 +36,8 @@ struct ContentView: View {
               .font(.subheadline)
               .foregroundStyle(.secondary)
               .multilineTextAlignment(.center)
-            Button("最初の愛用品を登録") { showsAdd = true }.buttonStyle(.borderedProminent)
+            Button("最初の愛用品を登録") { showsAdd = true }.accessibilityIdentifier("add-first-item")
+              .buttonStyle(.borderedProminent)
             if hasHistory {
               Divider().padding(.top, 4)
               NavigationLink {
@@ -68,7 +74,8 @@ struct ContentView: View {
       }
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
-          Button("愛用品を追加", systemImage: "plus") { showsAdd = true }
+          Button("愛用品を追加", systemImage: "plus") { showsAdd = true }.accessibilityIdentifier(
+            "add-item")
         }
       }
       .navigationDestination(for: UUID.self) { navigationID in
@@ -92,6 +99,24 @@ struct ContentView: View {
     } message: {
       Text("愛用品を見直すタイミングになったらお知らせします。")
     }
+    .alert("地域設定が変更されました", isPresented: $showsRegionNotice) {
+      Button("確認") {
+        acknowledgedRegion = noticeRegion
+        noticeRegion = nil
+      }
+    } message: {
+      Text("購入価格は自動換算されません。必要に応じて、既存アイテムの購入価格を現在の通貨に合わせて編集してください。")
+    }
+    .onChange(of: scenePhase) { _, phase in
+      if phase == .active { checkRegion() }
+    }
+    .onChange(of: navigationPath) { _, _ in checkRegion() }
+    .onChange(of: showsAdd) { _, shown in
+      if !shown { checkRegion() }
+    }
+    .onChange(of: showsNotificationExplanation) { _, shown in
+      if !shown { checkRegion() }
+    }
     .onChange(of: notificationNavigation.itemID) { _, itemID in
       openNotificationItem(itemID)
     }
@@ -101,8 +126,32 @@ struct ContentView: View {
     }
     .task {
       await repairLegacyNotificationIDs()
+      for item in items where !item.isCompleted {
+        await NotificationScheduler.shared.rescheduleIfAuthorized(
+          ItemNotificationDetails(item: item))
+      }
       openNotificationItem(notificationNavigation.itemID)
+      checkRegion()
     }
+  }
+
+  private func checkRegion() {
+    guard !showsRegionNotice else { return }
+    let region = Locale.current.region?.identifier ?? "JP"
+    guard
+      RegionNotice.needsAcknowledgement(
+        previousRegion: acknowledgedRegion, currentRegion: region, hasItems: !items.isEmpty
+      )
+    else {
+      acknowledgedRegion = region
+      return
+    }
+    // Present from Home after any item flow or permission explanation has finished.
+    guard navigationPath.isEmpty, !showsAdd, !showsNotificationExplanation,
+      pendingNotificationItem == nil
+    else { return }
+    noticeRegion = region
+    showsRegionNotice = true
   }
 
   private func handleAddDismiss() {
@@ -152,6 +201,7 @@ struct ContentView: View {
 }
 
 private struct FeaturedItemCard: View {
+  @Environment(\.locale) private var locale
   let item: Item
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
@@ -174,7 +224,7 @@ private struct FeaturedItemCard: View {
       ProgressView(value: min(item.progress(), 1))
         .tint(item.status().progressTint)
       VStack(alignment: .leading, spacing: 4) {
-        Text(item.remainingText)
+        Text(item.remainingText(locale: locale))
           .font(.subheadline)
         ItemUsageSummary(item: item)
       }
@@ -187,6 +237,7 @@ private struct FeaturedItemCard: View {
 }
 
 struct ItemRow: View {
+  @Environment(\.locale) private var locale
   let item: Item
   var body: some View {
     HStack(alignment: .top, spacing: 12) {
@@ -214,6 +265,7 @@ struct ItemRow: View {
 }
 
 private struct ProgressText: View {
+  @Environment(\.locale) private var locale
   let item: Item
   var featured = false
 
@@ -221,6 +273,7 @@ private struct ProgressText: View {
     Text(item.progress(), format: .percent.precision(.fractionLength(0)))
       .font(featured ? .title2.bold() : .subheadline.bold())
       .monospacedDigit()
+      .fixedSize(horizontal: true, vertical: false)
       .foregroundStyle(.primary)
   }
 }
@@ -236,63 +289,55 @@ extension ReplacementStatus {
 }
 
 private struct ItemUsageSummary: View {
+  @Environment(\.locale) private var locale
   let item: Item
 
   var body: some View {
+    let duration = item.usageDurationText(locale: locale)
+    let target = item.targetDurationText(locale: locale)
+    let cost = item.currentDailyCost().formatted(
+      .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0)).locale(
+        locale))
     Text(
-      "使用期間 \(item.usageDurationText) / 目標\(item.targetDurationText) ・ 1日 \(item.dailyCostText)"
+      "使用期間 \(duration) / 目標\(target) ・ 1日 \(cost)"
     )
     .font(.caption)
     .foregroundStyle(.secondary)
   }
 }
 
-extension Item {
-  fileprivate var dailyCostText: String {
-    currentDailyCost().formatted(.currency(code: "JPY").precision(.fractionLength(0)))
-  }
-}
-
 struct StatusLabel: View {
+  @Environment(\.locale) private var locale
   let item: Item
   var body: some View {
     HStack(spacing: 5) {
       Image(systemName: item.status().symbolName)
-      Text(item.status().title)
+      Text(item.status().title(locale: locale))
     }
     .font(.caption.weight(.semibold))
     .foregroundStyle(item.status() == .goalAchieved ? .green : .secondary)
   }
 }
 
-private enum ContentViewPreview {
-  static func makeContainer() -> ModelContainer {
-    let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
-    do {
-      let container = try ModelContainer(
-        for: Item.self, UsageNote.self, configurations: configuration)
-      let calendar = Calendar.current
-      let now = Date.now
-      container.mainContext.insert(
-        Item(
-          name: "毎日使うバッグ", category: .bag,
-          purchaseDate: calendar.date(byAdding: .month, value: -3, to: now) ?? now,
-          purchasePrice: 80_000, targetMonths: 12))
-      container.mainContext.insert(
-        Item(
-          name: "見直しを考えるスマホ", category: .phone,
-          purchaseDate: calendar.date(byAdding: .month, value: -11, to: now) ?? now,
-          purchasePrice: 120_000, targetMonths: 12))
-      container.mainContext.insert(
-        Item(
-          name: "長く使ったカメラ", category: .camera,
-          purchaseDate: calendar.date(byAdding: .month, value: -18, to: now) ?? now,
-          purchasePrice: 200_000, targetMonths: 12))
-      return container
-    } catch {
-      fatalError("Failed to create ContentView preview container: \(error)")
-    }
+#if DEBUG
+  #Preview("Japanese") {
+    ContentView()
+      .modelContainer(
+        ScreenshotFixtures.previewContainer(
+          locale: Locale(identifier: "ja_JP"))
+      )
+      .environment(\.locale, Locale(identifier: "ja_JP"))
+      .defaultAppStorage(UserDefaults(suiteName: "UsedWell.Previews") ?? .standard)
   }
-}
 
-#Preview { ContentView().modelContainer(ContentViewPreview.makeContainer()) }
+  #Preview("English") {
+    ContentView()
+      .modelContainer(
+        ScreenshotFixtures.previewContainer(
+          locale: Locale(identifier: "en_US"))
+      )
+      .environment(\.locale, Locale(identifier: "en_US"))
+      .defaultAppStorage(UserDefaults(suiteName: "UsedWell.Previews") ?? .standard)
+  }
+
+#endif

@@ -26,6 +26,8 @@ final class UsedWellUITests: XCTestCase {
   func testExample() throws {
     // UI tests must launch the application that they test.
     let app = XCUIApplication()
+    app.launchArguments = ["-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP"]
+    app.launchEnvironment["USEDWELL_FIXTURE"] = "empty"
     app.launch()
 
     // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -36,7 +38,8 @@ final class UsedWellUITests: XCTestCase {
   @MainActor
   func testCompactPurchaseDatePickerStaysStableDuringRepeatedChanges() throws {
     let app = XCUIApplication()
-    app.launch()
+    app.launchArguments = ["-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP"]
+    launchJapaneseFixture(app)
     openItemEditor(in: app)
 
     let purchaseDatePicker = app.datePickers["purchase-date-picker"]
@@ -93,12 +96,17 @@ final class UsedWellUITests: XCTestCase {
     XCTAssertNotEqual(purchaseDateButton.value as? String, initialPurchaseDateValue)
   }
 
+  @MainActor private func launchJapaneseFixture(_ app: XCUIApplication) {
+    app.launchEnvironment["USEDWELL_FIXTURE"] = "empty"
+    app.launch()
+  }
+
   private func openItemEditor(in app: XCUIApplication) {
-    let firstItemButton = app.buttons["最初の愛用品を登録"]
+    let firstItemButton = app.buttons["add-first-item"]
     if firstItemButton.waitForExistence(timeout: 2) {
       firstItemButton.tap()
     } else {
-      app.buttons["愛用品を追加"].tap()
+      app.buttons["add-item"].tap()
     }
   }
 
@@ -110,7 +118,7 @@ final class UsedWellUITests: XCTestCase {
 
   private func selectFirstCalendarDay(in app: XCUIApplication) {
     let calendarDay = app.buttons.matching(
-      NSPredicate(format: "label MATCHES %@", ".*day, .* [0-9]+$")
+      NSPredicate(format: "label MATCHES %@", "[0-9]+月[0-9]+日 .*曜日")
     ).firstMatch
     XCTAssertTrue(calendarDay.waitForExistence(timeout: 2))
     calendarDay.tap()

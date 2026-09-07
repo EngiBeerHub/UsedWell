@@ -59,8 +59,9 @@ import Testing
       item.currentDailyCost(asOf: completion, calendar: calendar)
         == item.currentDailyCost(asOf: muchLater, calendar: calendar))
     #expect(
-      item.remainingText(asOf: completion, calendar: calendar)
-        == item.remainingText(asOf: muchLater, calendar: calendar))
+      item.remainingText(asOf: completion, calendar: calendar, locale: Locale(identifier: "ja_JP"))
+        == item.remainingText(
+          asOf: muchLater, calendar: calendar, locale: Locale(identifier: "ja_JP")))
   }
   @Test func completedItemUsesCompletionDateForCost() {
     let completion = calendar.date(byAdding: .day, value: 100, to: start)!
@@ -78,11 +79,13 @@ import Testing
     let item = Item(
       name: "Computer", category: .computer, purchaseDate: start, purchasePrice: 200_000,
       targetMonths: 26)
-    #expect(item.remainingText(asOf: start, calendar: calendar) == "目標まであと約2年2か月")
+    #expect(
+      item.remainingText(asOf: start, calendar: calendar, locale: Locale(identifier: "ja_JP"))
+        == "目標まであと約2年2か月")
 
     let overTarget = calendar.date(byAdding: .month, value: 40, to: start)!
     #expect(
-      item.remainingText(asOf: overTarget, calendar: calendar)
+      item.remainingText(asOf: overTarget, calendar: calendar, locale: Locale(identifier: "ja_JP"))
         == "目標を約1年2か月超えて使えています")
   }
 
@@ -92,24 +95,26 @@ import Testing
     let targetDate = item.targetDate(calendar: calendar)
 
     #expect(
-      item.remainingText(asOf: targetDate, calendar: calendar, usesDayPrecision: true) == "今日が目標日です"
+      item.remainingText(
+        asOf: targetDate, calendar: calendar, usesDayPrecision: true,
+        locale: Locale(identifier: "ja_JP")) == "今日が目標日です"
     )
     #expect(
       item.remainingText(
         asOf: calendar.date(byAdding: .day, value: -1, to: targetDate)!, calendar: calendar,
-        usesDayPrecision: true) == "目標まであと1日")
+        usesDayPrecision: true, locale: Locale(identifier: "ja_JP")) == "目標まであと1日")
     #expect(
       item.remainingText(
         asOf: calendar.date(byAdding: .day, value: -29, to: targetDate)!, calendar: calendar,
-        usesDayPrecision: true) == "目標まであと29日")
+        usesDayPrecision: true, locale: Locale(identifier: "ja_JP")) == "目標まであと29日")
     #expect(
       item.remainingText(
         asOf: calendar.date(byAdding: .day, value: 1, to: targetDate)!, calendar: calendar,
-        usesDayPrecision: true) == "目標を1日超えて使えています")
+        usesDayPrecision: true, locale: Locale(identifier: "ja_JP")) == "目標を1日超えて使えています")
     #expect(
       item.remainingText(
         asOf: calendar.date(byAdding: .day, value: 29, to: targetDate)!, calendar: calendar,
-        usesDayPrecision: true) == "目標を29日超えて使えています")
+        usesDayPrecision: true, locale: Locale(identifier: "ja_JP")) == "目標を29日超えて使えています")
   }
 
   @Test func detailedRemainingDurationUsesMonthsAtThirtyDays() {
@@ -120,16 +125,16 @@ import Testing
     #expect(
       item.remainingText(
         asOf: calendar.date(byAdding: .day, value: -30, to: targetDate)!, calendar: calendar,
-        usesDayPrecision: true) == "目標まであと約1か月")
+        usesDayPrecision: true, locale: Locale(identifier: "ja_JP")) == "目標まであと約1か月")
     #expect(
       item.remainingText(
         asOf: calendar.date(byAdding: .day, value: 30, to: targetDate)!, calendar: calendar,
-        usesDayPrecision: true) == "目標を約1か月超えて使えています")
+        usesDayPrecision: true, locale: Locale(identifier: "ja_JP")) == "目標を約1か月超えて使えています")
   }
   @Test func targetDateAddsConfiguredMonths() {
     let item = Item(
       name: "Bag", category: .bag, purchaseDate: start, purchasePrice: 50_000, targetMonths: 38)
-    #expect(item.targetDurationText == "3年2か月")
+    #expect(item.targetDurationText(locale: Locale(identifier: "ja_JP")) == "3年2か月")
     #expect(
       item.targetDate(calendar: calendar) == calendar.date(byAdding: .month, value: 38, to: start))
   }
@@ -214,8 +219,12 @@ import Testing
         item.elapsedDays(asOf: asOf, calendar: calendar) == item.targetDays(calendar: calendar))
       #expect(item.progress(asOf: asOf, calendar: calendar) == 1)
       #expect(item.status(asOf: asOf, calendar: calendar) == .goalAchieved)
-      #expect(item.remainingText(asOf: asOf, calendar: calendar) == "今日が目標日です")
-      #expect(item.usageDurationText(asOf: asOf, calendar: calendar) == "1か月")
+      #expect(
+        item.remainingText(asOf: asOf, calendar: calendar, locale: Locale(identifier: "ja_JP"))
+          == "今日が目標日です")
+      #expect(
+        item.usageDurationText(asOf: asOf, calendar: calendar, locale: Locale(identifier: "ja_JP"))
+          == "1か月")
       #expect(
         item.currentDailyCost(asOf: asOf, calendar: calendar)
           == item.targetDailyCost(calendar: calendar))

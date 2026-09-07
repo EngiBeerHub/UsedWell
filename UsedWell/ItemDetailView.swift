@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct ItemDetailView: View {
+  @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item
@@ -31,24 +32,35 @@ struct ItemDetailView: View {
           if item.isCompleted {
             Text("最終進捗率").font(.subheadline).foregroundStyle(.secondary)
           } else {
-            Text(item.remainingText(usesDayPrecision: true)).font(.subheadline).foregroundStyle(
-              .secondary)
+            Text(item.remainingText(usesDayPrecision: true, locale: locale)).font(.subheadline)
+              .foregroundStyle(
+                .secondary)
           }
         }.frame(maxWidth: .infinity).padding(.vertical, 8)
       }
-      Section(item.isCompleted ? "最終結果" : "使用状況") {
-        LabeledContent(item.isCompleted ? "最終使用期間" : "使用期間", value: item.usageDurationText)
-        LabeledContent("使用目標", value: item.targetDurationText)
-        LabeledContent("目標日", value: item.targetDate().japaneseDateText)
+      Section(
+        item.isCompleted
+          ? String(localized: LocalizedStringResource("最終結果", locale: locale))
+          : String(localized: LocalizedStringResource("使用状況", locale: locale))
+      ) {
+        LabeledContent(
+          item.isCompleted
+            ? String(localized: LocalizedStringResource("最終使用期間", locale: locale))
+            : String(localized: LocalizedStringResource("使用期間", locale: locale)),
+          value: item.usageDurationText(locale: locale))
+        LabeledContent("使用目標", value: item.targetDurationText(locale: locale))
+        LabeledContent("目標日", value: item.targetDate().localizedDateText(locale: locale))
         if item.isCompleted {
-          LabeledContent("使用開始〜終了", value: item.completedPeriodText)
+          LabeledContent("使用開始〜終了", value: item.completedPeriodText(locale: locale))
         } else {
-          LabeledContent("購入日", value: item.purchaseDate.japaneseDateText)
+          LabeledContent("購入日", value: item.purchaseDate.localizedDateText(locale: locale))
         }
         LabeledContent(
           "購入価格",
-          value: item.purchasePrice.formatted(.currency(code: "JPY").precision(.fractionLength(0))))
-        LabeledContent("カテゴリ", value: item.category.rawValue)
+          value: item.purchasePrice.formatted(
+            .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0))
+              .locale(locale)))
+        LabeledContent("カテゴリ", value: item.category.displayName(locale: locale))
       }
       if item.isCompleted {
         Section("最終コスト") {
@@ -58,7 +70,9 @@ struct ItemDetailView: View {
         Section {
           CostRow(title: "現在", value: item.currentDailyCost(), emphasis: true)
           CostRow(title: "今から1年後", value: item.extendedDailyCost())
-          CostRow(title: "目標達成時（\(item.targetDurationText)）", value: item.targetDailyCost())
+          CostRow(
+            title: "目標達成時（\(item.targetDurationText(locale: locale))）",
+            value: item.targetDailyCost())
         } header: {
           Text("1日あたりのコスト")
         } footer: {
@@ -69,6 +83,7 @@ struct ItemDetailView: View {
       if !item.isCompleted {
         Section {
           Button("買い替え完了にする", systemImage: "checkmark.circle") { showsCompleteConfirmation = true }
+            .accessibilityIdentifier("complete-item")
         } footer: {
           Text("使い終えた愛用品を、これまで使ったものに移します。")
         }
@@ -80,12 +95,20 @@ struct ItemDetailView: View {
           Label("記録を削除", systemImage: "trash")
             .foregroundStyle(.red)
         }
+        .accessibilityIdentifier("delete-item")
       }
     }
-    .navigationTitle(item.isCompleted ? "履歴の詳細" : "愛用品の詳細").navigationBarTitleDisplayMode(.inline)
+    .navigationTitle(
+      item.isCompleted
+        ? String(localized: LocalizedStringResource("履歴の詳細", locale: locale))
+        : String(localized: LocalizedStringResource("愛用品の詳細", locale: locale))
+    )
+    .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       if !item.isCompleted {
-        ToolbarItem(placement: .topBarTrailing) { Button("編集") { showsEditor = true } }
+        ToolbarItem(placement: .topBarTrailing) {
+          Button("編集") { showsEditor = true }.accessibilityIdentifier("edit-item")
+        }
       }
     }
     .sheet(isPresented: $showsEditor) {
@@ -133,9 +156,10 @@ struct ItemDetailView: View {
 
   private var completionMessage: String {
     let cost = item.currentDailyCost().formatted(
-      .currency(code: "JPY").precision(.fractionLength(0))
+      .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0)).locale(
+        locale)
     )
-    return "最終使用期間は\(item.usageDurationText)、1日あたり\(cost)でした。"
+    return String(localized: "最終使用期間は\(item.usageDurationText(locale: locale))、1日あたり\(cost)でした。")
   }
 
   @ViewBuilder private var usageNotesSection: some View {
@@ -159,7 +183,7 @@ struct ItemDetailView: View {
             presentUsageNoteEditor(note)
           } label: {
             VStack(alignment: .leading, spacing: 5) {
-              Text(note.date.japaneseDateText)
+              Text(note.date.localizedDateText(locale: locale))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
               Text(note.text)
@@ -209,12 +233,17 @@ private struct UsageNoteEditorDestination: Identifiable {
 }
 
 private struct CostRow: View {
-  let title: String
+  @Environment(\.locale) private var locale
+  let title: LocalizedStringKey
   let value: Double
   var emphasis = false
   var body: some View {
     LabeledContent(title) {
-      Text(value, format: .currency(code: "JPY").precision(.fractionLength(0))).fontWeight(
+      Text(
+        value,
+        format: .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0))
+          .locale(locale)
+      ).fontWeight(
         emphasis ? .bold : .regular
       ).monospacedDigit()
     }

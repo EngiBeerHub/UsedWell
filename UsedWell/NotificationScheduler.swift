@@ -5,17 +5,21 @@ enum NotificationMilestone: String, Sendable {
   case review = "90"
   case goal = "100"
 
-  func title() -> String {
+  func title(locale: Locale = .current) -> String {
     switch self {
-    case .review: "そろそろ見直しどきです"
-    case .goal: "使用目標に到達しました"
+    case .review: String(localized: LocalizedStringResource("そろそろ見直しどきです", locale: locale))
+    case .goal: String(localized: LocalizedStringResource("使用目標に到達しました", locale: locale))
     }
   }
 
-  func body(itemName: String) -> String {
+  func body(itemName: String, locale: Locale = .current) -> String {
     switch self {
-    case .review: "\(itemName)が使用目標の90%に達しました。"
-    case .goal: "\(itemName)を目標期間まで使いました。これからも使うか、見直してみましょう。"
+    case .review:
+      String(localized: LocalizedStringResource("\(itemName)が使用目標の90%に達しました。", locale: locale))
+    case .goal:
+      String(
+        localized: LocalizedStringResource(
+          "\(itemName)を目標期間まで使いました。これからも使うか、見直してみましょう。", locale: locale))
     }
   }
 }

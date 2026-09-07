@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct UsageNoteEditorView: View {
+  @Environment(\.locale) private var locale
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item
@@ -21,13 +22,14 @@ struct UsageNoteEditorView: View {
     Form {
       Section("日付") {
         DatePicker("メモの日付", selection: $date, in: ...Date.now, displayedComponents: .date)
-          .environment(\.locale, Locale(identifier: "ja_JP"))
+
           .accessibilityIdentifier("usage-note-date")
       }
       Section {
         TextEditor(text: $text)
           .frame(minHeight: 140)
           .accessibilityIdentifier("usage-note-text")
+          .accessibilityLabel("メモ")
       } header: {
         Text("メモ")
       } footer: {
@@ -45,7 +47,11 @@ struct UsageNoteEditorView: View {
         }
       }
     }
-    .navigationTitle(note == nil ? "使用メモを追加" : "使用メモを編集")
+    .navigationTitle(
+      note == nil
+        ? String(localized: LocalizedStringResource("使用メモを追加", locale: locale))
+        : String(localized: LocalizedStringResource("使用メモを編集", locale: locale))
+    )
     .navigationBarTitleDisplayMode(.inline)
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
