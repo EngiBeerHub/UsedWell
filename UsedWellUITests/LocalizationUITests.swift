@@ -3,8 +3,41 @@ import XCTest
 final class LocalizationUITests: XCTestCase {
   override func setUpWithError() throws { continueAfterFailure = false }
 
+  @MainActor func testReviewedEnglishScreenshots() {
+    let app = launch(language: "en", region: "US", fixture: "screenshots")
+    XCTAssertTrue(app.buttons["add-item"].waitForExistence(timeout: 5))
+    XCTAssertTrue(app.staticTexts["Want to keep using it"].firstMatch.exists)
+    XCTAssertTrue(app.staticTexts["Thinking about replacing it"].firstMatch.exists)
+    capture("en-US-01-home", app: app)
+    app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "iPhone 15 Pro")).firstMatch
+      .tap()
+    XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
+    capture("en-US-02-detail", app: app)
+    app.swipeUp()
+    capture("en-US-03-cost-notes", app: app)
+    app.terminate()
+    captureCostScreenshot()
+  }
+
+  @MainActor private func captureCostScreenshot() {
+    let app = launch(language: "en", region: "US", fixture: "cost-screenshot")
+    app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "MacBook Pro")).firstMatch.tap()
+    XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
+    app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.80)).press(
+      forDuration: 0.05,
+      thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.22)),
+      withVelocity: .slow, thenHoldForDuration: 0.3)
+    app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65)).press(
+      forDuration: 0.05,
+      thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.45)),
+      withVelocity: .slow, thenHoldForDuration: 0.3)
+    capture("en-US-14-cost", app: app)
+    app.terminate()
+  }
+
   @MainActor func testEnglishScreenshotsAndFlows() {
     exerciseFlows(language: "en", region: "US")
+    captureCostScreenshot()
   }
 
   @MainActor func testJapaneseScreenshotsAndFlows() {

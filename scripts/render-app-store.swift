@@ -63,7 +63,7 @@ let headings = [
   "Is it time to replace\nthis iPhone?",
   "See how long\nyou've owned it",
   "Don't replace it\non a whim",
-  "Keep notes on\nhow it feels",
+  "Keep notes on\nwhat you notice",
   "What does it\ncost per day?"
 ]
 let subtitles = [

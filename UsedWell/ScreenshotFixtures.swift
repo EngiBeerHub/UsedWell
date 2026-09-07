@@ -21,6 +21,17 @@
       guard mode != "empty" else { return container }
       let calendar = Calendar.current
       let today = calendar.startOfDay(for: .now)
+      if mode == "cost-screenshot" {
+        let computer = Item(
+          name: "MacBook Pro", category: .computer,
+          purchaseDate: calendar.date(byAdding: .year, value: -2, to: today)!,
+          purchasePrice: 3_999, targetMonths: 48)
+        container.mainContext.insert(computer)
+        computer.usageNotes.append(
+          UsageNote(date: today, text: "Still handles my video projects well"))
+        try container.mainContext.save()
+        return container
+      }
       let target = calendar.date(byAdding: .day, value: 16, to: today)!
       let purchase = calendar.date(byAdding: .year, value: -3, to: target)!
       let japanese = locale.language.languageCode?.identifier == "ja"
