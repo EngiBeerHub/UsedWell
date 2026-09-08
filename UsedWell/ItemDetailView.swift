@@ -6,6 +6,10 @@ struct ItemDetailView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item
+  let notifications: NotificationScheduler
+  let asOf: Date
+  var commit = PersistenceCommit()
+  @State private var saveFailed = false
   let onAddReplacement: () -> Void
   @State private var showsEditor = false
   @State private var showsCompleteConfirmation = false
@@ -22,19 +26,21 @@ struct ItemDetailView: View {
             Label("買い替え完了", systemImage: "checkmark.circle.fill")
               .font(.subheadline.weight(.semibold)).foregroundStyle(.green)
           } else {
-            StatusLabel(item: item)
+            StatusLabel(item: item, asOf: asOf)
           }
-          Text(item.progress(), format: .percent.precision(.fractionLength(0))).font(
+          Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0))).font(
             .largeTitle.bold()
           ).monospacedDigit()
-          ProgressView(value: min(item.progress(), 1))
+          ProgressView(value: min(item.progress(asOf: asOf), 1))
             .tint(progressTint)
           if item.isCompleted {
             Text("最終進捗率").font(.subheadline).foregroundStyle(.secondary)
           } else {
-            Text(item.remainingText(usesDayPrecision: true, locale: locale)).font(.subheadline)
-              .foregroundStyle(
-                .secondary)
+            Text(item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale)).font(
+              .subheadline
+            )
+            .foregroundStyle(
+              .secondary)
           }
         }.frame(maxWidth: .infinity).padding(.vertical, 8)
       }
@@ -47,7 +53,7 @@ struct ItemDetailView: View {
           item.isCompleted
             ? String(localized: LocalizedStringResource("最終使用期間", locale: locale))
             : String(localized: LocalizedStringResource("使用期間", locale: locale)),
-          value: item.usageDurationText(locale: locale))
+          value: item.usageDurationText(asOf: asOf, locale: locale))
         LabeledContent("使用目標", value: item.targetDurationText(locale: locale))
         LabeledContent("目標日", value: item.targetDate().localizedDateText(locale: locale))
         if item.isCompleted {
@@ -64,12 +70,12 @@ struct ItemDetailView: View {
       }
       if item.isCompleted {
         Section("最終コスト") {
-          CostRow(title: "1日あたり", value: item.currentDailyCost(), emphasis: true)
+          CostRow(title: "1日あたり", value: item.currentDailyCost(asOf: asOf), emphasis: true)
         }
       } else {
         Section {
-          CostRow(title: "現在", value: item.currentDailyCost(), emphasis: true)
-          CostRow(title: "今から1年後", value: item.extendedDailyCost())
+          CostRow(title: "現在", value: item.currentDailyCost(asOf: asOf), emphasis: true)
+          CostRow(title: "今から1年後", value: item.extendedDailyCost(asOf: asOf))
           CostRow(
             title: "目標達成時（\(item.targetDurationText(locale: locale))）",
             value: item.targetDailyCost())
@@ -104,6 +110,9 @@ struct ItemDetailView: View {
         : String(localized: LocalizedStringResource("愛用品の詳細", locale: locale))
     )
     .navigationBarTitleDisplayMode(.inline)
+    .alert("変更を保存できませんでした。もう一度お試しください。", isPresented: $saveFailed) {
+      Button("確認", role: .cancel) {}
+    }
     .toolbar {
       if !item.isCompleted {
         ToolbarItem(placement: .topBarTrailing) {
@@ -113,21 +122,19 @@ struct ItemDetailView: View {
     }
     .sheet(isPresented: $showsEditor) {
       NavigationStack {
-        ItemEditorView(item: item) { item, _ in
-          Task { await NotificationScheduler.shared.rescheduleIfAuthorized(item) }
+        ItemEditorView(item: item, commit: commit) { id, _ in
+          notifications.requestUpdate(itemID: id)
         }
       }
     }
     .sheet(item: $usageNoteEditorDestination) { destination in
       NavigationStack {
-        UsageNoteEditorView(item: item, note: destination.note)
+        UsageNoteEditorView(item: item, note: destination.note, commit: commit)
       }
     }
     .alert("買い替え完了にしますか？", isPresented: $showsCompleteConfirmation) {
       Button("今日で使用を終了") {
-        item.completedDate = .now
-        NotificationScheduler.shared.cancel(itemID: item.notificationID)
-        showsCompletionResult = true
+        completeItem()
       }
       Button("キャンセル", role: .cancel) {}
     } message: {
@@ -144,9 +151,7 @@ struct ItemDetailView: View {
     }
     .alert("この記録を削除しますか？", isPresented: $showsDeleteConfirmation) {
       Button("完全に削除", role: .destructive) {
-        NotificationScheduler.shared.cancel(itemID: item.notificationID)
-        modelContext.delete(item)
-        dismiss()
+        deleteItem()
       }
       Button("キャンセル", role: .cancel) {}
     } message: {
@@ -154,12 +159,36 @@ struct ItemDetailView: View {
     }
   }
 
+  private func completeItem() {
+    do {
+      try commit(in: modelContext) { item.completedDate = .now }
+      saveFailed = false
+      notifications.requestUpdate(itemID: item.notificationID)
+      showsCompletionResult = true
+    } catch {
+      saveFailed = true
+    }
+  }
+
+  private func deleteItem() {
+    let id = item.notificationID
+    do {
+      try commit(in: modelContext) { modelContext.delete(item) }
+      saveFailed = false
+      notifications.requestUpdate(itemID: id)
+      dismiss()
+    } catch {
+      saveFailed = true
+    }
+  }
+
   private var completionMessage: String {
-    let cost = item.currentDailyCost().formatted(
+    let cost = item.currentDailyCost(asOf: asOf).formatted(
       .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0)).locale(
         locale)
     )
-    return String(localized: "最終使用期間は\(item.usageDurationText(locale: locale))、1日あたり\(cost)でした。")
+    return String(
+      localized: "最終使用期間は\(item.usageDurationText(asOf: asOf, locale: locale))、1日あたり\(cost)でした。")
   }
 
   @ViewBuilder private var usageNotesSection: some View {
@@ -219,7 +248,7 @@ struct ItemDetailView: View {
 
   private var progressTint: Color {
     if item.isCompleted { return .green }
-    switch item.status() {
+    switch item.status(asOf: asOf) {
     case .stillUsing: return .accentColor
     case .considerReplacing: return .orange
     case .goalAchieved: return .green

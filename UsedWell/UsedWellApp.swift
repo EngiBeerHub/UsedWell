@@ -11,7 +11,22 @@ import SwiftUI
 @main
 struct UsedWellApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-  var sharedModelContainer: ModelContainer = {
+  private let sharedModelContainer: ModelContainer
+  private let notifications: NotificationScheduler
+  private let commit: PersistenceCommit
+
+  init() {
+    let container = Self.makeContainer()
+    sharedModelContainer = container
+    notifications = NotificationScheduler(context: container.mainContext)
+    #if DEBUG
+      commit = ScreenshotFixtures.makeCommit()
+    #else
+      commit = PersistenceCommit()
+    #endif
+  }
+
+  private static func makeContainer() -> ModelContainer {
     #if DEBUG
       if let mode = ScreenshotFixtures.mode {
         do { return try ScreenshotFixtures.makeContainer(mode: mode) } catch {
@@ -25,14 +40,14 @@ struct UsedWellApp: App {
     do {
       let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
       let items = try container.mainContext.fetch(FetchDescriptor<Item>())
-      if !Item.repairDuplicateNavigationIDs(in: items).isEmpty {
-        try container.mainContext.save()
+      try PersistenceCommit()(in: container.mainContext) {
+        _ = Item.repairDuplicateNavigationIDs(in: items)
       }
       return container
     } catch {
       fatalError("Could not create ModelContainer: \(error)")
     }
-  }()
+  }
 
   private let preferences: UserDefaults = {
     #if DEBUG
@@ -50,7 +65,17 @@ struct UsedWellApp: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView().defaultAppStorage(preferences)
+      Group {
+        #if DEBUG
+          if ScreenshotFixtures.mode == "day-boundary" {
+            DateRefreshFixture(notifications: notifications, commit: commit)
+          } else {
+            ContentView(notifications: notifications, commit: commit)
+          }
+        #else
+          ContentView(notifications: notifications, commit: commit)
+        #endif
+      }.defaultAppStorage(preferences)
     }
     .modelContainer(sharedModelContainer)
   }

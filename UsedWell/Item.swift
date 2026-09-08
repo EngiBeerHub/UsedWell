@@ -178,8 +178,18 @@ enum PurchasePrice {
     )
     return Double(purchasePrice) / Double(days)
   }
-  func reviewPriority(asOf date: Date = .now) -> (Int, Double) {
-    (status(asOf: date).rawValue, progress(asOf: date))
+  func reviewPriority(asOf date: Date = .now, calendar: Calendar = .current) -> (Int, Double) {
+    (status(asOf: date, calendar: calendar).rawValue, progress(asOf: date, calendar: calendar))
+  }
+
+  static func activeItemsForReview(
+    _ items: [Item], asOf date: Date, calendar: Calendar = .current
+  ) -> [Item] {
+    items.filter { !$0.isCompleted }.sorted {
+      let lhs = $0.reviewPriority(asOf: date, calendar: calendar)
+      let rhs = $1.reviewPriority(asOf: date, calendar: calendar)
+      return lhs.0 == rhs.0 ? lhs.1 > rhs.1 : lhs.0 > rhs.0
+    }
   }
 
   func usageDurationText(

@@ -7,12 +7,15 @@ struct UsageNoteEditorView: View {
   @Environment(\.modelContext) private var modelContext
   let item: Item
   let note: UsageNote?
+  let commit: PersistenceCommit
+  @State private var saveFailed = false
   @State private var date: Date
   @State private var text: String
   @State private var showsDeleteConfirmation = false
 
-  init(item: Item, note: UsageNote? = nil) {
+  init(item: Item, note: UsageNote? = nil, commit: PersistenceCommit? = nil) {
     self.item = item
+    self.commit = commit ?? PersistenceCommit()
     self.note = note
     _date = State(initialValue: note?.date ?? .now)
     _text = State(initialValue: note?.text ?? "")
@@ -53,6 +56,9 @@ struct UsageNoteEditorView: View {
         : String(localized: LocalizedStringResource("使用メモを編集", locale: locale))
     )
     .navigationBarTitleDisplayMode(.inline)
+    .alert("変更を保存できませんでした。もう一度お試しください。", isPresented: $saveFailed) {
+      Button("確認", role: .cancel) {}
+    }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button("キャンセル") { dismiss() }
@@ -76,23 +82,36 @@ struct UsageNoteEditorView: View {
   }
 
   private func save() {
-    let noteDate = Calendar.current.startOfDay(for: date)
-    if let note {
-      note.date = noteDate
-      note.text = trimmedText
-      note.updatedAt = .now
-    } else {
-      let note = UsageNote(date: noteDate, text: trimmedText)
-      modelContext.insert(note)
-      item.usageNotes.append(note)
+    guard !trimmedText.isEmpty else { return }
+    perform {
+      let noteDate = Calendar.current.startOfDay(for: date)
+      if let note {
+        note.date = noteDate
+        note.text = trimmedText
+        note.updatedAt = .now
+      } else {
+        let note = UsageNote(date: noteDate, text: trimmedText)
+        modelContext.insert(note)
+        item.usageNotes.append(note)
+      }
     }
-    dismiss()
   }
 
   private func delete() {
     guard let note else { return }
-    item.usageNotes.removeAll { $0.persistentModelID == note.persistentModelID }
-    modelContext.delete(note)
-    dismiss()
+    perform {
+      item.usageNotes.removeAll { $0.persistentModelID == note.persistentModelID }
+      modelContext.delete(note)
+    }
+  }
+
+  private func perform(_ change: () -> Void) {
+    do {
+      try commit(in: modelContext, applying: change)
+      saveFailed = false
+      dismiss()
+    } catch {
+      saveFailed = true
+    }
   }
 }

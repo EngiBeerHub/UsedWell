@@ -6,7 +6,9 @@ struct ItemEditorView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item?
-  let onSaved: (ItemNotificationDetails, Bool) -> Void
+  let onSaved: (UUID, Bool) -> Void
+  let commit: PersistenceCommit
+  @State private var saveFailed = false
   @State private var name: String
   @State private var category: ItemCategory
   @State private var purchaseDate: Date
@@ -15,10 +17,11 @@ struct ItemEditorView: View {
   @State private var targetAdditionalMonths: Int
 
   init(
-    item: Item? = nil,
-    onSaved: @escaping (ItemNotificationDetails, Bool) -> Void = { _, _ in }
+    item: Item? = nil, commit: PersistenceCommit? = nil,
+    onSaved: @escaping (UUID, Bool) -> Void = { _, _ in }
   ) {
     self.item = item
+    self.commit = commit ?? PersistenceCommit()
     self.onSaved = onSaved
     _name = State(initialValue: item?.name ?? "")
     _category = State(initialValue: item?.category ?? .phone)
@@ -83,6 +86,9 @@ struct ItemEditorView: View {
         : String(localized: LocalizedStringResource("登録内容を編集", locale: locale))
     )
     .navigationBarTitleDisplayMode(.inline)
+    .alert("変更を保存できませんでした。もう一度お試しください。", isPresented: $saveFailed) {
+      Button("確認", role: .cancel) {}
+    }
     .toolbar {
       ToolbarItem(placement: .cancellationAction) {
         Button {
@@ -115,24 +121,29 @@ struct ItemEditorView: View {
   }
   private func save() {
     guard isValid, let purchasePrice else { return }
-    let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-    let savedItem: Item
-    if let item {
-      item.name = cleanName
-      item.category = category
-      item.purchaseDate = Calendar.current.startOfDay(for: purchaseDate)
-      item.purchasePrice = purchasePrice
-      item.targetMonths = targetMonths
-      savedItem = item
-    } else {
-      let newItem = Item(
-        name: cleanName, category: category,
-        purchaseDate: Calendar.current.startOfDay(for: purchaseDate),
-        purchasePrice: purchasePrice, targetMonths: targetMonths)
-      modelContext.insert(newItem)
-      savedItem = newItem
+    do {
+      let savedItem = try commit(in: modelContext) {
+        let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let item {
+          item.name = cleanName
+          item.category = category
+          item.purchaseDate = Calendar.current.startOfDay(for: purchaseDate)
+          item.purchasePrice = purchasePrice
+          item.targetMonths = targetMonths
+          return item
+        }
+        let newItem = Item(
+          name: cleanName, category: category,
+          purchaseDate: Calendar.current.startOfDay(for: purchaseDate),
+          purchasePrice: purchasePrice, targetMonths: targetMonths)
+        modelContext.insert(newItem)
+        return newItem
+      }
+      saveFailed = false
+      onSaved(savedItem.notificationID, item == nil)
+      dismiss()
+    } catch {
+      saveFailed = true
     }
-    onSaved(ItemNotificationDetails(item: savedItem), item == nil)
-    dismiss()
   }
 }
