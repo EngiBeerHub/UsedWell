@@ -219,35 +219,44 @@ struct ContentView: View {
 
 private struct FeaturedItemCard: View {
   @Environment(\.locale) private var locale
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  @ScaledMetric(relativeTo: .title2) private var iconWidth = 28
   let item: Item
   let asOf: Date
+
+  private var headerLayout: AnyLayout {
+    dynamicTypeSize.isAccessibilitySize
+      ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+      : AnyLayout(HStackLayout(alignment: .top, spacing: 12))
+  }
+
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
-      HStack(alignment: .top, spacing: 12) {
+      headerLayout {
         Image(systemName: item.category.symbolName)
           .font(.title2)
           .foregroundStyle(.tint)
-          .frame(width: 28, height: 28)
-        VStack(alignment: .leading, spacing: 5) {
-          HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Text(item.name)
-              .font(.headline)
-              .lineLimit(1)
-            Spacer(minLength: 8)
-            ProgressText(item: item, asOf: asOf, featured: true)
-          }
-          StatusLabel(item: item, asOf: asOf)
-        }
+          .frame(width: iconWidth)
+          .accessibilityHidden(true)
+        Text(item.name)
+          .font(.title3.weight(.semibold))
+          .fixedSize(horizontal: false, vertical: true)
+      }
+      VStack(alignment: .leading, spacing: 5) {
+        Text("使用期間")
+          .font(.caption)
+          .foregroundStyle(.secondary)
+        Text(item.usageDurationText(asOf: asOf, locale: locale))
+          .font(.largeTitle.weight(.semibold))
+          .fixedSize(horizontal: false, vertical: true)
+        StatusLabel(item: item, asOf: asOf, homeFont: .subheadline)
+          .fixedSize(horizontal: false, vertical: true)
       }
       ProgressView(value: min(item.progress(asOf: asOf), 1))
-        .tint(item.status(asOf: asOf).progressTint)
-      VStack(alignment: .leading, spacing: 4) {
-        Text(item.remainingText(asOf: asOf, locale: locale))
-          .font(.subheadline)
-        ItemUsageSummary(item: item, asOf: asOf)
-      }
-      .foregroundStyle(.secondary)
-      .padding(.leading, 40)
+        .controlSize(.small)
+        .tint(Color(uiColor: .systemGray))
+        .accessibilityHidden(true)
+      HomeItemContext(item: item, asOf: asOf, featured: true)
     }
     .padding(.vertical, 8)
     .accessibilityIdentifier("featured-item")
@@ -256,74 +265,98 @@ private struct FeaturedItemCard: View {
 
 struct ItemRow: View {
   @Environment(\.locale) private var locale
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  @ScaledMetric(relativeTo: .title3) private var iconWidth = 28
   let item: Item
   let asOf: Date
+
+  private var rowLayout: AnyLayout {
+    dynamicTypeSize.isAccessibilitySize
+      ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+      : AnyLayout(HStackLayout(alignment: .top, spacing: 12))
+  }
+
   var body: some View {
-    HStack(alignment: .top, spacing: 12) {
+    rowLayout {
       Image(systemName: item.category.symbolName)
         .font(.title3)
         .foregroundStyle(.tint)
-        .frame(width: 28, height: 28)
+        .frame(width: iconWidth)
+        .accessibilityHidden(true)
       VStack(alignment: .leading, spacing: 5) {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
-          Text(item.name)
-            .font(.headline)
-            .lineLimit(1)
-          Spacer(minLength: 8)
-          ProgressText(item: item, asOf: asOf)
-        }
-        ProgressView(value: min(item.progress(asOf: asOf), 1))
-          .controlSize(.small)
-          .tint(item.status(asOf: asOf).progressTint)
-        StatusLabel(item: item, asOf: asOf)
-        ItemUsageSummary(item: item, asOf: asOf)
+        Text(item.name)
+          .font(.headline)
+          .fixedSize(horizontal: false, vertical: true)
+        Text(item.usageDurationText(asOf: asOf, locale: locale))
+          .font(.body)
+          .fixedSize(horizontal: false, vertical: true)
+        StatusLabel(item: item, asOf: asOf, homeFont: .caption)
+          .fixedSize(horizontal: false, vertical: true)
+        HomeItemContext(item: item, asOf: asOf)
       }
     }
     .padding(.vertical, 5)
+    .accessibilityIdentifier("regular-item-\(item.navigationID)")
   }
 }
 
-private struct ProgressText: View {
+private struct HomeItemContext: View {
   @Environment(\.locale) private var locale
   let item: Item
   let asOf: Date
   var featured = false
 
   var body: some View {
-    Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0)))
-      .font(featured ? .title2.bold() : .subheadline.bold())
-      .monospacedDigit()
-      .fixedSize(horizontal: true, vertical: false)
-      .foregroundStyle(.primary)
-  }
-}
-
-extension ReplacementStatus {
-  fileprivate var progressTint: Color {
-    switch self {
-    case .stillUsing: .accentColor
-    case .considerReplacing: .orange
-    case .goalAchieved: .green
-    }
-  }
-}
-
-private struct ItemUsageSummary: View {
-  @Environment(\.locale) private var locale
-  let item: Item
-  let asOf: Date
-
-  var body: some View {
-    let duration = item.usageDurationText(asOf: asOf, locale: locale)
-    let target = item.targetDurationText(locale: locale)
-    let cost = item.currentDailyCost(asOf: asOf).formatted(
+    let target = String(
+      localized: LocalizedStringResource(
+        "目標\(item.targetDurationText(locale: locale))", locale: locale))
+    let percentage = item.progress(asOf: asOf).formatted(
+      .percent.precision(.fractionLength(0)).locale(locale))
+    let amount = item.currentDailyCost(asOf: asOf).formatted(
       .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0)).locale(
         locale))
-    Text(
-      "使用期間 \(duration) / 目標\(target) ・ 1日 \(cost)"
-    )
-    .font(.caption)
+    let cost = String(localized: LocalizedStringResource("1日 \(amount)", locale: locale))
+    VStack(alignment: .leading, spacing: 4) {
+      if featured {
+        HomeContextLine(parts: [target, item.remainingText(asOf: asOf, locale: locale)])
+          .font(.footnote)
+        HomeContextLine(parts: [percentage, cost])
+          .font(.caption)
+      } else {
+        HomeContextLine(parts: [target, percentage, cost])
+          .font(.caption)
+      }
+    }
     .foregroundStyle(.secondary)
+  }
+}
+
+/// Keeps each piece of context intact when a single line no longer fits.
+private struct HomeContextLine: View {
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  @Environment(\.locale) private var locale
+  let parts: [String]
+
+  var body: some View {
+    if dynamicTypeSize.isAccessibilitySize {
+      stacked
+    } else {
+      ViewThatFits(in: .horizontal) {
+        Text(
+          parts.joined(separator: locale.language.languageCode?.identifier == "ja" ? " ・ " : " · ")
+        )
+        .fixedSize()
+        stacked
+      }
+    }
+  }
+
+  private var stacked: some View {
+    VStack(alignment: .leading, spacing: 4) {
+      ForEach(parts.indices, id: \.self) { index in
+        Text(parts[index]).fixedSize(horizontal: false, vertical: true)
+      }
+    }
   }
 }
 
@@ -331,13 +364,18 @@ struct StatusLabel: View {
   @Environment(\.locale) private var locale
   let item: Item
   let asOf: Date
+  var homeFont: Font?
+
   var body: some View {
     HStack(spacing: 5) {
       Image(systemName: item.status(asOf: asOf).symbolName)
+        .accessibilityHidden(homeFont != nil)
       Text(item.status(asOf: asOf).title(locale: locale))
     }
-    .font(.caption.weight(.semibold))
-    .foregroundStyle(item.status(asOf: asOf) == .goalAchieved ? .green : .secondary)
+    .font(homeFont ?? .caption.weight(.semibold))
+    .foregroundStyle(
+      homeFont == nil && item.status(asOf: asOf) == .goalAchieved ? .green : .secondary
+    )
   }
 }
 
