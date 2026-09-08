@@ -1,4 +1,6 @@
 import Foundation
+import OSLog
+import SwiftData
 import UserNotifications
 
 enum NotificationMilestone: String, Sendable {
@@ -89,48 +91,155 @@ enum NotificationPlanner {
   }
 }
 
-final class NotificationScheduler: Sendable {
-  static let shared = NotificationScheduler()
-  private let center = UNUserNotificationCenter.current()
+/// Only the OS boundary is replaceable; planning and ordering always run through the real scheduler.
+@MainActor struct NotificationOperations {
+  var authorizationStatus: () async -> UNAuthorizationStatus
+  var requestAuthorization: () async throws -> Bool
+  var add: (UNNotificationRequest) async throws -> Void
+  var remove: ([String]) -> Void
+  var pending: () async -> [UNNotificationRequest]
+
+  static func live(center: UNUserNotificationCenter = .current()) -> Self {
+    Self(
+      authorizationStatus: { await center.notificationSettings().authorizationStatus },
+      requestAuthorization: { try await center.requestAuthorization(options: [.alert, .sound]) },
+      add: { try await center.add($0) },
+      remove: { center.removePendingNotificationRequests(withIdentifiers: $0) },
+      pending: { await center.pendingNotificationRequests() })
+  }
+}
+
+@MainActor final class NotificationScheduler {
+  private let readItem: (UUID) throws -> ItemNotificationDetails?
+  private let readIDs: () throws -> [UUID]
+  private let operations: NotificationOperations
+  private let now: () -> Date
+  private var generations: [UUID: UUID] = [:]
+  private var workers: [UUID: Task<Void, Never>] = [:]
+  private let logger = Logger(subsystem: "UsedWell", category: "Notifications")
+
+  convenience init(context: ModelContext, operations: NotificationOperations? = nil) {
+    self.init(
+      readItem: { id in
+        let descriptor = FetchDescriptor<Item>(predicate: #Predicate { $0.notificationID == id })
+        return try context.fetch(descriptor).first.map(ItemNotificationDetails.init(item:))
+      },
+      readIDs: { try context.fetch(FetchDescriptor<Item>()).map(\.notificationID) },
+      operations: operations ?? .live())
+  }
+
+  init(
+    readItem: @escaping (UUID) throws -> ItemNotificationDetails?,
+    readIDs: @escaping () throws -> [UUID], operations: NotificationOperations,
+    now: @escaping () -> Date = { .now }
+  ) {
+    self.readItem = readItem
+    self.readIDs = readIDs
+    self.operations = operations
+    self.now = now
+  }
 
   func authorizationStatus() async -> UNAuthorizationStatus {
-    await center.notificationSettings().authorizationStatus
+    await operations.authorizationStatus()
   }
 
   func requestAuthorization() async -> Bool {
-    (try? await center.requestAuthorization(options: [.alert, .sound])) ?? false
-  }
-
-  func rescheduleIfAuthorized(_ item: ItemNotificationDetails) async {
-    let status = await authorizationStatus()
-    guard status == .authorized || status == .provisional || status == .ephemeral else {
-      cancel(itemID: item.id)
-      return
-    }
-    await reschedule(item)
-  }
-
-  func reschedule(_ item: ItemNotificationDetails, after date: Date = .now) async {
-    cancel(itemID: item.id)
-    for plan in NotificationPlanner.plans(for: item, after: date) {
-      let content = UNMutableNotificationContent()
-      content.title = plan.milestone.title()
-      content.body = plan.milestone.body(itemName: item.name)
-      content.sound = .default
-      content.userInfo = ["itemID": item.id.uuidString]
-
-      let components = Calendar.current.dateComponents(
-        [.year, .month, .day, .hour, .minute], from: plan.date)
-      let request = UNNotificationRequest(
-        identifier: plan.identifier,
-        content: content,
-        trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false))
-      try? await center.add(request)
+    do { return try await operations.requestAuthorization() } catch {
+      logger.error(
+        "Notification permission request failed: \(String(describing: error), privacy: .public)")
+      return false
     }
   }
 
-  func cancel(itemID: UUID) {
-    center.removePendingNotificationRequests(
-      withIdentifiers: NotificationPlanner.identifiers(itemID: itemID))
+  /// Call synchronously immediately after committing, before yielding or dismissing the editor.
+  func requestUpdate(itemID: UUID) {
+    generations[itemID] = UUID()
+    guard workers[itemID] == nil else { return }
+    // Owned by this scheduler, not by a sheet task. An in-flight OS add must finish before cleanup.
+    workers[itemID] = Task { await drain(itemID: itemID) }
+  }
+
+  func reconcile() async {
+    do {
+      let ids = Set(try readIDs())
+      let pendingIDs = await operations.pending().compactMap { Self.itemID(in: $0.identifier) }
+      for id in ids.union(pendingIDs) { requestUpdate(itemID: id) }
+    } catch {
+      logger.error(
+        "Notification reconciliation failed: \(String(describing: error), privacy: .public)")
+    }
+  }
+
+  private func drain(itemID: UUID) async {
+    defer {
+      workers[itemID] = nil
+      generations[itemID] = nil
+    }
+    while let generation = generations[itemID] {
+      do {
+        // Fetch errors are not deletions: leave existing reservations alone and retry on reconcile.
+        _ = try readItem(itemID)
+        let status = await operations.authorizationStatus()
+        guard generations[itemID] == generation else { continue }
+        let item = try readItem(itemID)
+        guard await removeExisting(itemID: itemID) else {
+          logger.error("Pending notification removal unconfirmed; deferring update")
+          return
+        }
+        guard generations[itemID] == generation else { continue }
+        let canNotify = [.authorized, .provisional, .ephemeral].contains(status)
+        if let item, !item.isCompleted, canNotify {
+          for plan in NotificationPlanner.plans(for: item, after: now()) {
+            guard generations[itemID] == generation else { break }
+            // Recheck time after an earlier add; do not backfill a milestone that has just passed.
+            guard plan.date > now() else { continue }
+            try await operations.add(request(plan, item: item))
+            // If a newer commit arrived during add, the next iteration removes this stale add
+            // before writing anything from the new generation. Never cancel this await early.
+          }
+        }
+      } catch {
+        logger.error("Notification update failed: \(String(describing: error), privacy: .public)")
+      }
+      if generations[itemID] == generation { return }
+    }
+  }
+
+  private func removeExisting(itemID: UUID) async -> Bool {
+    let identifiers = Set(NotificationPlanner.identifiers(itemID: itemID))
+    let existing = await operations.pending().map(\.identifier).filter { identifiers.contains($0) }
+    guard !existing.isEmpty else { return true }
+    operations.remove(existing)
+    // One OS round trip to confirm removal. If still pending, do not overlap reservations or
+    // spin/poll: the next foreground/commit reconciliation will retry from persisted state.
+    return await operations.pending().allSatisfy { !identifiers.contains($0.identifier) }
+  }
+
+  private func request(
+    _ plan: PlannedNotification, item: ItemNotificationDetails
+  ) -> UNNotificationRequest {
+    let content = UNMutableNotificationContent()
+    content.title = plan.milestone.title()
+    content.body = plan.milestone.body(itemName: item.name)
+    content.sound = .default
+    content.userInfo = ["itemID": item.id.uuidString]
+    let components = Calendar.current.dateComponents(
+      [.year, .month, .day, .hour, .minute], from: plan.date)
+    return UNNotificationRequest(
+      identifier: plan.identifier, content: content,
+      trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false))
+  }
+
+  private static func itemID(in identifier: String) -> UUID? {
+    let parts = identifier.split(separator: ".")
+    guard parts.count == 4, parts[0] == "usedwell", parts[1] == "item",
+      parts[3] == "90" || parts[3] == "100"
+    else { return nil }
+    return UUID(uuidString: String(parts[2]))
+  }
+
+  /// Also lets tests wait for OS completion without timing assumptions or canceling a worker.
+  func waitForUpdates() async {
+    while let worker = workers.values.first { await worker.value }
   }
 }

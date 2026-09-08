@@ -1743,6 +1743,22 @@
           }
         }
       }
+    },
+    "変更を保存できませんでした。もう一度お試しください。": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変更を保存できませんでした。もう一度お試しください。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not save your changes. Please try again."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

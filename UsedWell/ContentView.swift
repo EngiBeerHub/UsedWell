@@ -1,7 +1,12 @@
+import OSLog
 import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+  let notifications: NotificationScheduler
+  var commit = PersistenceCommit()
+  var now: () -> Date = { .now }
+  @State private var asOf = Date.now
   @Environment(\.locale) private var locale
   @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
@@ -13,14 +18,8 @@ struct ContentView: View {
   @State private var notificationNavigation = NotificationNavigation.shared
   @State private var showsAdd = false
   @State private var showsNotificationExplanation = false
-  @State private var pendingNotificationItem: ItemNotificationDetails?
-  private var activeItems: [Item] {
-    items.filter { !$0.isCompleted }.sorted {
-      let lhs = $0.reviewPriority()
-      let rhs = $1.reviewPriority()
-      return lhs.0 == rhs.0 ? lhs.1 > rhs.1 : lhs.0 > rhs.0
-    }
-  }
+  @State private var pendingNotificationItem: UUID?
+  private var activeItems: [Item] { Item.activeItemsForReview(items, asOf: asOf) }
   private var hasHistory: Bool { items.contains(where: \.isCompleted) }
   var body: some View {
     NavigationStack(path: $navigationPath) {
@@ -41,7 +40,7 @@ struct ContentView: View {
             if hasHistory {
               Divider().padding(.top, 4)
               NavigationLink {
-                HistoryView()
+                HistoryView(notifications: notifications, asOf: asOf, commit: commit)
               } label: {
                 Label("これまで使ったもの", systemImage: "clock.arrow.circlepath")
               }
@@ -54,17 +53,19 @@ struct ContentView: View {
           List {
             Section("次に見直すもの") {
               if let item = activeItems.first {
-                NavigationLink(value: item.navigationID) { FeaturedItemCard(item: item) }
+                NavigationLink(value: item.navigationID) {
+                  FeaturedItemCard(item: item, asOf: asOf)
+                }
               }
             }
             Section("使用中の愛用品") {
               ForEach(activeItems) { item in
-                NavigationLink(value: item.navigationID) { ItemRow(item: item) }
+                NavigationLink(value: item.navigationID) { ItemRow(item: item, asOf: asOf) }
               }
             }
             Section {
               NavigationLink {
-                HistoryView()
+                HistoryView(notifications: notifications, asOf: asOf, commit: commit)
               } label: {
                 Label("これまで使ったもの", systemImage: "clock.arrow.circlepath")
               }
@@ -80,7 +81,9 @@ struct ContentView: View {
       }
       .navigationDestination(for: UUID.self) { navigationID in
         if let item = items.first(where: { $0.navigationID == navigationID }) {
-          ItemDetailView(item: item, onAddReplacement: { showsAdd = true })
+          ItemDetailView(
+            item: item, notifications: notifications, asOf: asOf, commit: commit,
+            onAddReplacement: { showsAdd = true })
         } else {
           ContentUnavailableView("記録が見つかりません", systemImage: "questionmark.folder")
         }
@@ -88,8 +91,9 @@ struct ContentView: View {
     }
     .sheet(isPresented: $showsAdd, onDismiss: handleAddDismiss) {
       NavigationStack {
-        ItemEditorView { item, isNew in
-          if isNew { pendingNotificationItem = item }
+        ItemEditorView(commit: commit) { id, isNew in
+          notifications.requestUpdate(itemID: id)
+          if isNew { pendingNotificationItem = id }
         }
       }
     }
@@ -108,7 +112,16 @@ struct ContentView: View {
       Text("購入価格は自動換算されません。必要に応じて、既存アイテムの購入価格を現在の通貨に合わせて編集してください。")
     }
     .onChange(of: scenePhase) { _, phase in
-      if phase == .active { checkRegion() }
+      if phase == .active {
+        refreshAsOf()
+        checkRegion()
+        refreshNotifications()
+      }
+    }
+    .onReceive(
+      NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)
+    ) { _ in
+      refreshAsOf()
     }
     .onChange(of: navigationPath) { _, _ in checkRegion() }
     .onChange(of: showsAdd) { _, shown in
@@ -121,18 +134,22 @@ struct ContentView: View {
       openNotificationItem(itemID)
     }
     .onChange(of: items.map(\.navigationID)) { _, _ in
-      Task { await repairLegacyNotificationIDs() }
+      refreshNotifications()
       openNotificationItem(notificationNavigation.itemID)
     }
     .task {
-      await repairLegacyNotificationIDs()
-      for item in items where !item.isCompleted {
-        await NotificationScheduler.shared.rescheduleIfAuthorized(
-          ItemNotificationDetails(item: item))
-      }
+      refreshAsOf()
+      if repairLegacyNotificationIDs() { await notifications.reconcile() }
       openNotificationItem(notificationNavigation.itemID)
       checkRegion()
     }
+  }
+
+  private func refreshAsOf() { asOf = now() }
+
+  private func refreshNotifications() {
+    guard repairLegacyNotificationIDs() else { return }
+    Task { await notifications.reconcile() }
   }
 
   private func checkRegion() {
@@ -157,11 +174,11 @@ struct ContentView: View {
   private func handleAddDismiss() {
     guard let item = pendingNotificationItem else { return }
     Task {
-      switch await NotificationScheduler.shared.authorizationStatus() {
+      switch await notifications.authorizationStatus() {
       case .notDetermined:
         showsNotificationExplanation = true
       case .authorized, .provisional, .ephemeral:
-        await NotificationScheduler.shared.reschedule(item)
+        notifications.requestUpdate(itemID: item)
         pendingNotificationItem = nil
       default:
         pendingNotificationItem = nil
@@ -172,8 +189,8 @@ struct ContentView: View {
   private func requestNotificationPermission() {
     guard let item = pendingNotificationItem else { return }
     Task {
-      if await NotificationScheduler.shared.requestAuthorization() {
-        await NotificationScheduler.shared.reschedule(item)
+      if await notifications.requestAuthorization() {
+        notifications.requestUpdate(itemID: item)
       }
       pendingNotificationItem = nil
     }
@@ -185,24 +202,25 @@ struct ContentView: View {
     notificationNavigation.itemID = nil
   }
 
-  private func repairLegacyNotificationIDs() async {
-    let repair = Item.repairDuplicateNotificationIDs(in: items)
-    guard !repair.repairedItems.isEmpty else { return }
+  private func repairLegacyNotificationIDs() -> Bool {
     do {
-      try modelContext.save()
+      let repair = try commit(in: modelContext) { Item.repairDuplicateNotificationIDs(in: items) }
+      for id in repair.staleIDs { notifications.requestUpdate(itemID: id) }
+      for item in repair.repairedItems { notifications.requestUpdate(itemID: item.notificationID) }
+      return true
     } catch {
-      return
-    }
-    repair.staleIDs.forEach(NotificationScheduler.shared.cancel)
-    for item in repair.repairedItems where !item.isCompleted {
-      await NotificationScheduler.shared.rescheduleIfAuthorized(ItemNotificationDetails(item: item))
+      Logger(subsystem: "UsedWell", category: "Persistence")
+        .error("Notification identity repair failed; retrying on next refresh")
+      return false
     }
   }
+
 }
 
 private struct FeaturedItemCard: View {
   @Environment(\.locale) private var locale
   let item: Item
+  let asOf: Date
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
       HStack(alignment: .top, spacing: 12) {
@@ -216,17 +234,17 @@ private struct FeaturedItemCard: View {
               .font(.headline)
               .lineLimit(1)
             Spacer(minLength: 8)
-            ProgressText(item: item, featured: true)
+            ProgressText(item: item, asOf: asOf, featured: true)
           }
-          StatusLabel(item: item)
+          StatusLabel(item: item, asOf: asOf)
         }
       }
-      ProgressView(value: min(item.progress(), 1))
-        .tint(item.status().progressTint)
+      ProgressView(value: min(item.progress(asOf: asOf), 1))
+        .tint(item.status(asOf: asOf).progressTint)
       VStack(alignment: .leading, spacing: 4) {
-        Text(item.remainingText(locale: locale))
+        Text(item.remainingText(asOf: asOf, locale: locale))
           .font(.subheadline)
-        ItemUsageSummary(item: item)
+        ItemUsageSummary(item: item, asOf: asOf)
       }
       .foregroundStyle(.secondary)
       .padding(.leading, 40)
@@ -239,6 +257,7 @@ private struct FeaturedItemCard: View {
 struct ItemRow: View {
   @Environment(\.locale) private var locale
   let item: Item
+  let asOf: Date
   var body: some View {
     HStack(alignment: .top, spacing: 12) {
       Image(systemName: item.category.symbolName)
@@ -251,13 +270,13 @@ struct ItemRow: View {
             .font(.headline)
             .lineLimit(1)
           Spacer(minLength: 8)
-          ProgressText(item: item)
+          ProgressText(item: item, asOf: asOf)
         }
-        ProgressView(value: min(item.progress(), 1))
+        ProgressView(value: min(item.progress(asOf: asOf), 1))
           .controlSize(.small)
-          .tint(item.status().progressTint)
-        StatusLabel(item: item)
-        ItemUsageSummary(item: item)
+          .tint(item.status(asOf: asOf).progressTint)
+        StatusLabel(item: item, asOf: asOf)
+        ItemUsageSummary(item: item, asOf: asOf)
       }
     }
     .padding(.vertical, 5)
@@ -267,10 +286,11 @@ struct ItemRow: View {
 private struct ProgressText: View {
   @Environment(\.locale) private var locale
   let item: Item
+  let asOf: Date
   var featured = false
 
   var body: some View {
-    Text(item.progress(), format: .percent.precision(.fractionLength(0)))
+    Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0)))
       .font(featured ? .title2.bold() : .subheadline.bold())
       .monospacedDigit()
       .fixedSize(horizontal: true, vertical: false)
@@ -291,11 +311,12 @@ extension ReplacementStatus {
 private struct ItemUsageSummary: View {
   @Environment(\.locale) private var locale
   let item: Item
+  let asOf: Date
 
   var body: some View {
-    let duration = item.usageDurationText(locale: locale)
+    let duration = item.usageDurationText(asOf: asOf, locale: locale)
     let target = item.targetDurationText(locale: locale)
-    let cost = item.currentDailyCost().formatted(
+    let cost = item.currentDailyCost(asOf: asOf).formatted(
       .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0)).locale(
         locale))
     Text(
@@ -309,35 +330,31 @@ private struct ItemUsageSummary: View {
 struct StatusLabel: View {
   @Environment(\.locale) private var locale
   let item: Item
+  let asOf: Date
   var body: some View {
     HStack(spacing: 5) {
-      Image(systemName: item.status().symbolName)
-      Text(item.status().title(locale: locale))
+      Image(systemName: item.status(asOf: asOf).symbolName)
+      Text(item.status(asOf: asOf).title(locale: locale))
     }
     .font(.caption.weight(.semibold))
-    .foregroundStyle(item.status() == .goalAchieved ? .green : .secondary)
+    .foregroundStyle(item.status(asOf: asOf) == .goalAchieved ? .green : .secondary)
   }
 }
 
 #if DEBUG
   #Preview("Japanese") {
-    ContentView()
-      .modelContainer(
-        ScreenshotFixtures.previewContainer(
-          locale: Locale(identifier: "ja_JP"))
-      )
+    let container = ScreenshotFixtures.previewContainer(locale: Locale(identifier: "ja_JP"))
+    ContentView(notifications: NotificationScheduler(context: container.mainContext))
+      .modelContainer(container)
       .environment(\.locale, Locale(identifier: "ja_JP"))
       .defaultAppStorage(UserDefaults(suiteName: "UsedWell.Previews") ?? .standard)
   }
 
   #Preview("English") {
-    ContentView()
-      .modelContainer(
-        ScreenshotFixtures.previewContainer(
-          locale: Locale(identifier: "en_US"))
-      )
+    let container = ScreenshotFixtures.previewContainer(locale: Locale(identifier: "en_US"))
+    ContentView(notifications: NotificationScheduler(context: container.mainContext))
+      .modelContainer(container)
       .environment(\.locale, Locale(identifier: "en_US"))
       .defaultAppStorage(UserDefaults(suiteName: "UsedWell.Previews") ?? .standard)
   }
-
 #endif
