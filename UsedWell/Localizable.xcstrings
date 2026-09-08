@@ -718,22 +718,6 @@
         }
       }
     },
-    "使用期間 %@ / 目標%@ ・ 1日 %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Owned %@ / Goal %@ · %@ per day"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "使用期間 %@ / 目標%@ ・ 1日 %@"
-          }
-        }
-      }
-    },
     "使用状況": {
       "localizations": {
         "en": {
@@ -1756,6 +1740,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not save your changes. Please try again."
+          }
+        }
+      }
+    },
+    "目標%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目標%@"
+          }
+        }
+      }
+    },
+    "1日 %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per day"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1日 %@"
           }
         }
       }

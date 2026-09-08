@@ -70,7 +70,9 @@ struct UsedWellApp: App {
           if ScreenshotFixtures.mode == "day-boundary" {
             DateRefreshFixture(notifications: notifications, commit: commit)
           } else {
-            ContentView(notifications: notifications, commit: commit)
+            ContentView(
+              notifications: notifications, commit: commit,
+              now: { ScreenshotFixtures.homeReferenceDate ?? .now })
           }
         #else
           ContentView(notifications: notifications, commit: commit)

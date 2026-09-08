@@ -41,6 +41,72 @@
 
     static var mode: String? { ProcessInfo.processInfo.environment["USEDWELL_FIXTURE"] }
 
+    @MainActor private static func populateCostScreenshot(
+      _ container: ModelContainer, today: Date, calendar: Calendar
+    ) throws {
+      let computer = Item(
+        name: "MacBook Pro", category: .computer,
+        purchaseDate: calendar.date(byAdding: .year, value: -2, to: today)!,
+        purchasePrice: 3_999, targetMonths: 48)
+      container.mainContext.insert(computer)
+      computer.usageNotes.append(
+        UsageNote(date: today, text: "Still handles my video projects well"))
+      try container.mainContext.save()
+    }
+
+    static var homeReferenceDate: Date? {
+      guard mode?.hasPrefix("home-") == true else { return nil }
+      return homeDate(2026, 9, 8)
+    }
+
+    private static func homeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+      Calendar.current.date(from: DateComponents(year: year, month: month, day: day, hour: 12))!
+    }
+
+    @MainActor private static func populateHome(
+      _ container: ModelContainer, mode: String, locale: Locale
+    ) throws {
+      let japanese = locale.language.languageCode?.identifier == "ja"
+      let phone = Item(
+        name: "iPhone 15 Pro", category: .phone, purchaseDate: homeDate(2023, 9, 24),
+        purchasePrice: 159_800, targetMonths: 36)
+      if mode == "home-new" {
+        phone.purchaseDate = homeDate(2026, 9, 8)
+      } else if mode == "home-over" {
+        phone.purchaseDate = homeDate(2022, 9, 8)
+      } else if mode == "home-long" {
+        phone.name =
+          japanese
+          ? "旅と日常の記録に使い続けている大切なフルサイズカメラと標準ズームレンズ"
+          : "The full-frame camera and everyday zoom lens I have used for travel and family photographs"
+        phone.categoryRawValue = ItemCategory.camera.rawValue
+        phone.purchaseDate = homeDate(2013, 10, 8)
+      }
+      container.mainContext.insert(phone)
+      if mode == "home-review" {
+        // Deliberately insert out of review order, including two items in the 90–99% state.
+        container.mainContext.insert(
+          Item(
+            name: "Leather bag", category: .bag, purchaseDate: homeDate(2024, 12, 8),
+            purchasePrice: 80_000, targetMonths: 36))
+        container.mainContext.insert(
+          Item(
+            name: "MacBook Air", category: .computer, purchaseDate: homeDate(2024, 3, 8),
+            purchasePrice: 183_800, targetMonths: 36))
+        container.mainContext.insert(
+          Item(
+            name: "Review Camera", category: .camera, purchaseDate: homeDate(2023, 11, 8),
+            purchasePrice: 120_000, targetMonths: 36))
+      }
+      if mode != "home-new" {
+        container.mainContext.insert(
+          Item(
+            name: "Past Watch", category: .watch, purchaseDate: homeDate(2020, 9, 8),
+            purchasePrice: 40_000, targetMonths: 24, completedDate: homeDate(2023, 9, 8)))
+      }
+      try container.mainContext.save()
+    }
+
     @MainActor static func makeContainer(
       mode: String, locale: Locale = .current
     ) throws -> ModelContainer {
@@ -48,6 +114,10 @@
         for: Item.self, UsageNote.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true))
       guard mode != "empty" else { return container }
+      if mode.hasPrefix("home-") {
+        try populateHome(container, mode: mode, locale: locale)
+        return container
+      }
       if mode == "day-boundary" {
         try populateDateBoundary(container)
         return container
@@ -55,14 +125,7 @@
       let calendar = Calendar.current
       let today = calendar.startOfDay(for: .now)
       if mode == "cost-screenshot" {
-        let computer = Item(
-          name: "MacBook Pro", category: .computer,
-          purchaseDate: calendar.date(byAdding: .year, value: -2, to: today)!,
-          purchasePrice: 3_999, targetMonths: 48)
-        container.mainContext.insert(computer)
-        computer.usageNotes.append(
-          UsageNote(date: today, text: "Still handles my video projects well"))
-        try container.mainContext.save()
+        try populateCostScreenshot(container, today: today, calendar: calendar)
         return container
       }
       let target = calendar.date(byAdding: .day, value: 16, to: today)!
