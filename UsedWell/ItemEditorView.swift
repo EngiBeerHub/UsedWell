@@ -1,3 +1,4 @@
+import PhotosUI
 import SwiftData
 import SwiftUI
 
@@ -15,6 +16,8 @@ struct ItemEditorView: View {
   @State private var purchasePrice: Int?
   @State private var targetYears: Int
   @State private var targetAdditionalMonths: Int
+  @State private var selectedPhoto: PhotosPickerItem?
+  @State private var photoDraft: ItemPhotoDraft
 
   init(
     item: Item? = nil, commit: PersistenceCommit? = nil,
@@ -23,6 +26,7 @@ struct ItemEditorView: View {
     self.item = item
     self.commit = commit ?? PersistenceCommit()
     self.onSaved = onSaved
+    _photoDraft = State(initialValue: ItemPhotoDraft(original: item?.photoData))
     _name = State(initialValue: item?.name ?? "")
     _category = State(initialValue: item?.category ?? .phone)
     _purchaseDate = State(initialValue: item?.purchaseDate ?? .now)
@@ -33,6 +37,7 @@ struct ItemEditorView: View {
   }
   var body: some View {
     Form {
+      photoSection
       Section("愛用品") {
         TextField("名前", text: $name).accessibilityIdentifier("item-name")
         Picker("カテゴリ", selection: $category) {
@@ -110,6 +115,54 @@ struct ItemEditorView: View {
     .onChange(of: targetYears) { _, newValue in
       if newValue == 20 { targetAdditionalMonths = 0 }
     }
+    .onChange(of: selectedPhoto) { _, selection in
+      if selection != nil { photoDraft.beginSelection() }
+    }
+    .task(id: photoDraft.selectionID) {
+      guard photoDraft.isLoading, let selectedPhoto else { return }
+      let selectionID = photoDraft.selectionID
+      do {
+        let photo = try await selectedPhoto.loadTransferable(type: ImportedItemPhoto.self)
+        guard !Task.isCancelled else { return }
+        photoDraft.finish(photo?.data, selectionID: selectionID)
+        self.selectedPhoto = nil
+      } catch {
+        guard !Task.isCancelled else { return }
+        photoDraft.finish(nil, selectionID: selectionID)
+        self.selectedPhoto = nil
+      }
+    }
+    .onDisappear { photoDraft.cancelLoading() }
+  }
+
+  private var photoSection: some View {
+    Section {
+      ItemPhotoView(data: photoDraft.data, category: category)
+        .frame(height: photoDraft.data == nil ? 100 : 180)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .accessibilityIdentifier("item-photo-preview")
+      PhotosPicker(selection: $selectedPhoto, matching: .images) {
+        Label(photoDraft.data == nil ? "写真を追加" : "写真を変更", systemImage: "photo")
+      }
+      .accessibilityIdentifier("choose-item-photo")
+      if photoDraft.data != nil {
+        Button("写真を削除", role: .destructive) {
+          selectedPhoto = nil
+          photoDraft.remove()
+        }
+        .accessibilityIdentifier("remove-item-photo")
+      }
+      if photoDraft.isLoading {
+        ProgressView("写真を読み込み中")
+      }
+    } header: {
+      Text("写真（任意）")
+    } footer: {
+      if photoDraft.loadFailed {
+        Text("写真を読み込めませんでした。もう一度選択してください。")
+          .foregroundStyle(.red)
+      }
+    }
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
   private var purchasePriceValidationMessage: String? {
@@ -117,7 +170,7 @@ struct ItemEditorView: View {
   }
   private var isValid: Bool {
     !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-      && purchasePriceValidationMessage == nil && targetMonths > 0
+      && purchasePriceValidationMessage == nil && targetMonths > 0 && !photoDraft.isLoading
   }
   private func save() {
     guard isValid, let purchasePrice else { return }
@@ -130,6 +183,7 @@ struct ItemEditorView: View {
           item.purchaseDate = Calendar.current.startOfDay(for: purchaseDate)
           item.purchasePrice = purchasePrice
           item.targetMonths = targetMonths
+          if photoDraft.change != .unchanged { item.photoData = photoDraft.data }
           return item
         }
         let newItem = Item(
@@ -137,6 +191,7 @@ struct ItemEditorView: View {
           purchaseDate: Calendar.current.startOfDay(for: purchaseDate),
           purchasePrice: purchasePrice, targetMonths: targetMonths)
         modelContext.insert(newItem)
+        newItem.photoData = photoDraft.data
         return newItem
       }
       saveFailed = false

@@ -50,29 +50,44 @@ struct ContentView: View {
           .padding(.horizontal, 32)
           .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
-          List {
-            Section("次に見直すもの") {
+          ScrollView {
+            LazyVStack(alignment: .leading, spacing: 16) {
+              Text("使用中 \(activeItems.count)点")
+                .font(.subheadline).foregroundStyle(.secondary)
+              Text("次に見直すもの").font(.headline).padding(.top, 8)
               if let item = activeItems.first {
                 NavigationLink(value: item.navigationID) {
                   FeaturedItemCard(item: item, asOf: asOf)
-                }
+                }.buttonStyle(.plain)
               }
-            }
-            Section("使用中の愛用品") {
+              Text("使用中の愛用品").font(.headline).padding(.top, 8)
               ForEach(activeItems) { item in
                 NavigationLink(value: item.navigationID) { ItemRow(item: item, asOf: asOf) }
+                  .buttonStyle(.plain)
               }
-            }
-            Section {
               NavigationLink {
                 HistoryView(notifications: notifications, asOf: asOf, commit: commit)
               } label: {
-                Label("これまで使ったもの", systemImage: "clock.arrow.circlepath")
-              }
+                HStack {
+                  Label("これまで使ったもの", systemImage: "clock.arrow.circlepath")
+                  Spacer()
+                  Image(systemName: "chevron.right").accessibilityHidden(true)
+                }
+                .font(.subheadline).foregroundStyle(.secondary)
+                .padding(.vertical, 20)
+                .contentShape(Rectangle())
+              }.buttonStyle(.plain)
             }
-          }.listStyle(.insetGrouped)
+            .padding(.horizontal, 16).padding(.bottom, 16)
+          }
+          .background(Color(uiColor: .systemGroupedBackground))
         }
       }
+      .navigationTitle(
+        String(
+          localized: LocalizedStringResource(
+            "home.items.title", defaultValue: "愛用品", locale: locale))
+      )
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button("愛用品を追加", systemImage: "plus") { showsAdd = true }.accessibilityIdentifier(
@@ -218,84 +233,41 @@ struct ContentView: View {
 }
 
 private struct FeaturedItemCard: View {
-  @Environment(\.locale) private var locale
-  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-  @ScaledMetric(relativeTo: .title2) private var iconWidth = 28
   let item: Item
   let asOf: Date
 
-  private var headerLayout: AnyLayout {
-    dynamicTypeSize.isAccessibilitySize
-      ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
-      : AnyLayout(HStackLayout(alignment: .top, spacing: 12))
-  }
-
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
-      headerLayout {
-        Image(systemName: item.category.symbolName)
-          .font(.title2)
-          .foregroundStyle(.tint)
-          .frame(width: iconWidth)
-          .accessibilityHidden(true)
-        Text(item.name)
-          .font(.title3.weight(.semibold))
-          .fixedSize(horizontal: false, vertical: true)
-      }
-      VStack(alignment: .leading, spacing: 5) {
-        Text("使用期間")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-        Text(item.usageDurationText(asOf: asOf, locale: locale))
-          .font(.largeTitle.weight(.semibold))
-          .fixedSize(horizontal: false, vertical: true)
-        StatusLabel(item: item, asOf: asOf, homeFont: .subheadline)
-          .fixedSize(horizontal: false, vertical: true)
-      }
-      ProgressView(value: min(item.progress(asOf: asOf), 1))
-        .controlSize(.small)
-        .tint(Color(uiColor: .systemGray))
-        .accessibilityHidden(true)
+      ItemDurationHeader(item: item, asOf: asOf)
       HomeItemContext(item: item, asOf: asOf, featured: true)
     }
-    .padding(.vertical, 8)
+    .padding(16)
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(
+      Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24)
+    )
+    .contentShape(RoundedRectangle(cornerRadius: 24))
+    .accessibilityElement(children: .combine)
     .accessibilityIdentifier("featured-item")
   }
 }
 
 struct ItemRow: View {
-  @Environment(\.locale) private var locale
-  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-  @ScaledMetric(relativeTo: .title3) private var iconWidth = 28
   let item: Item
   let asOf: Date
 
-  private var rowLayout: AnyLayout {
-    dynamicTypeSize.isAccessibilitySize
-      ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
-      : AnyLayout(HStackLayout(alignment: .top, spacing: 12))
-  }
-
   var body: some View {
-    rowLayout {
-      Image(systemName: item.category.symbolName)
-        .font(.title3)
-        .foregroundStyle(.tint)
-        .frame(width: iconWidth)
-        .accessibilityHidden(true)
-      VStack(alignment: .leading, spacing: 5) {
-        Text(item.name)
-          .font(.headline)
-          .fixedSize(horizontal: false, vertical: true)
-        Text(item.usageDurationText(asOf: asOf, locale: locale))
-          .font(.body)
-          .fixedSize(horizontal: false, vertical: true)
-        StatusLabel(item: item, asOf: asOf, homeFont: .caption)
-          .fixedSize(horizontal: false, vertical: true)
-        HomeItemContext(item: item, asOf: asOf)
-      }
+    VStack(alignment: .leading, spacing: 12) {
+      ItemDurationHeader(item: item, asOf: asOf, prominent: false)
+      HomeItemContext(item: item, asOf: asOf)
     }
-    .padding(.vertical, 5)
+    .padding(16)
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(
+      Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24)
+    )
+    .contentShape(RoundedRectangle(cornerRadius: 24))
+    .accessibilityElement(children: .combine)
     .accessibilityIdentifier("regular-item-\(item.navigationID)")
   }
 }
@@ -316,15 +288,21 @@ private struct HomeItemContext: View {
       .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0)).locale(
         locale))
     let cost = String(localized: LocalizedStringResource("1日 \(amount)", locale: locale))
-    VStack(alignment: .leading, spacing: 4) {
+    VStack(alignment: .leading, spacing: 10) {
       if featured {
-        HomeContextLine(parts: [target, item.remainingText(asOf: asOf, locale: locale)])
-          .font(.footnote)
-        HomeContextLine(parts: [percentage, cost])
-          .font(.caption)
+        HomeContextLine(parts: [
+          target, item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale)
+        ])
+        .font(.footnote)
+        HomeContextLine(parts: [percentage, cost]).font(.caption)
+        UsageProgressBar(progress: item.progress(asOf: asOf), status: item.status(asOf: asOf))
       } else {
-        HomeContextLine(parts: [target, percentage, cost])
-          .font(.caption)
+        HomeContextLine(parts: [
+          target, item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale), percentage
+        ])
+        .font(.caption)
+        UsageProgressBar(progress: item.progress(asOf: asOf), status: item.status(asOf: asOf))
+        Text(cost).font(.caption)
       }
     }
     .foregroundStyle(.secondary)
