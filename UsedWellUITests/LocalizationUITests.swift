@@ -84,6 +84,7 @@ final class LocalizationUITests: XCTestCase {
     XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
     XCTAssertTrue(app.staticTexts[japanese ? "目標まであと16日" : "16 days to your goal"].exists)
     capture("\(prefix)-02-detail", app: app)
+    exerciseNotes(app: app, japanese: japanese, prefix: prefix)
     app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.80)).press(
       forDuration: 0.05,
       thenDragTo: app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.22)),
@@ -91,7 +92,6 @@ final class LocalizationUITests: XCTestCase {
     capture("\(prefix)-14-cost", app: app)
     app.swipeUp()
     capture("\(prefix)-03-cost-notes", app: app)
-    exerciseNotes(app: app, japanese: japanese, prefix: prefix)
     app.buttons["edit-item"].tap()
     XCTAssertTrue(app.textFields["item-name"].waitForExistence(timeout: 3))
     capture("\(prefix)-06-edit-item", app: app)

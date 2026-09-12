@@ -5,7 +5,6 @@ struct HistoryView: View {
   let notifications: NotificationScheduler
   let asOf: Date
   var commit = PersistenceCommit()
-  @Environment(\.locale) private var locale
   @Query private var items: [Item]
   private var completedItems: [Item] {
     items.filter(\.isCompleted).sorted {
@@ -19,28 +18,72 @@ struct HistoryView: View {
           "履歴はまだありません", systemImage: "clock.arrow.circlepath",
           description: Text("買い替え完了にした愛用品がここに残ります。"))
       } else {
-        List(completedItems) { item in
-          NavigationLink {
-            ItemDetailView(
-              item: item, notifications: notifications, asOf: asOf, commit: commit,
-              onAddReplacement: {})
-          } label: {
-            VStack(alignment: .leading, spacing: 5) {
-              Text(item.name).font(.headline).foregroundStyle(.primary)
-              HStack(spacing: 4) {
-                Text("\(item.usageDurationText(asOf: asOf, locale: locale))使用")
-                Text("·")
-                let cost = item.currentDailyCost(asOf: asOf).formatted(
-                  .currency(code: locale.currency?.identifier ?? "JPY")
-                    .precision(.fractionLength(0)).locale(locale))
-                Text("\(cost) / 日")
-              }.font(.subheadline.weight(.medium)).foregroundStyle(.primary)
-              Text(item.completedPeriodText(locale: locale))
-                .font(.caption).foregroundStyle(.secondary)
+        ScrollView {
+          LazyVStack(alignment: .leading, spacing: 12) {
+            Text("使用終了 \(completedItems.count)点")
+              .font(.subheadline).foregroundStyle(.secondary).padding(.bottom, 4)
+            ForEach(completedItems) { item in
+              NavigationLink {
+                ItemDetailView(
+                  item: item, notifications: notifications, asOf: asOf, commit: commit,
+                  onAddReplacement: {})
+              } label: {
+                HistoryItemRow(item: item, asOf: asOf)
+              }.buttonStyle(.plain)
             }
-          }
+          }.padding(16)
         }
+        .background(Color(uiColor: .systemGroupedBackground))
       }
     }.navigationTitle("これまで使ったもの")
+  }
+}
+
+private struct HistoryItemRow: View {
+  @Environment(\.locale) private var locale
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  let item: Item
+  let asOf: Date
+
+  private var layout: AnyLayout {
+    dynamicTypeSize.isAccessibilitySize
+      ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+      : AnyLayout(HStackLayout(alignment: .center, spacing: 14))
+  }
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 14) {
+      layout {
+        ItemPhotoView(data: item.photoData, category: item.category, maxPixelSize: 300)
+          .frame(width: 64, height: 76)
+          .clipShape(RoundedRectangle(cornerRadius: 12))
+        VStack(alignment: .leading, spacing: 8) {
+          Text(item.name).font(.headline)
+          Text(item.usageDurationText(asOf: asOf, locale: locale))
+            .font(.title2.bold())
+          let cost = item.currentDailyCost(asOf: asOf).formatted(
+            .currency(code: locale.currency?.identifier ?? "JPY")
+              .precision(.fractionLength(0)).locale(locale))
+          Text("\(cost) / 日").font(.caption).foregroundStyle(.secondary)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        if !dynamicTypeSize.isAccessibilitySize {
+          Image(systemName: "chevron.right")
+            .font(.caption).foregroundStyle(.tertiary).accessibilityHidden(true)
+        }
+      }
+      Text("\(item.completedPeriodText(locale: locale)) 使用終了")
+        .font(.caption).foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+    .padding(16)
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(
+      Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20)
+    )
+    .contentShape(RoundedRectangle(cornerRadius: 20))
+    .accessibilityElement(children: .combine)
+    .accessibilityIdentifier("history-item-\(item.navigationID)")
   }
 }

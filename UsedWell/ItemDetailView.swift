@@ -19,30 +19,36 @@ struct ItemDetailView: View {
   var body: some View {
     List {
       Section {
-        VStack(spacing: 12) {
-          Image(systemName: item.category.symbolName).font(.largeTitle).foregroundStyle(.tint)
-          Text(item.name).font(.title2.bold())
+        VStack(alignment: .leading, spacing: 16) {
+          ItemDurationHeader(item: item, asOf: asOf)
           if item.isCompleted {
-            Label("買い替え完了", systemImage: "checkmark.circle.fill")
-              .font(.subheadline.weight(.semibold)).foregroundStyle(.green)
+            Text(item.completedPeriodText(locale: locale))
+              .font(.footnote).foregroundStyle(.secondary)
           } else {
-            StatusLabel(item: item, asOf: asOf)
+            Text(item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale))
+              .font(.footnote).foregroundStyle(.secondary)
+            Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0)))
+              .font(.caption).foregroundStyle(.secondary)
           }
-          Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0))).font(
-            .largeTitle.bold()
-          ).monospacedDigit()
-          ProgressView(value: min(item.progress(asOf: asOf), 1))
-            .tint(progressTint)
-          if item.isCompleted {
-            Text("最終進捗率").font(.subheadline).foregroundStyle(.secondary)
-          } else {
-            Text(item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale)).font(
-              .subheadline
-            )
-            .foregroundStyle(
-              .secondary)
-          }
-        }.frame(maxWidth: .infinity).padding(.vertical, 8)
+        }.padding(.vertical, 8)
+      }
+      usageNotesSection
+      if item.isCompleted {
+        Section("最終コスト") {
+          CostRow(title: "1日あたり", value: item.currentDailyCost(asOf: asOf), emphasis: true)
+        }
+      } else {
+        Section {
+          CostRow(title: "現在", value: item.currentDailyCost(asOf: asOf), emphasis: true)
+          CostRow(
+            title: "目標達成時（\(item.targetDurationText(locale: locale))）",
+            value: item.targetDailyCost())
+          CostRow(title: "今から1年後", value: item.extendedDailyCost(asOf: asOf))
+        } header: {
+          Text("1日あたりのコスト")
+        } footer: {
+          Text("長く使うほど、1日あたりのコストは下がります。")
+        }
       }
       Section(
         item.isCompleted
@@ -54,6 +60,14 @@ struct ItemDetailView: View {
             ? String(localized: LocalizedStringResource("最終使用期間", locale: locale))
             : String(localized: LocalizedStringResource("使用期間", locale: locale)),
           value: item.usageDurationText(asOf: asOf, locale: locale))
+        if item.isCompleted {
+          LabeledContent("最終進捗率") {
+            Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0)))
+              .foregroundStyle(.secondary)
+          }
+          .accessibilityElement(children: .combine)
+          .accessibilityIdentifier("final-progress")
+        }
         LabeledContent("使用目標", value: item.targetDurationText(locale: locale))
         LabeledContent("目標日", value: item.targetDate().localizedDateText(locale: locale))
         if item.isCompleted {
@@ -68,24 +82,6 @@ struct ItemDetailView: View {
               .locale(locale)))
         LabeledContent("カテゴリ", value: item.category.displayName(locale: locale))
       }
-      if item.isCompleted {
-        Section("最終コスト") {
-          CostRow(title: "1日あたり", value: item.currentDailyCost(asOf: asOf), emphasis: true)
-        }
-      } else {
-        Section {
-          CostRow(title: "現在", value: item.currentDailyCost(asOf: asOf), emphasis: true)
-          CostRow(title: "今から1年後", value: item.extendedDailyCost(asOf: asOf))
-          CostRow(
-            title: "目標達成時（\(item.targetDurationText(locale: locale))）",
-            value: item.targetDailyCost())
-        } header: {
-          Text("1日あたりのコスト")
-        } footer: {
-          Text("長く使うほど、1日あたりのコストは下がります。")
-        }
-      }
-      usageNotesSection
       if !item.isCompleted {
         Section {
           Button("買い替え完了にする", systemImage: "checkmark.circle") { showsCompleteConfirmation = true }
@@ -104,6 +100,7 @@ struct ItemDetailView: View {
         .accessibilityIdentifier("delete-item")
       }
     }
+    .listStyle(.insetGrouped)
     .navigationTitle(
       item.isCompleted
         ? String(localized: LocalizedStringResource("履歴の詳細", locale: locale))
@@ -245,15 +242,6 @@ struct ItemDetailView: View {
   private func presentUsageNoteEditor(_ note: UsageNote? = nil) {
     usageNoteEditorDestination = UsageNoteEditorDestination(note: note)
   }
-
-  private var progressTint: Color {
-    if item.isCompleted { return .green }
-    switch item.status(asOf: asOf) {
-    case .stillUsing: return .accentColor
-    case .considerReplacing: return .orange
-    case .goalAchieved: return .green
-    }
-  }
 }
 
 private struct UsageNoteEditorDestination: Identifiable {
@@ -276,5 +264,7 @@ private struct CostRow: View {
         emphasis ? .bold : .regular
       ).monospacedDigit()
     }
+    .font(emphasis ? .body : .subheadline)
+    .foregroundStyle(emphasis ? .primary : .secondary)
   }
 }

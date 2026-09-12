@@ -95,6 +95,7 @@ enum PurchasePrice {
   var targetMonths: Int
   var completedDate: Date?
   var createdAt: Date
+  @Attribute(.externalStorage) var photoData: Data?
   @Relationship(deleteRule: .cascade, inverse: \UsageNote.item)
   var usageNotes: [UsageNote] = []
 

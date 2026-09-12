@@ -70,18 +70,7 @@
       let phone = Item(
         name: "iPhone 15 Pro", category: .phone, purchaseDate: homeDate(2023, 9, 24),
         purchasePrice: 159_800, targetMonths: 36)
-      if mode == "home-new" {
-        phone.purchaseDate = homeDate(2026, 9, 8)
-      } else if mode == "home-over" {
-        phone.purchaseDate = homeDate(2022, 9, 8)
-      } else if mode == "home-long" {
-        phone.name =
-          japanese
-          ? "旅と日常の記録に使い続けている大切なフルサイズカメラと標準ズームレンズ"
-          : "The full-frame camera and everyday zoom lens I have used for travel and family photographs"
-        phone.categoryRawValue = ItemCategory.camera.rawValue
-        phone.purchaseDate = homeDate(2013, 10, 8)
-      }
+      configureHomePhone(phone, mode: mode, japanese: japanese)
       container.mainContext.insert(phone)
       if mode == "home-review" {
         // Deliberately insert out of review order, including two items in the 90–99% state.
@@ -102,9 +91,73 @@
         container.mainContext.insert(
           Item(
             name: "Past Watch", category: .watch, purchaseDate: homeDate(2020, 9, 8),
-            purchasePrice: 40_000, targetMonths: 24, completedDate: homeDate(2023, 9, 8)))
+            purchasePrice: 40_000, targetMonths: mode.hasPrefix("home-photo") ? 36 : 24,
+            completedDate: homeDate(2023, 9, 8)))
+      }
+      if mode.hasPrefix("home-photo") {
+        try populatePhotoHistory(
+          container, phone: phone, japanese: japanese, longName: mode == "home-photo-long")
       }
       try container.mainContext.save()
+    }
+
+    @MainActor private static func configureHomePhone(_ phone: Item, mode: String, japanese: Bool) {
+      if mode == "home-new" {
+        phone.purchaseDate = homeDate(2026, 9, 8)
+      } else if mode == "home-over" || mode == "home-photo-over" {
+        phone.purchaseDate = homeDate(2022, 9, 8)
+      } else if mode == "home-long" || mode == "home-photo-long" {
+        phone.name =
+          japanese
+          ? "旅と日常の記録に使い続けている大切なフルサイズカメラと標準ズームレンズ"
+          : "The full-frame camera and everyday zoom lens I have used for travel and family photographs"
+        phone.categoryRawValue = ItemCategory.camera.rawValue
+        phone.purchaseDate = homeDate(2013, 10, 8)
+      }
+      if mode == "home-photo-90" {
+        phone.purchaseDate = homeDate(2026, 8, 11)
+        phone.targetMonths = 1
+      } else if mode == "home-photo-100" {
+        phone.purchaseDate = homeDate(2023, 9, 8)
+      } else if mode == "home-photo-under" {
+        phone.purchaseDate = homeDate(2024, 9, 8)
+      }
+    }
+
+    @MainActor private static func populatePhotoHistory(
+      _ container: ModelContainer, phone: Item, japanese: Bool, longName: Bool
+    ) throws {
+      let history = Item(
+        name: "Past iPhone", category: .phone,
+        purchaseDate: homeDate(2020, 9, 8), purchasePrice: 100000, targetMonths: 36,
+        completedDate: homeDate(2024, 9, 8))
+      if longName {
+        history.name =
+          japanese
+          ? "毎日の暮らしと長い旅で大切に使い続けていた思い出の愛用品"
+          : "The much-loved item I used every day at home and on many long journeys"
+      }
+      container.mainContext.insert(history)
+      for item in try container.mainContext.fetch(FetchDescriptor<Item>()) {
+        if item.category == .phone || item.category == .camera {
+          item.photoData = fixturePhotoData()
+        }
+      }
+      let bag = Item(
+        name: "Past Bag", category: .bag, purchaseDate: homeDate(2021, 3, 8),
+        purchasePrice: 80000, targetMonths: 48, completedDate: homeDate(2024, 9, 8))
+      container.mainContext.insert(bag)
+      phone.usageNotes.append(
+        UsageNote(
+          date: homeDate(2026, 8, 20),
+          text: japanese ? "まだ十分に使える" : "Still works well for everyday use"))
+    }
+
+    static func fixturePhotoData() -> Data? {
+      guard let path = ProcessInfo.processInfo.environment["USEDWELL_PHOTO_FIXTURE_PATH"] else {
+        return nil
+      }
+      return try? ItemPhotoPipeline.prepare(fileURL: URL(fileURLWithPath: path))
     }
 
     @MainActor static func makeContainer(
