@@ -4,6 +4,7 @@ import SwiftUI
 struct ItemDurationHeader: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  @ScaledMetric(relativeTo: .title2) private var prominentDurationSize = 24
   let item: Item
   let asOf: Date
   var prominent = true
@@ -16,11 +17,7 @@ struct ItemDurationHeader: View {
 
   var body: some View {
     layout {
-      ItemPhotoView(data: item.photoData, category: item.category)
-        .frame(
-          width: item.photoData == nil ? 48 : (prominent ? 108 : 64),
-          height: item.photoData == nil ? 48 : (prominent ? 140 : 76)
-        )
+      ItemPhotoView(data: item.photoData, category: item.category, width: prominent ? 108 : 64)
         .clipShape(RoundedRectangle(cornerRadius: prominent ? 16 : 12))
       VStack(alignment: .leading, spacing: prominent ? 12 : 6) {
         Text(item.name).font(.headline).fixedSize(horizontal: false, vertical: true)
@@ -29,16 +26,13 @@ struct ItemDurationHeader: View {
             .font(.caption).foregroundStyle(.secondary)
         }
         Text(item.usageDurationText(asOf: asOf, locale: locale))
-          .font(prominent ? .title.bold() : .title2.bold())
+          .font(prominent ? .system(size: prominentDurationSize, weight: .bold) : .title2.bold())
           .fixedSize(horizontal: false, vertical: true)
         if item.isCompleted {
           Text("使用終了").font(.caption).foregroundStyle(.secondary)
         } else {
           StatusLabel(item: item, asOf: asOf, homeFont: .caption)
             .fixedSize(horizontal: false, vertical: true)
-          if item.status(asOf: asOf) == .goalAchieved {
-            Text("使用中").font(.caption).foregroundStyle(.secondary)
-          }
         }
       }
       .frame(maxWidth: .infinity, alignment: .leading)

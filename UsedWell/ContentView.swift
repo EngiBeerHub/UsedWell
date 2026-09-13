@@ -352,7 +352,7 @@ struct StatusLabel: View {
     }
     .font(homeFont ?? .caption.weight(.semibold))
     .foregroundStyle(
-      homeFont == nil && item.status(asOf: asOf) == .goalAchieved ? .green : .secondary
+      item.status(asOf: asOf) == .goalAchieved ? .green : .secondary
     )
   }
 }

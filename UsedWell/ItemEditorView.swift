@@ -137,9 +137,9 @@ struct ItemEditorView: View {
 
   private var photoSection: some View {
     Section {
-      ItemPhotoView(data: photoDraft.data, category: category)
-        .frame(height: photoDraft.data == nil ? 100 : 180)
+      ItemPhotoView(data: photoDraft.data, category: category, width: 144)
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .frame(maxWidth: .infinity)
         .accessibilityIdentifier("item-photo-preview")
       PhotosPicker(selection: $selectedPhoto, matching: .images) {
         Label(photoDraft.data == nil ? "写真を追加" : "写真を変更", systemImage: "photo")
