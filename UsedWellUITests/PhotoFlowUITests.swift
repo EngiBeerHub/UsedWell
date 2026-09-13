@@ -106,6 +106,14 @@ final class PhotoFlowUITests: XCTestCase {
     }
   }
 
+  @MainActor func testPhotoFitJapaneseAndEnglish() throws {
+    let photoPath = try XCTUnwrap(
+      ProcessInfo.processInfo.environment["USEDWELL_PHOTO_FIXTURE_PATH"])
+    for language in ["ja", "en"] {
+      checkVisualVariant(language: language, variant: "99", photoPath: photoPath, polish: true)
+    }
+  }
+
   @MainActor private func checkVisualVariant(
     language: String, variant: String, photoPath: String?, polish: Bool = false
   ) {

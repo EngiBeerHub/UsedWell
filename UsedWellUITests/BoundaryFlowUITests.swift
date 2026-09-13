@@ -128,13 +128,22 @@ final class BoundaryFlowUITests: XCTestCase {
       app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "featured-item"))
         .firstMatch.label.contains("Boundary Phone"))
     itemButton("Boundary Phone", app).tap()
-    XCTAssertTrue(app.staticTexts["Time owned, 29 days"].waitForExistence(timeout: 3))
+    XCTAssertTrue(
+      app.staticTexts.matching(
+        NSPredicate(format: "label IN %@", ["Time owned, 29 days", "29 days"])
+      ).firstMatch.waitForExistence(timeout: 3))
     app.buttons["advance-day"].tap()
-    XCTAssertTrue(app.staticTexts["Time owned, 30 days"].waitForExistence(timeout: 3))
+    XCTAssertTrue(
+      app.staticTexts.matching(
+        NSPredicate(format: "label IN %@", ["Time owned, 30 days", "30 days"])
+      ).firstMatch.waitForExistence(timeout: 3))
     app.buttons["advance-day"].tap()
     XCTAssertTrue(app.staticTexts["Goal reached"].waitForExistence(timeout: 3))
     XCTAssertTrue(app.staticTexts["100%"].exists)
-    XCTAssertTrue(app.staticTexts["Time owned, 1 month"].exists)
+    XCTAssertTrue(
+      app.staticTexts.matching(
+        NSPredicate(format: "label IN %@", ["Time owned, 1 month", "1 month"])
+      ).firstMatch.exists)
     capture("detail-day-boundary", app)
   }
 
