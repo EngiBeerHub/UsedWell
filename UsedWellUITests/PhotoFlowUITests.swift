@@ -96,8 +96,18 @@ final class PhotoFlowUITests: XCTestCase {
     }
   }
 
+  @MainActor func testPhotoPolishJapaneseAndEnglish() throws {
+    let photoPath = try XCTUnwrap(
+      ProcessInfo.processInfo.environment["USEDWELL_PHOTO_FIXTURE_PATH"])
+    for language in ["ja", "en"] {
+      for variant in ["99", "over"] {
+        checkVisualVariant(language: language, variant: variant, photoPath: photoPath, polish: true)
+      }
+    }
+  }
+
   @MainActor private func checkVisualVariant(
-    language: String, variant: String, photoPath: String?
+    language: String, variant: String, photoPath: String?, polish: Bool = false
   ) {
     let app = XCUIApplication()
     let region = language == "ja" ? "JP" : "US"
@@ -119,10 +129,7 @@ final class PhotoFlowUITests: XCTestCase {
       NSPredicate(format: "identifier BEGINSWITH %@", "featured-item")
     ).firstMatch
     XCTAssertTrue(featured.waitForExistence(timeout: 5))
-    let percentage = ["under": "67%", "90": "90%", "100": "100%", "over": "133%"]
-    if let expected = percentage[variant] {
-      XCTAssertTrue(featured.label.contains(expected), featured.label)
-    }
+    checkFeaturedStatus(featured, variant: variant, language: language)
     capture("\(language)-\(region)-photo-\(variant)-home", app)
     if variant == "long" {
       app.swipeUp()
@@ -131,9 +138,15 @@ final class PhotoFlowUITests: XCTestCase {
     if variant != "long" {
       featured.tap()
       XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
+      XCTAssertFalse(app.staticTexts[language == "ja" ? "使用中" : "In use"].exists)
       capture("\(language)-\(region)-photo-\(variant)-detail", app)
+      if polish {
+        checkPhotoEditor(
+          app, language: language, name: "\(language)-\(region)-photo-\(variant)-edit")
+      }
       app.navigationBars.buttons.firstMatch.tap()
     }
+    if polish { checkFallback(app, language: language, region: region, variant: variant) }
     let history = app.buttons[language == "ja" ? "これまで使ったもの" : "Past Items"]
     reveal(history, app)
     history.tap()
@@ -143,6 +156,40 @@ final class PhotoFlowUITests: XCTestCase {
     capture("\(language)-\(region)-photo-\(variant)-history", app)
     if variant == "over" { checkHistoryDetail(app, language: language, region: region) }
     app.terminate()
+  }
+
+  @MainActor private func checkFeaturedStatus(
+    _ featured: XCUIElement, variant: String, language: String
+  ) {
+    let percentage = ["under": "67%", "90": "90%", "99": "99%", "100": "100%", "over": "133%"]
+    if let expected = percentage[variant] {
+      XCTAssertTrue(featured.label.contains(expected), featured.label)
+    }
+    XCTAssertFalse(featured.label.contains(language == "ja" ? "使用中" : "In use"))
+  }
+
+  @MainActor private func checkPhotoEditor(_ app: XCUIApplication, language: String, name: String) {
+    app.buttons["edit-item"].tap()
+    XCTAssertTrue(app.buttons["remove-item-photo"].waitForExistence(timeout: 3))
+    capture(name, app)
+    app.buttons[language == "ja" ? "キャンセル" : "Cancel"].tap()
+  }
+
+  @MainActor private func checkFallback(
+    _ app: XCUIApplication, language: String, region: String, variant: String
+  ) {
+    let fallback = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "MacBook Air"))
+      .firstMatch
+    reveal(fallback, app)
+    capture("\(language)-\(region)-photo-\(variant)-mixed-rows", app)
+    fallback.tap()
+    XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
+    capture("\(language)-\(region)-photo-\(variant)-fallback-detail", app)
+    app.buttons["edit-item"].tap()
+    XCTAssertFalse(app.buttons["remove-item-photo"].exists)
+    capture("\(language)-\(region)-photo-\(variant)-fallback-edit", app)
+    app.buttons[language == "ja" ? "キャンセル" : "Cancel"].tap()
+    app.navigationBars.buttons.firstMatch.tap()
   }
 
   @MainActor private func checkHistoryDetail(

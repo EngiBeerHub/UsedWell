@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct ItemPhotoView: View {
+  // A shared center crop keeps the editor preview and saved displays consistent.
+  private static let aspectRatio: CGFloat = 4 / 5
   let data: Data?
   let category: ItemCategory
+  var width: CGFloat = 108
   var maxPixelSize = 720
   @State private var image: CGImage?
   @State private var renderedData: Data?
@@ -18,13 +21,14 @@ struct ItemPhotoView: View {
             .frame(width: geometry.size.width, height: geometry.size.height)
         } else {
           Image(systemName: category.symbolName)
-            .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.5))
+            .font(.system(size: min(geometry.size.width * 0.5, 32)))
             .foregroundStyle(.secondary)
         }
       }
       .frame(width: geometry.size.width, height: geometry.size.height)
       .clipped()
     }
+    .frame(width: width, height: width / Self.aspectRatio)
     .allowsHitTesting(false)
     .accessibilityHidden(true)
     .task(id: data) {

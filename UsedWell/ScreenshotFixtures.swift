@@ -147,6 +147,10 @@
         name: "Past Bag", category: .bag, purchaseDate: homeDate(2021, 3, 8),
         purchasePrice: 80000, targetMonths: 48, completedDate: homeDate(2024, 9, 8))
       container.mainContext.insert(bag)
+      container.mainContext.insert(
+        Item(
+          name: "MacBook Air", category: .computer, purchaseDate: homeDate(2024, 3, 8),
+          purchasePrice: 183_800, targetMonths: 36))
       phone.usageNotes.append(
         UsageNote(
           date: homeDate(2026, 8, 20),

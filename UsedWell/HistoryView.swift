@@ -54,8 +54,7 @@ private struct HistoryItemRow: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
       layout {
-        ItemPhotoView(data: item.photoData, category: item.category, maxPixelSize: 300)
-          .frame(width: 64, height: 76)
+        ItemPhotoView(data: item.photoData, category: item.category, width: 64, maxPixelSize: 300)
           .clipShape(RoundedRectangle(cornerRadius: 12))
         VStack(alignment: .leading, spacing: 8) {
           Text(item.name).font(.headline)
