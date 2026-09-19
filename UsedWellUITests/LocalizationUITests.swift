@@ -1,7 +1,6 @@
 import XCTest
 
-final class LocalizationUITests: XCTestCase {
-  override func setUpWithError() throws { continueAfterFailure = false }
+final class LocalizationUITests: UIFlowTestCase {
 
   @MainActor func testReviewedEnglishScreenshots() {
     let app = launch(language: "en", region: "US", fixture: "screenshots")
@@ -66,11 +65,7 @@ final class LocalizationUITests: XCTestCase {
   }
 
   @MainActor private func reveal(_ element: XCUIElement, app: XCUIApplication) {
-    for _ in 0..<6 {
-      if element.isHittable { return }
-      app.swipeUp()
-    }
-    XCTAssertTrue(element.isHittable)
+    revealElement(element, in: app)
   }
 
   @MainActor private func exerciseFlows(language: String, region: String) {
@@ -135,14 +130,17 @@ final class LocalizationUITests: XCTestCase {
     app.textViews["usage-note-text"].tap()
     app.textViews["usage-note-text"].typeText("Keeping it for now")
     app.buttons["save-usage-note"].tap()
-    let note = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Keeping it for now"))
-      .firstMatch
+    let note = app.buttons.matching(
+      NSPredicate(
+        format: "identifier == %@ AND label CONTAINS %@",
+        "usage-note-row", "Keeping it for now")
+    ).firstMatch
     reveal(note, app: app)
     note.tap()
     app.buttons["delete-usage-note"].tap()
     capture("\(prefix)-05-delete-note", app: app)
     app.alerts.buttons[japanese ? "削除" : "Delete"].tap()
-    XCTAssertFalse(app.staticTexts["Keeping it for now"].exists)
+    XCTAssertTrue(note.waitForNonExistence(timeout: 5))
   }
 
   @MainActor private func exerciseAdd(language: String, region: String) {
