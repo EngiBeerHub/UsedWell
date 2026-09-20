@@ -22,6 +22,9 @@ struct ContentView: View {
   private var activeItems: [Item] { Item.activeItemsForReview(items, asOf: asOf) }
   private var hasHistory: Bool { items.contains(where: \.isCompleted) }
   var body: some View {
+    let activeItems = self.activeItems
+    let featuredItem = activeItems.first
+    let regularItems = activeItems.filter { $0.navigationID != featuredItem?.navigationID }
     NavigationStack(path: $navigationPath) {
       Group {
         if activeItems.isEmpty {
@@ -51,19 +54,24 @@ struct ContentView: View {
           .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
           ScrollView {
-            LazyVStack(alignment: .leading, spacing: 16) {
+            // Measure the single hero eagerly so very large text remains scrollable.
+            VStack(alignment: .leading, spacing: 16) {
               Text("使用中 \(activeItems.count)点")
                 .font(.subheadline).foregroundStyle(.secondary)
-              Text("次に見直すもの").font(.headline).padding(.top, 8)
-              if let item = activeItems.first {
+              if let item = featuredItem {
+                Text("次に見直すもの").font(.headline).padding(.top, 8)
                 NavigationLink(value: item.navigationID) {
                   FeaturedItemCard(item: item, asOf: asOf)
                 }.buttonStyle(.plain)
               }
-              Text("使用中の愛用品").font(.headline).padding(.top, 8)
-              ForEach(activeItems) { item in
-                NavigationLink(value: item.navigationID) { ItemRow(item: item, asOf: asOf) }
-                  .buttonStyle(.plain)
+              if !regularItems.isEmpty {
+                Text("使用中の愛用品").font(.headline).padding(.top, 8)
+                LazyVStack(spacing: 16) {
+                  ForEach(regularItems) { item in
+                    NavigationLink(value: item.navigationID) { ItemRow(item: item, asOf: asOf) }
+                      .buttonStyle(.plain)
+                  }
+                }
               }
               NavigationLink {
                 HistoryView(notifications: notifications, asOf: asOf, commit: commit)

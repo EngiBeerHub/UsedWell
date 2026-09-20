@@ -7,20 +7,7 @@
 
 import XCTest
 
-final class UsedWellUITests: XCTestCase {
-
-  override func setUpWithError() throws {
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-
-    // In UI tests it is usually best to stop immediately when a failure occurs.
-    continueAfterFailure = false
-
-    // Set any initial state required before each UI test here.
-  }
-
-  override func tearDownWithError() throws {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-  }
+final class UsedWellUITests: UIFlowTestCase {
 
   @MainActor
   func testExample() throws {
@@ -105,8 +92,9 @@ final class UsedWellUITests: XCTestCase {
     ] {
       XCTAssertTrue(featured.label.contains(value), featured.label)
     }
+    XCTAssertTrue(app.staticTexts["4 items in use"].exists)
     captureHome("en-US-home-review", app)
-    let names = ["iPhone 15 Pro", "Review Camera", "MacBook Air", "Leather bag"]
+    let names = ["Review Camera", "MacBook Air", "Leather bag"]
     for name in names {
       let row = homeRegular(name, app)
       revealHome(row, app)
@@ -118,19 +106,24 @@ final class UsedWellUITests: XCTestCase {
       let indices = names.compactMap { name in visibleNames.firstIndex { $0.hasPrefix(name) } }
       XCTAssertEqual(indices, indices.sorted())
     }
-    let phone = homeRegular("iPhone 15 Pro", app)
+    XCTAssertFalse(homeRegular("iPhone 15 Pro", app).exists)
+    let camera = homeRegular("Review Camera", app)
     for _ in 0..<8 {
       if featured.isHittable { break }
       app.swipeDown()
     }
     featured.tap()
     XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
-    app.navigationBars.buttons.firstMatch.tap()
-    revealHome(phone, app)
-    phone.tap()
-    XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
-    XCTAssertTrue(app.staticTexts["Time owned, 2 years 11 months"].exists)
+    XCTAssertTrue(
+      app.staticTexts.matching(
+        NSPredicate(format: "label IN %@", ["Time owned, 2 years 11 months", "2 years 11 months"])
+      ).firstMatch.exists)
     XCTAssertTrue(app.staticTexts["99%"].exists)
+    app.navigationBars.buttons.firstMatch.tap()
+    revealHome(camera, app)
+    camera.tap()
+    XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
+    XCTAssertTrue(app.staticTexts["Review Camera"].exists)
     app.navigationBars.buttons.firstMatch.tap()
     let history = app.buttons["Past Items"]
     revealHome(history, app)
@@ -154,15 +147,26 @@ final class UsedWellUITests: XCTestCase {
       if fixture == "home-over" {
         XCTAssertTrue(featured.label.contains("Goal reached"))
       }
+      XCTAssertTrue(app.staticTexts["1 item in use"].exists)
       captureHome("en-US-\(fixture)", app)
-      let row = homeRegular("iPhone 15 Pro", app)
-      revealHome(row, app)
-      XCTAssertTrue(row.exists)
-      XCTAssertTrue(row.label.contains(duration))
-      row.tap()
+      XCTAssertFalse(homeRegular("iPhone 15 Pro", app).exists)
+      XCTAssertFalse(app.staticTexts["Items I'm using"].exists)
+      featured.tap()
       XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
       revealHome(app.buttons["complete-item"], app)
       XCTAssertTrue(app.buttons["complete-item"].exists)
+      app.terminate()
+    }
+  }
+
+  @MainActor func testHomeWithoutFeatured() {
+    for japanese in [true, false] {
+      let app = launchHomeFixture("empty", japanese: japanese)
+      XCTAssertTrue(app.buttons["add-first-item"].waitForExistence(timeout: 5))
+      XCTAssertFalse(homeFeatured(app).exists)
+      XCTAssertFalse(app.staticTexts[japanese ? "次に見直すもの" : "Next to reflect on"].exists)
+      XCTAssertFalse(app.staticTexts[japanese ? "使用中の愛用品" : "Items I'm using"].exists)
+      captureHome(japanese ? "ja-JP-home-empty" : "en-US-home-empty", app)
       app.terminate()
     }
   }
@@ -190,6 +194,10 @@ final class UsedWellUITests: XCTestCase {
     XCTAssertTrue(featured.waitForExistence(timeout: 5))
     XCTAssertTrue(featured.label.contains("0日"))
     XCTAssertTrue(featured.label.contains("まだ使いたい"))
+    XCTAssertTrue(app.staticTexts["使用中 1点"].exists)
+    XCTAssertFalse(app.staticTexts["使用中の愛用品"].exists)
+    XCTAssertFalse(homeRegular("iPhone 15 Pro", app).exists)
+    captureHome("ja-JP-home-single", app)
     app.buttons["add-item"].tap()
     XCTAssertTrue(app.textFields["item-name"].waitForExistence(timeout: 3))
     app.textFields["item-name"].tap()

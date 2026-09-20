@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ItemPhotoView: View {
-  // A shared center crop keeps the editor preview and saved displays consistent.
+  // Keep the same frame and show the whole photo in both the editor and saved displays.
   private static let aspectRatio: CGFloat = 4 / 5
   let data: Data?
   let category: ItemCategory
@@ -17,7 +17,7 @@ struct ItemPhotoView: View {
         if let image, renderedData == data {
           Image(decorative: image, scale: 1)
             .resizable()
-            .scaledToFill()
+            .scaledToFit()
             .frame(width: geometry.size.width, height: geometry.size.height)
         } else {
           Image(systemName: category.symbolName)

@@ -1,15 +1,17 @@
 import XCTest
 
-final class BoundaryFlowUITests: XCTestCase {
-  override func setUpWithError() throws { continueAfterFailure = false }
+final class BoundaryFlowUITests: UIFlowTestCase {
 
   @MainActor func testItemSaveFailureKeepsInputAndRetrySavesOnce() {
     let app = launch(fixture: "empty", failedSave: 1)
     app.buttons["add-first-item"].tap()
+    waitForElement(app.textFields["item-name"])
     app.textFields["item-name"].tap()
     app.textFields["item-name"].typeText("Retry Camera")
+    reveal(app.textFields["purchase-price"], app)
     app.textFields["purchase-price"].tap()
     app.textFields["purchase-price"].typeText("3100")
+    capture("item-editor-filled", app)
     app.buttons["save-item"].tap()
     acknowledgeSaveFailure(app)
     XCTAssertEqual(app.textFields["item-name"].value as? String, "Retry Camera")
@@ -28,6 +30,7 @@ final class BoundaryFlowUITests: XCTestCase {
     openPhone(app)
     app.buttons["edit-item"].tap()
     let name = app.textFields["item-name"]
+    waitForElement(name)
     name.tap()
     name.typeText(" revised")
     let draft = name.value as? String
@@ -54,13 +57,16 @@ final class BoundaryFlowUITests: XCTestCase {
     XCTAssertTrue(text.waitForExistence(timeout: 3))
     text.tap()
     text.typeText("Keep this draft for retry")
+    capture("note-editor-filled", app)
     app.buttons["save-usage-note"].tap()
     acknowledgeSaveFailure(app)
     XCTAssertTrue((text.value as? String)?.contains("Keep this draft for retry") == true)
     capture("note-save-failure", app)
     app.buttons["save-usage-note"].tap()
     let row = app.buttons.matching(
-      NSPredicate(format: "label CONTAINS %@", "Keep this draft for retry")
+      NSPredicate(
+        format: "identifier == %@ AND label CONTAINS %@",
+        "usage-note-row", "Keep this draft for retry")
     ).firstMatch
     reveal(row, app)
     row.tap()
@@ -76,6 +82,7 @@ final class BoundaryFlowUITests: XCTestCase {
     let row = app.buttons["usage-note-row"].firstMatch
     reveal(row, app)
     row.tap()
+    waitForElement(app.textViews["usage-note-text"])
     let body = app.textViews["usage-note-text"].value as? String
     app.buttons["delete-usage-note"].tap()
     app.alerts.buttons["Delete"].tap()
@@ -85,7 +92,11 @@ final class BoundaryFlowUITests: XCTestCase {
     app.alerts.buttons["Delete"].tap()
     XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
     XCTAssertFalse(
-      app.buttons.matching(NSPredicate(format: "label CONTAINS %@", body ?? "")).firstMatch.exists)
+      app.buttons.matching(
+        NSPredicate(
+          format: "identifier == %@ AND label CONTAINS %@",
+          "usage-note-row", body ?? "")
+      ).firstMatch.exists)
   }
 
   @MainActor func testCompletionSaveFailureStaysActiveUntilRetry() {
@@ -99,8 +110,10 @@ final class BoundaryFlowUITests: XCTestCase {
     complete(app)
     XCTAssertTrue(app.alerts.buttons["Done"].waitForExistence(timeout: 3))
     app.alerts.buttons["Done"].tap()
+    waitForElement(app.buttons["add-item"])
     reveal(app.buttons["Past Items"], app)
     app.buttons["Past Items"].tap()
+    reveal(itemButton("iPhone 15 Pro", app), app)
     XCTAssertTrue(itemButton("iPhone 15 Pro", app).waitForExistence(timeout: 3))
   }
 
@@ -127,37 +140,55 @@ final class BoundaryFlowUITests: XCTestCase {
     XCTAssertTrue(
       app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "featured-item"))
         .firstMatch.label.contains("Boundary Phone"))
+    reveal(itemButton("Boundary Phone", app), app)
     itemButton("Boundary Phone", app).tap()
-    XCTAssertTrue(app.staticTexts["Time owned, 29 days"].waitForExistence(timeout: 3))
+    XCTAssertTrue(
+      app.staticTexts.matching(
+        NSPredicate(format: "label IN %@", ["Time owned, 29 days", "29 days"])
+      ).firstMatch.waitForExistence(timeout: 3))
     app.buttons["advance-day"].tap()
-    XCTAssertTrue(app.staticTexts["Time owned, 30 days"].waitForExistence(timeout: 3))
+    XCTAssertTrue(
+      app.staticTexts.matching(
+        NSPredicate(format: "label IN %@", ["Time owned, 30 days", "30 days"])
+      ).firstMatch.waitForExistence(timeout: 3))
     app.buttons["advance-day"].tap()
     XCTAssertTrue(app.staticTexts["Goal reached"].waitForExistence(timeout: 3))
     XCTAssertTrue(app.staticTexts["100%"].exists)
-    XCTAssertTrue(app.staticTexts["Time owned, 1 month"].exists)
+    XCTAssertTrue(
+      app.staticTexts.matching(
+        NSPredicate(format: "label IN %@", ["Time owned, 1 month", "1 month"])
+      ).firstMatch.exists)
     capture("detail-day-boundary", app)
   }
 
   @MainActor func testForegroundRefreshesDetailWithoutResettingDraft() {
     let app = launch(fixture: "day-boundary")
+    reveal(itemButton("Boundary Phone", app), app)
     itemButton("Boundary Phone", app).tap()
-    XCTAssertTrue(app.staticTexts["Time owned, 27 days"].waitForExistence(timeout: 3))
+    waitForElement(duration("27 days", app))
     XCTAssertTrue(app.staticTexts["Now, $115"].exists)
     app.buttons["advance-unobserved-day"].tap()
-    XCTAssertTrue(app.staticTexts["Time owned, 27 days"].exists)
+    XCTAssertTrue(duration("27 days", app).exists)
     XCUIDevice.shared.press(.home)
     app.activate()
-    XCTAssertTrue(app.staticTexts["Time owned, 28 days"].waitForExistence(timeout: 5))
+    XCTAssertTrue(duration("28 days", app).waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["Now, $111"].exists)
     XCTAssertTrue(app.staticTexts["Thinking about replacing it"].exists)
     app.buttons["edit-item"].tap()
     let name = app.textFields["item-name"]
+    waitForElement(name)
     name.tap()
     name.typeText(" retained draft")
     let draft = name.value as? String
     XCUIDevice.shared.press(.home)
     app.activate()
     XCTAssertEqual(name.value as? String, draft)
+  }
+
+  @MainActor private func duration(_ value: String, _ app: XCUIApplication) -> XCUIElement {
+    app.staticTexts.matching(
+      NSPredicate(format: "label IN %@", ["Time owned, \(value)", value])
+    ).firstMatch
   }
 
   @MainActor private func acknowledgeSaveFailure(_ app: XCUIApplication) {
@@ -183,7 +214,12 @@ final class BoundaryFlowUITests: XCTestCase {
   }
 
   @MainActor private func itemButton(_ name: String, _ app: XCUIApplication) -> XCUIElement {
-    app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", name)).firstMatch
+    app.buttons.matching(
+      NSPredicate(
+        format: "(identifier == %@ OR identifier BEGINSWITH %@ OR identifier BEGINSWITH %@) "
+          + "AND label BEGINSWITH %@",
+        "featured-item", "regular-item-", "history-item-", name)
+    ).firstMatch
   }
 
   @MainActor private func openPhone(_ app: XCUIApplication) {
@@ -211,14 +247,14 @@ final class BoundaryFlowUITests: XCTestCase {
   @MainActor private func reveal(
     _ element: XCUIElement, _ app: XCUIApplication, upward: Bool = true
   ) {
-    for _ in 0..<8 {
-      if element.isHittable { return }
-      if upward { app.swipeUp() } else { app.swipeDown() }
-    }
-    XCTAssertTrue(element.isHittable)
+    revealElement(element, in: app, upward: upward)
   }
 
   @MainActor private func capture(_ name: String, _ app: XCUIApplication) {
+    let tree = XCTAttachment(string: app.debugDescription)
+    tree.name = "\(name)-accessibility"
+    tree.lifetime = .keepAlways
+    add(tree)
     let attachment = XCTAttachment(screenshot: app.screenshot())
     attachment.name = name
     attachment.lifetime = .keepAlways

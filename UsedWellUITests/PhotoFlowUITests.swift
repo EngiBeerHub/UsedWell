@@ -1,9 +1,10 @@
+import UIKit
 import XCTest
 
-final class PhotoFlowUITests: XCTestCase {
-  override func setUpWithError() throws { continueAfterFailure = false }
+final class PhotoFlowUITests: UIFlowTestCase {
 
   @MainActor func testPhotosPickerSaveRemoveCancelAndRetry() throws {
+    try requireSeededPhotoLibrary()
     let app = XCUIApplication()
     app.launchArguments = [
       "-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-lastAcknowledgedRegion", "US"
@@ -20,6 +21,7 @@ final class PhotoFlowUITests: XCTestCase {
     app.buttons["edit-item"].tap()
     choosePhoto(app)
     let remove = app.buttons["remove-item-photo"]
+    reveal(remove, app)
     XCTAssertTrue(remove.waitForExistence(timeout: 10))
     XCTAssertTrue(app.buttons["save-item"].isEnabled)
     capture("en-US-photo-draft", app)
@@ -45,7 +47,8 @@ final class PhotoFlowUITests: XCTestCase {
     app.buttons["Cancel"].tap()
   }
 
-  @MainActor func testAddPhotoCancelThenSave() {
+  @MainActor func testAddPhotoCancelThenSave() throws {
+    try requireSeededPhotoLibrary()
     let app = XCUIApplication()
     app.launchArguments = [
       "-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-lastAcknowledgedRegion", "US"
@@ -55,14 +58,18 @@ final class PhotoFlowUITests: XCTestCase {
     app.launch()
     app.buttons["add-first-item"].tap()
     choosePhoto(app)
+    reveal(app.buttons["remove-item-photo"], app)
     XCTAssertTrue(app.buttons["remove-item-photo"].waitForExistence(timeout: 10))
     app.buttons["Cancel"].tap()
     app.buttons["add-first-item"].tap()
     XCTAssertFalse(app.buttons["remove-item-photo"].exists)
     choosePhoto(app)
+    reveal(app.buttons["remove-item-photo"], app)
     XCTAssertTrue(app.buttons["remove-item-photo"].waitForExistence(timeout: 10))
+    reveal(app.textFields["item-name"], app)
     app.textFields["item-name"].tap()
     app.textFields["item-name"].typeText("Photo Camera")
+    reveal(app.textFields["purchase-price"], app)
     app.textFields["purchase-price"].tap()
     app.textFields["purchase-price"].typeText("3100")
     app.buttons["save-item"].tap()
@@ -76,6 +83,13 @@ final class PhotoFlowUITests: XCTestCase {
     XCTAssertTrue(app.buttons["remove-item-photo"].waitForExistence(timeout: 3))
   }
 
+  private func requireSeededPhotoLibrary() throws {
+    try XCTSkipUnless(
+      ProcessInfo.processInfo.environment["USEDWELL_PHOTOS_PICKER_SEEDED"] == "1",
+      "Real Photos picker integration: seed a disposable Simulator with simctl addmedia, "
+        + "then set USEDWELL_PHOTOS_PICKER_SEEDED=1 in the test runner environment.")
+  }
+
   @MainActor private func choosePhoto(_ app: XCUIApplication) {
     app.buttons["choose-item-photo"].tap()
     // Uses the real system picker. Seed a disposable Simulator with `simctl addmedia` first.
@@ -85,10 +99,14 @@ final class PhotoFlowUITests: XCTestCase {
       photo.waitForExistence(timeout: 10), "The Simulator photo library needs a test image")
     capture("en-US-photo-picker", app)
     photo.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+    // Selection dismisses the picker before the asynchronous image import has finished.
+    XCTAssertTrue(
+      app.buttons["remove-item-photo"].waitForExistence(timeout: 30),
+      "The selected seeded photo must finish importing before editing or saving")
   }
 
   @MainActor func testPhotoVisualStatesAndHistory() throws {
-    let photoPath = ProcessInfo.processInfo.environment["USEDWELL_PHOTO_FIXTURE_PATH"]
+    let photoPath = try makePhotoFixture()
     for language in ["ja", "en"] {
       for variant in ["under", "90", "100", "over", "long"] {
         checkVisualVariant(language: language, variant: variant, photoPath: photoPath)
@@ -97,12 +115,18 @@ final class PhotoFlowUITests: XCTestCase {
   }
 
   @MainActor func testPhotoPolishJapaneseAndEnglish() throws {
-    let photoPath = try XCTUnwrap(
-      ProcessInfo.processInfo.environment["USEDWELL_PHOTO_FIXTURE_PATH"])
+    let photoPath = try makePhotoFixture()
     for language in ["ja", "en"] {
       for variant in ["99", "over"] {
         checkVisualVariant(language: language, variant: variant, photoPath: photoPath, polish: true)
       }
+    }
+  }
+
+  @MainActor func testPhotoFitJapaneseAndEnglish() throws {
+    let photoPath = try makePhotoFixture()
+    for language in ["ja", "en"] {
+      checkVisualVariant(language: language, variant: "99", photoPath: photoPath, polish: true)
     }
   }
 
@@ -129,18 +153,19 @@ final class PhotoFlowUITests: XCTestCase {
       NSPredicate(format: "identifier BEGINSWITH %@", "featured-item")
     ).firstMatch
     XCTAssertTrue(featured.waitForExistence(timeout: 5))
-    checkFeaturedStatus(featured, variant: variant, language: language)
+    let photoItem = photoItem(app, featured: featured, variant: variant)
+    checkFeaturedStatus(photoItem, variant: variant, language: language)
     capture("\(language)-\(region)-photo-\(variant)-home", app)
     if variant == "long" {
       app.swipeUp()
       capture("\(language)-\(region)-photo-long-scroll", app)
     }
     if variant != "long" {
-      featured.tap()
+      photoItem.tap()
       XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
       XCTAssertFalse(app.staticTexts[language == "ja" ? "使用中" : "In use"].exists)
       capture("\(language)-\(region)-photo-\(variant)-detail", app)
-      if polish {
+      if photoPath != nil {
         checkPhotoEditor(
           app, language: language, name: "\(language)-\(region)-photo-\(variant)-edit")
       }
@@ -156,6 +181,25 @@ final class PhotoFlowUITests: XCTestCase {
     capture("\(language)-\(region)-photo-\(variant)-history", app)
     if variant == "over" { checkHistoryDetail(app, language: language, region: region) }
     app.terminate()
+  }
+
+  @MainActor private func photoItem(
+    _ app: XCUIApplication, featured: XCUIElement, variant: String
+  ) -> XCUIElement {
+    // At 67%, the phone is below the 83% Mac in the unchanged review ranking.
+    let photoItem =
+      variant == "under"
+      ? app.buttons.matching(
+        NSPredicate(
+          format: "identifier BEGINSWITH %@ AND label BEGINSWITH %@",
+          "regular-item-", "iPhone 15 Pro")
+      ).firstMatch
+      : featured
+    if variant == "under" {
+      XCTAssertTrue(featured.label.hasPrefix("MacBook Air"), featured.label)
+      reveal(photoItem, app)
+    }
+    return photoItem
   }
 
   @MainActor private func checkFeaturedStatus(
@@ -211,13 +255,7 @@ final class PhotoFlowUITests: XCTestCase {
   }
 
   @MainActor private func reveal(_ element: XCUIElement, _ app: XCUIApplication) {
-    for _ in 0..<18 {
-      if element.exists && element.isHittable && element.frame.midY < app.frame.maxY - 35 {
-        return
-      }
-      app.swipeUp()
-    }
-    XCTAssertTrue(element.isHittable)
+    revealElement(element, in: app)
   }
 
   @MainActor private func capture(_ name: String, _ app: XCUIApplication) {
@@ -226,4 +264,28 @@ final class PhotoFlowUITests: XCTestCase {
     attachment.lifetime = .keepAlways
     add(attachment)
   }
+}
+
+extension PhotoFlowUITests {
+  @MainActor fileprivate func makePhotoFixture() throws -> String {
+    if let path = ProcessInfo.processInfo.environment["USEDWELL_PHOTO_FIXTURE_PATH"] {
+      XCTAssertNotNil(UIImage(contentsOfFile: path), "The supplied photo fixture must be readable")
+      return path
+    }
+    // A landscape image with contrasting edges makes aspect-fit evidence self-contained.
+    let image = UIGraphicsImageRenderer(size: CGSize(width: 480, height: 240)).image { context in
+      UIColor.systemTeal.setFill()
+      context.fill(CGRect(x: 0, y: 0, width: 480, height: 240))
+      UIColor.systemRed.setFill()
+      context.fill(CGRect(x: 0, y: 0, width: 40, height: 240))
+      UIColor.systemBlue.setFill()
+      context.fill(CGRect(x: 440, y: 0, width: 40, height: 240))
+    }
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+      .appendingPathExtension("png")
+    try XCTUnwrap(image.pngData()).write(to: url)
+    addTeardownBlock { try FileManager.default.removeItem(at: url) }
+    return url.path
+  }
+
 }
