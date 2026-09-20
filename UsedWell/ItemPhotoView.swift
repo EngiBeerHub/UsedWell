@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ItemPhotoView: View {
   // Keep the same frame and show the whole photo in both the editor and saved displays.
-  private static let aspectRatio: CGFloat = 4 / 5
+  private static let aspectRatio: CGFloat = 1
   let data: Data?
   let category: ItemCategory
   var width: CGFloat = 108
