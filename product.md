@@ -278,7 +278,7 @@ Active itemは、使用目標の90%と100%に到達する日にローカル通�
 ### iOS
 
 - iPhone向けネイティブアプリ
-- iOS 18以上
+- iOS 26以上
 - SwiftUI
 - SwiftData
 - Apple標準のUI・操作体系を中心にする
