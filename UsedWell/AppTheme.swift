@@ -75,8 +75,13 @@ struct AppPalette {
   let progressTrack: Color
 
   // Milestone colors are semantic and never derived from a brand accent.
-  static func progressColor(for status: ReplacementStatus, colorScheme: ColorScheme) -> Color {
-    return switch (status, colorScheme) {
+  static func progressColor(
+    for status: ReplacementStatus, colorScheme: ColorScheme,
+    theme: AppTheme = .warm, featured: Bool = false
+  ) -> Color {
+    let surfaceScheme: ColorScheme =
+      featured && (theme == .forest || colorScheme == .dark) ? .dark : colorScheme
+    return switch (status, surfaceScheme) {
     case (.stillUsing, .light): Color(hex: 0x687B78)
     case (.stillUsing, .dark): Color(hex: 0xAAB9B4)
     case (.considerReplacing, .light): Color(hex: 0xA96D19)

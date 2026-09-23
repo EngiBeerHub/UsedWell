@@ -7,6 +7,19 @@ import UniformTypeIdentifiers
 nonisolated enum ItemPhotoPipeline {
   enum Failure: Error { case invalidImage, encodingFailed }
 
+  /// Reads the saved JPEG header without decoding its pixels, so layout can be fixed before loading.
+  static func pixelSize(data: Data) -> CGSize? {
+    guard
+      let source = CGImageSourceCreateWithData(
+        data as CFData, [kCGImageSourceShouldCache: false] as CFDictionary),
+      let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
+      let width = properties[kCGImagePropertyPixelWidth] as? Int,
+      let height = properties[kCGImagePropertyPixelHeight] as? Int,
+      width > 0, height > 0
+    else { return nil }
+    return CGSize(width: width, height: height)
+  }
+
   static func prepare(fileURL: URL) throws -> Data {
     guard
       let source = CGImageSourceCreateWithURL(

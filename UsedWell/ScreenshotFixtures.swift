@@ -154,7 +154,11 @@
       container.mainContext.insert(bag)
       container.mainContext.insert(
         Item(
-          name: "MacBook Air", category: .computer,
+          name: longName
+            ? (japanese
+              ? "仕事と旅行の両方で何年も使い続けている大切なノートパソコン"
+              : "The MacBook Air I have used for work and travel over many years")
+            : "MacBook Air", category: .computer,
           purchaseDate: mode == "home-photo-83" ? homeDate(2025, 3, 8) : homeDate(2024, 3, 8),
           purchasePrice: 183_800, targetMonths: 36))
       phone.usageNotes.append(

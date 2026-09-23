@@ -11,16 +11,27 @@ struct ItemPhotoView: View {
   @State private var renderedData: Data?
 
   var body: some View {
+    let pixelSize = data.flatMap(ItemPhotoPipeline.pixelSize)
     Group {
-      if let image, renderedData == data {
+      if let pixelSize {
         let size = AdaptivePhotoLayout.fittedSize(
-          pixelWidth: image.width, pixelHeight: image.height,
+          pixelWidth: Int(pixelSize.width), pixelHeight: Int(pixelSize.height),
           maxWidth: width, maxHeight: maxHeight ?? width * 1.2)
-        Image(decorative: image, scale: 1)
-          .resizable()
-          .frame(width: size.width, height: size.height)
-          .padding(3)
-          .background(palette.photoMat, in: RoundedRectangle(cornerRadius: 7))
+        Group {
+          if let image, renderedData == data {
+            Image(decorative: image, scale: 1)
+              .resizable()
+              .scaledToFit()
+          } else if renderedData == data {
+            Image(systemName: "photo.badge.exclamationmark")
+              .foregroundStyle(palette.secondaryText)
+          } else {
+            Color.clear
+          }
+        }
+        .frame(width: size.width, height: size.height)
+        .padding(3)
+        .background(palette.photoMat, in: RoundedRectangle(cornerRadius: 7))
       } else {
         Image(systemName: category.symbolName)
           .font(.system(size: min(width * 0.38, 32)))
@@ -32,9 +43,11 @@ struct ItemPhotoView: View {
     .allowsHitTesting(false)
     .accessibilityHidden(true)
     .task(id: data) {
-      image = nil
-      renderedData = nil
-      guard let data else { return }
+      guard let data else {
+        image = nil
+        renderedData = nil
+        return
+      }
       let size = maxPixelSize
       let decoded = await Task.detached(priority: .userInitiated) {
         try? ItemPhotoPipeline.thumbnail(data: data, maxPixelSize: size)

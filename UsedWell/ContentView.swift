@@ -30,7 +30,6 @@ struct ContentView: View {
       Group {
         if activeItems.isEmpty {
           VStack(spacing: 16) {
-            Text("愛用品").font(.largeTitle.bold()).frame(maxWidth: .infinity, alignment: .leading)
             Image(systemName: "heart.text.square")
               .font(.largeTitle)
               .foregroundStyle(palette.accent)
@@ -58,12 +57,8 @@ struct ContentView: View {
         } else {
           ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-              Text("愛用品")
-                .font(.system(.largeTitle, design: .default, weight: .bold))
-                .foregroundStyle(palette.primaryText)
               Text("使用中 \(activeItems.count)点")
                 .font(.subheadline).foregroundStyle(palette.secondaryText)
-                .padding(.top, -16)
               if let item = featuredItem {
                 NavigationLink(value: item.navigationID) {
                   FeaturedItemCard(item: item, asOf: asOf)
@@ -101,8 +96,8 @@ struct ContentView: View {
           .background(palette.background)
         }
       }
-      .navigationTitle("")
-      .navigationBarTitleDisplayMode(.inline)
+      .navigationTitle("愛用品")
+      .navigationBarTitleDisplayMode(.large)
       .toolbarBackground(palette.background, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
