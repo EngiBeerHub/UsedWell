@@ -4,6 +4,7 @@ import SwiftUI
 
 struct ItemEditorView: View {
   @Environment(\.locale) private var locale
+  @Environment(\.appPalette) private var palette
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item?
@@ -47,6 +48,7 @@ struct ItemEditorView: View {
           }
         }
       }
+      .listRowBackground(palette.surface)
       Section {
         DatePicker(
           "購入日", selection: $purchaseDate, in: ...Date.now, displayedComponents: .date
@@ -71,6 +73,7 @@ struct ItemEditorView: View {
           Text(purchasePriceValidationMessage).foregroundStyle(.red)
         }
       }
+      .listRowBackground(palette.surface)
       Section {
         Picker("年", selection: $targetYears) {
           ForEach(0...20, id: \.self) { years in Text("\(years)年").tag(years) }
@@ -84,13 +87,18 @@ struct ItemEditorView: View {
       } footer: {
         Text("この愛用品を使いたい期間の目安です。")
       }
+      .listRowBackground(palette.surface)
     }
+    .scrollContentBackground(.hidden)
+    .background(palette.background)
+    .foregroundStyle(palette.primaryText)
     .navigationTitle(
       item == nil
         ? String(localized: LocalizedStringResource("愛用品を追加", locale: locale))
         : String(localized: LocalizedStringResource("登録内容を編集", locale: locale))
     )
     .navigationBarTitleDisplayMode(.inline)
+    .toolbarBackground(palette.background, for: .navigationBar)
     .alert("変更を保存できませんでした。もう一度お試しください。", isPresented: $saveFailed) {
       Button("確認", role: .cancel) {}
     }
@@ -137,8 +145,7 @@ struct ItemEditorView: View {
 
   private var photoSection: some View {
     Section {
-      ItemPhotoView(data: photoDraft.data, category: category, width: 144)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+      ItemPhotoView(data: photoDraft.data, category: category, width: 160, maxHeight: 192)
         .frame(maxWidth: .infinity)
         .accessibilityIdentifier("item-photo-preview")
       PhotosPicker(selection: $selectedPhoto, matching: .images) {
@@ -163,6 +170,7 @@ struct ItemEditorView: View {
           .foregroundStyle(.red)
       }
     }
+    .listRowBackground(palette.surface)
   }
   private var targetMonths: Int { targetYears * 12 + targetAdditionalMonths }
   private var purchasePriceValidationMessage: String? {

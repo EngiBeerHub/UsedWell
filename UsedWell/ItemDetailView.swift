@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ItemDetailView: View {
   @Environment(\.locale) private var locale
+  @Environment(\.appPalette) private var palette
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item
@@ -32,11 +33,13 @@ struct ItemDetailView: View {
           }
         }.padding(.vertical, 8)
       }
+      .listRowBackground(palette.surface)
       usageNotesSection
       if item.isCompleted {
         Section("最終コスト") {
           CostRow(title: "1日あたり", value: item.currentDailyCost(asOf: asOf), emphasis: true)
         }
+        .listRowBackground(palette.surface)
       } else {
         Section {
           CostRow(title: "現在", value: item.currentDailyCost(asOf: asOf), emphasis: true)
@@ -49,6 +52,7 @@ struct ItemDetailView: View {
         } footer: {
           Text("長く使うほど、1日あたりのコストは下がります。")
         }
+        .listRowBackground(palette.surface)
       }
       Section(
         item.isCompleted
@@ -82,6 +86,7 @@ struct ItemDetailView: View {
               .locale(locale)))
         LabeledContent("カテゴリ", value: item.category.displayName(locale: locale))
       }
+      .listRowBackground(palette.surface)
       if !item.isCompleted {
         Section {
           Button("買い替え完了にする", systemImage: "checkmark.circle") { showsCompleteConfirmation = true }
@@ -89,6 +94,7 @@ struct ItemDetailView: View {
         } footer: {
           Text("使い終えた愛用品を、これまで使ったものに移します。")
         }
+        .listRowBackground(palette.surface)
       }
       Section {
         Button(role: .destructive) {
@@ -99,14 +105,19 @@ struct ItemDetailView: View {
         }
         .accessibilityIdentifier("delete-item")
       }
+      .listRowBackground(palette.surface)
     }
     .listStyle(.insetGrouped)
+    .scrollContentBackground(.hidden)
+    .background(palette.background)
+    .foregroundStyle(palette.primaryText)
     .navigationTitle(
       item.isCompleted
         ? String(localized: LocalizedStringResource("履歴の詳細", locale: locale))
         : String(localized: LocalizedStringResource("愛用品の詳細", locale: locale))
     )
     .navigationBarTitleDisplayMode(.inline)
+    .toolbarBackground(palette.background, for: .navigationBar)
     .alert("変更を保存できませんでした。もう一度お試しください。", isPresented: $saveFailed) {
       Button("確認", role: .cancel) {}
     }
@@ -237,6 +248,7 @@ struct ItemDetailView: View {
         }
       }
     }
+    .listRowBackground(palette.surface)
   }
 
   private func presentUsageNoteEditor(_ note: UsageNote? = nil) {
