@@ -4,7 +4,7 @@
 
 - Native iPhone application named `UsedWell`.
 - Use SwiftUI and SwiftData.
-- Support iOS 18 or later.
+- Support iOS 26 or later.
 - iPad, macOS, and watchOS apps are outside the MVP scope.
 - Data is stored locally on the device.
 - Accounts, cloud sync, external APIs, and AI features are outside the MVP scope.
