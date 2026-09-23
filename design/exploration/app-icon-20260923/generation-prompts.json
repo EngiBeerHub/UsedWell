@@ -1,0 +1,45 @@
+{
+  "purpose": "App Icon concept exploration only",
+  "sourceImage": "symbols/A3.png",
+  "colorEditPrompts": [
+    {
+      "palette": "Warm",
+      "prompt": "Edit ONLY the foreground color of this attached transparent symbol image. Preserve EXACTLY its existing silhouette, all contour geometry, thumb depression, bevel, angle, position, size, and transparent padding. This is a color variation of one fixed app-icon concept, not a redesign. Recolor the entire existing opaque symbol to a uniform solid #9C502F. Every background pixel must remain truly transparent. No shadows, gradients, texture, highlights, outlines, extra shapes, labels, letters, icon container, or background color. Return a square transparent PNG with the identical composition and silhouette to the reference. The one and only edit is foreground color #9C502F; remove any accidental texture inside the shape to make the color flat."
+    },
+    {
+      "palette": "Forest",
+      "prompt": "Edit ONLY the foreground color of this attached transparent symbol image. Preserve EXACTLY its existing silhouette, all contour geometry, thumb depression, bevel, angle, position, size, and transparent padding. This is a color variation of one fixed app-icon concept, not a redesign. Recolor the entire existing opaque symbol to a uniform solid #243F35. Every background pixel must remain truly transparent. No shadows, gradients, texture, highlights, outlines, extra shapes, labels, letters, icon container, or background color. Return a square transparent PNG with the identical composition and silhouette to the reference. The one and only edit is foreground color #243F35; remove any accidental texture inside the shape to make the color flat."
+    },
+    {
+      "palette": "Inverse",
+      "prompt": "Edit ONLY the foreground color of this attached transparent symbol image. Preserve EXACTLY its existing silhouette, all contour geometry, thumb depression, bevel, angle, position, size, and transparent padding. This is a color variation of one fixed app-icon concept, not a redesign. Recolor the entire existing opaque symbol to a uniform solid #F7EAD6. Every background pixel must remain truly transparent. No shadows, gradients, texture, highlights, outlines, extra shapes, labels, letters, icon container, or background color. Return a square transparent PNG with the identical composition and silhouette to the reference. The one and only edit is foreground color #F7EAD6; remove any accidental texture inside the shape to make the color flat."
+    }
+  ],
+  "palettes": [
+    {
+      "key": "Warm",
+      "bg": "#F3E6D1",
+      "fg": "#9C502F",
+      "label": "Sand / Rust"
+    },
+    {
+      "key": "Forest",
+      "bg": "#FFF8E9",
+      "fg": "#243F35",
+      "label": "Cream / Deep Forest"
+    },
+    {
+      "key": "Neutral",
+      "bg": "#EEE9DF",
+      "fg": "#302F2B",
+      "label": "Warm neutral / Charcoal"
+    },
+    {
+      "key": "Inverse",
+      "bg": "#243F35",
+      "fg": "#F7EAD6",
+      "label": "Deep Forest / Cream"
+    }
+  ],
+  "limitations": "A3 is a generated raster concept. Color edits have small edge differences and are not production vector assets."
+}
