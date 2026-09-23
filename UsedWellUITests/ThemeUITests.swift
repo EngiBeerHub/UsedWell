@@ -94,23 +94,32 @@ final class ThemeUITests: UIFlowTestCase {
   }
 
   @MainActor func testProgressStagesAreReadableWithoutColor() {
-    for (fixture, status, percentage) in [
-      ("home-photo-83", "まだ使いたい", "83%"),
-      ("home-photo-95", "買い替えを考え始める", "95%"),
-      ("home-photo-100", "目標達成", "100%"),
-      ("home-photo-over", "目標達成", "133%")
-    ] {
-      let app = XCUIApplication()
-      app.launchArguments = [
-        "-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP", "-lastAcknowledgedRegion", "JP"
-      ]
-      app.launchEnvironment["USEDWELL_FIXTURE"] = fixture
-      app.launch()
-      let featured = app.buttons["featured-item"]
-      XCTAssertTrue(featured.waitForExistence(timeout: 5))
-      XCTAssertTrue(featured.label.contains(status), featured.label)
-      XCTAssertTrue(featured.label.contains(percentage), featured.label)
-      app.terminate()
+    for theme in ["Warm", "Forest"] {
+      for (fixture, status, percentage) in [
+        ("home-photo-83", "まだ使いたい", "83%"),
+        ("home-photo-95", "買い替えを考え始める", "95%"),
+        ("home-photo-100", "目標達成", "100%"),
+        ("home-photo-over", "目標達成", "133%")
+      ] {
+        let app = XCUIApplication()
+        app.launchArguments = [
+          "-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP", "-lastAcknowledgedRegion", "JP"
+        ]
+        app.launchEnvironment["USEDWELL_FIXTURE"] = fixture
+        app.launchEnvironment["USEDWELL_RESET_PREFERENCES"] = "1"
+        app.launch()
+        if theme == "Forest" {
+          app.buttons["open-settings"].tap()
+          app.segmentedControls["theme-picker"].buttons["Forest"].tap()
+          app.buttons["完了"].tap()
+        }
+        let featured = app.buttons["featured-item"]
+        XCTAssertTrue(featured.waitForExistence(timeout: 5))
+        XCTAssertTrue(featured.label.contains(status), featured.label)
+        XCTAssertTrue(featured.label.contains(percentage), featured.label)
+        capture("\(theme) \(percentage) progress", app: app)
+        app.terminate()
+      }
     }
   }
 
