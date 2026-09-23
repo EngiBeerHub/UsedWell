@@ -5,11 +5,9 @@ final class LocalizationUITests: UIFlowTestCase {
   @MainActor func testReviewedEnglishScreenshots() {
     let app = launch(language: "en", region: "US", fixture: "screenshots")
     XCTAssertTrue(app.buttons["add-item"].waitForExistence(timeout: 5))
-    XCTAssertTrue(app.staticTexts["Want to keep using it"].firstMatch.exists)
-    XCTAssertTrue(app.staticTexts["Thinking about replacing it"].firstMatch.exists)
+    XCTAssertTrue(app.buttons["featured-item"].label.contains("Thinking about replacing it"))
     capture("en-US-01-home", app: app)
-    app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "iPhone 15 Pro")).firstMatch
-      .tap()
+    app.buttons["featured-item"].tap()
     XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
     capture("en-US-02-detail", app: app)
     app.swipeUp()
@@ -20,7 +18,7 @@ final class LocalizationUITests: UIFlowTestCase {
 
   @MainActor private func captureCostScreenshot() {
     let app = launch(language: "en", region: "US", fixture: "cost-screenshot")
-    app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "MacBook Pro")).firstMatch.tap()
+    app.buttons["featured-item"].tap()
     XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
     app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.80)).press(
       forDuration: 0.05,
@@ -74,8 +72,7 @@ final class LocalizationUITests: UIFlowTestCase {
     let app = launch(language: language, region: region, fixture: "screenshots")
     XCTAssertTrue(app.buttons["add-item"].waitForExistence(timeout: 5))
     capture("\(prefix)-01-home", app: app)
-    app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "iPhone 15 Pro")).firstMatch
-      .tap()
+    app.buttons["featured-item"].tap()
     XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 3))
     XCTAssertTrue(app.staticTexts[japanese ? "目標まであと16日" : "16 days to your goal"].exists)
     capture("\(prefix)-02-detail", app: app)
@@ -159,8 +156,7 @@ final class LocalizationUITests: UIFlowTestCase {
     let later = empty.alerts.buttons[japanese ? "後で" : "Not Now"]
     if later.waitForExistence(timeout: 2) { later.tap() }
     XCTAssertTrue(
-      empty.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "New Camera")).firstMatch
-        .exists)
+      empty.buttons["featured-item"].label.contains("New Camera"))
     empty.terminate()
   }
 

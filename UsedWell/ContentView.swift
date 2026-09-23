@@ -7,7 +7,7 @@ struct ContentView: View {
   var commit = PersistenceCommit()
   var now: () -> Date = { .now }
   @State private var asOf = Date.now
-  @Environment(\.locale) private var locale
+  @Environment(\.appPalette) private var palette
   @Environment(\.modelContext) private var modelContext
   @Environment(\.scenePhase) private var scenePhase
   @AppStorage(RegionNotice.defaultsKey) private var acknowledgedRegion: String?
@@ -17,6 +17,7 @@ struct ContentView: View {
   @State private var navigationPath: [UUID] = []
   @State private var notificationNavigation = NotificationNavigation.shared
   @State private var showsAdd = false
+  @State private var showsSettings = false
   @State private var showsNotificationExplanation = false
   @State private var pendingNotificationItem: UUID?
   private var activeItems: [Item] { Item.activeItemsForReview(items, asOf: asOf) }
@@ -29,14 +30,15 @@ struct ContentView: View {
       Group {
         if activeItems.isEmpty {
           VStack(spacing: 16) {
+            Text("愛用品").font(.largeTitle.bold()).frame(maxWidth: .infinity, alignment: .leading)
             Image(systemName: "heart.text.square")
               .font(.largeTitle)
-              .foregroundStyle(.secondary)
+              .foregroundStyle(palette.accent)
             Text("愛用品を登録しましょう")
               .font(.title3.bold())
             Text("使った期間とコストを見える化して、\n納得できる買い替え時期を考えられます。")
               .font(.subheadline)
-              .foregroundStyle(.secondary)
+              .foregroundStyle(palette.secondaryText)
               .multilineTextAlignment(.center)
             Button("最初の愛用品を登録") { showsAdd = true }.accessibilityIdentifier("add-first-item")
               .buttonStyle(.borderedProminent)
@@ -47,29 +49,37 @@ struct ContentView: View {
               } label: {
                 Label("これまで使ったもの", systemImage: "clock.arrow.circlepath")
               }
-              .buttonStyle(.plain).foregroundStyle(.tint)
+              .buttonStyle(.plain).foregroundStyle(palette.accent)
             }
           }
           .padding(.horizontal, 32)
           .frame(maxWidth: .infinity, maxHeight: .infinity)
+          .background(palette.background)
         } else {
           ScrollView {
-            // Measure the single hero eagerly so very large text remains scrollable.
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 20) {
+              Text("愛用品")
+                .font(.system(.largeTitle, design: .default, weight: .bold))
+                .foregroundStyle(palette.primaryText)
               Text("使用中 \(activeItems.count)点")
-                .font(.subheadline).foregroundStyle(.secondary)
+                .font(.subheadline).foregroundStyle(palette.secondaryText)
+                .padding(.top, -16)
               if let item = featuredItem {
-                Text("次に見直すもの").font(.headline).padding(.top, 8)
                 NavigationLink(value: item.navigationID) {
                   FeaturedItemCard(item: item, asOf: asOf)
                 }.buttonStyle(.plain)
               }
               if !regularItems.isEmpty {
-                Text("使用中の愛用品").font(.headline).padding(.top, 8)
-                LazyVStack(spacing: 16) {
+                Text("使用中の愛用品")
+                  .font(.headline).foregroundStyle(palette.primaryText)
+                  .padding(.top, 4)
+                LazyVStack(spacing: 0) {
                   ForEach(regularItems) { item in
                     NavigationLink(value: item.navigationID) { ItemRow(item: item, asOf: asOf) }
                       .buttonStyle(.plain)
+                    if item.navigationID != regularItems.last?.navigationID {
+                      Rectangle().fill(palette.divider).frame(height: 1)
+                    }
                   }
                 }
               }
@@ -81,22 +91,24 @@ struct ContentView: View {
                   Spacer()
                   Image(systemName: "chevron.right").accessibilityHidden(true)
                 }
-                .font(.subheadline).foregroundStyle(.secondary)
+                .font(.subheadline).foregroundStyle(palette.secondaryText)
                 .padding(.vertical, 20)
                 .contentShape(Rectangle())
               }.buttonStyle(.plain)
             }
-            .padding(.horizontal, 16).padding(.bottom, 16)
+            .padding(.horizontal, 20).padding(.top, 12).padding(.bottom, 24)
           }
-          .background(Color(uiColor: .systemGroupedBackground))
+          .background(palette.background)
         }
       }
-      .navigationTitle(
-        String(
-          localized: LocalizedStringResource(
-            "home.items.title", defaultValue: "愛用品", locale: locale))
-      )
+      .navigationTitle("")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbarBackground(palette.background, for: .navigationBar)
       .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button("設定", systemImage: "gearshape") { showsSettings = true }
+            .accessibilityIdentifier("open-settings")
+        }
         ToolbarItem(placement: .topBarTrailing) {
           Button("愛用品を追加", systemImage: "plus") { showsAdd = true }.accessibilityIdentifier(
             "add-item")
@@ -110,6 +122,16 @@ struct ContentView: View {
         } else {
           ContentUnavailableView("記録が見つかりません", systemImage: "questionmark.folder")
         }
+      }
+    }
+    .sheet(isPresented: $showsSettings) {
+      NavigationStack {
+        SettingsView()
+          .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+              Button("完了") { showsSettings = false }
+            }
+          }
       }
     }
     .sheet(isPresented: $showsAdd, onDismiss: handleAddDismiss) {
@@ -238,131 +260,6 @@ struct ContentView: View {
     }
   }
 
-}
-
-private struct FeaturedItemCard: View {
-  let item: Item
-  let asOf: Date
-
-  var body: some View {
-    VStack(alignment: .leading, spacing: 14) {
-      ItemDurationHeader(item: item, asOf: asOf)
-      HomeItemContext(item: item, asOf: asOf, featured: true)
-    }
-    .padding(16)
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .background(
-      Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24)
-    )
-    .contentShape(RoundedRectangle(cornerRadius: 24))
-    .accessibilityElement(children: .combine)
-    .accessibilityIdentifier("featured-item")
-  }
-}
-
-struct ItemRow: View {
-  let item: Item
-  let asOf: Date
-
-  var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      ItemDurationHeader(item: item, asOf: asOf, prominent: false)
-      HomeItemContext(item: item, asOf: asOf)
-    }
-    .padding(16)
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .background(
-      Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24)
-    )
-    .contentShape(RoundedRectangle(cornerRadius: 24))
-    .accessibilityElement(children: .combine)
-    .accessibilityIdentifier("regular-item-\(item.navigationID)")
-  }
-}
-
-private struct HomeItemContext: View {
-  @Environment(\.locale) private var locale
-  let item: Item
-  let asOf: Date
-  var featured = false
-
-  var body: some View {
-    let target = String(
-      localized: LocalizedStringResource(
-        "目標\(item.targetDurationText(locale: locale))", locale: locale))
-    let percentage = item.progress(asOf: asOf).formatted(
-      .percent.precision(.fractionLength(0)).locale(locale))
-    let amount = item.currentDailyCost(asOf: asOf).formatted(
-      .currency(code: locale.currency?.identifier ?? "JPY").precision(.fractionLength(0)).locale(
-        locale))
-    let cost = String(localized: LocalizedStringResource("1日 \(amount)", locale: locale))
-    VStack(alignment: .leading, spacing: 10) {
-      if featured {
-        HomeContextLine(parts: [
-          target, item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale)
-        ])
-        .font(.footnote)
-        HomeContextLine(parts: [percentage, cost]).font(.caption)
-        UsageProgressBar(progress: item.progress(asOf: asOf), status: item.status(asOf: asOf))
-      } else {
-        HomeContextLine(parts: [
-          target, item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale), percentage
-        ])
-        .font(.caption)
-        UsageProgressBar(progress: item.progress(asOf: asOf), status: item.status(asOf: asOf))
-        Text(cost).font(.caption)
-      }
-    }
-    .foregroundStyle(.secondary)
-  }
-}
-
-/// Keeps each piece of context intact when a single line no longer fits.
-private struct HomeContextLine: View {
-  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-  @Environment(\.locale) private var locale
-  let parts: [String]
-
-  var body: some View {
-    if dynamicTypeSize.isAccessibilitySize {
-      stacked
-    } else {
-      ViewThatFits(in: .horizontal) {
-        Text(
-          parts.joined(separator: locale.language.languageCode?.identifier == "ja" ? " ・ " : " · ")
-        )
-        .fixedSize()
-        stacked
-      }
-    }
-  }
-
-  private var stacked: some View {
-    VStack(alignment: .leading, spacing: 4) {
-      ForEach(parts.indices, id: \.self) { index in
-        Text(parts[index]).fixedSize(horizontal: false, vertical: true)
-      }
-    }
-  }
-}
-
-struct StatusLabel: View {
-  @Environment(\.locale) private var locale
-  let item: Item
-  let asOf: Date
-  var homeFont: Font?
-
-  var body: some View {
-    HStack(spacing: 5) {
-      Image(systemName: item.status(asOf: asOf).symbolName)
-        .accessibilityHidden(homeFont != nil)
-      Text(item.status(asOf: asOf).title(locale: locale))
-    }
-    .font(homeFont ?? .caption.weight(.semibold))
-    .foregroundStyle(
-      item.status(asOf: asOf) == .goalAchieved ? .green : .secondary
-    )
-  }
 }
 
 #if DEBUG

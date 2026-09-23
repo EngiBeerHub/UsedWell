@@ -3,6 +3,7 @@ import SwiftUI
 
 struct UsageNoteEditorView: View {
   @Environment(\.locale) private var locale
+  @Environment(\.appPalette) private var palette
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   let item: Item
@@ -28,6 +29,7 @@ struct UsageNoteEditorView: View {
 
           .accessibilityIdentifier("usage-note-date")
       }
+      .listRowBackground(palette.surface)
       Section {
         TextEditor(text: $text)
           .frame(minHeight: 140)
@@ -38,6 +40,7 @@ struct UsageNoteEditorView: View {
       } footer: {
         Text("使っていて気になったことや、まだ使い続けたい理由などを自由に残せます。")
       }
+      .listRowBackground(palette.surface)
       if note != nil {
         Section {
           Button(role: .destructive) {
@@ -48,14 +51,19 @@ struct UsageNoteEditorView: View {
           }
           .accessibilityIdentifier("delete-usage-note")
         }
+        .listRowBackground(palette.surface)
       }
     }
+    .scrollContentBackground(.hidden)
+    .background(palette.background)
+    .foregroundStyle(palette.primaryText)
     .navigationTitle(
       note == nil
         ? String(localized: LocalizedStringResource("使用メモを追加", locale: locale))
         : String(localized: LocalizedStringResource("使用メモを編集", locale: locale))
     )
     .navigationBarTitleDisplayMode(.inline)
+    .toolbarBackground(palette.background, for: .navigationBar)
     .alert("変更を保存できませんでした。もう一度お試しください。", isPresented: $saveFailed) {
       Button("確認", role: .cancel) {}
     }

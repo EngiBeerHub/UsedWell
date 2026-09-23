@@ -68,17 +68,42 @@ struct UsedWellApp: App {
       Group {
         #if DEBUG
           if ScreenshotFixtures.mode == "day-boundary" {
-            DateRefreshFixture(notifications: notifications, commit: commit)
+            ThemedRoot(notifications: notifications, commit: commit, dateBoundary: true)
           } else {
-            ContentView(
-              notifications: notifications, commit: commit,
-              now: { ScreenshotFixtures.homeReferenceDate ?? .now })
+            ThemedRoot(notifications: notifications, commit: commit)
           }
         #else
-          ContentView(notifications: notifications, commit: commit)
+          ThemedRoot(notifications: notifications, commit: commit)
         #endif
       }.defaultAppStorage(preferences)
     }
     .modelContainer(sharedModelContainer)
+  }
+}
+
+private struct ThemedRoot: View {
+  @Environment(\.colorScheme) private var colorScheme
+  @AppStorage(AppTheme.storageKey) private var selectedTheme = AppTheme.warm.rawValue
+  let notifications: NotificationScheduler
+  let commit: PersistenceCommit
+  var dateBoundary = false
+
+  var body: some View {
+    let palette = (AppTheme(rawValue: selectedTheme) ?? .warm).palette(colorScheme: colorScheme)
+    Group {
+      #if DEBUG
+        if dateBoundary {
+          DateRefreshFixture(notifications: notifications, commit: commit)
+        } else {
+          ContentView(
+            notifications: notifications, commit: commit,
+            now: { ScreenshotFixtures.homeReferenceDate ?? .now })
+        }
+      #else
+        ContentView(notifications: notifications, commit: commit)
+      #endif
+    }
+    .environment(\.appPalette, palette)
+    .tint(palette.accent)
   }
 }

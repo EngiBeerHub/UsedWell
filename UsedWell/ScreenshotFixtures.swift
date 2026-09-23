@@ -96,7 +96,8 @@
       }
       if mode.hasPrefix("home-photo") {
         try populatePhotoHistory(
-          container, phone: phone, japanese: japanese, longName: mode == "home-photo-long")
+          container, phone: phone, japanese: japanese, longName: mode == "home-photo-long",
+          mode: mode)
       }
       try container.mainContext.save()
     }
@@ -117,6 +118,10 @@
       if mode == "home-photo-90" {
         phone.purchaseDate = homeDate(2026, 8, 11)
         phone.targetMonths = 1
+      } else if mode == "home-photo-83" {
+        phone.purchaseDate = homeDate(2024, 3, 8)
+      } else if mode == "home-photo-95" {
+        phone.purchaseDate = homeDate(2023, 11, 1)
       } else if mode == "home-photo-100" {
         phone.purchaseDate = homeDate(2023, 9, 8)
       } else if mode == "home-photo-under" {
@@ -125,7 +130,7 @@
     }
 
     @MainActor private static func populatePhotoHistory(
-      _ container: ModelContainer, phone: Item, japanese: Bool, longName: Bool
+      _ container: ModelContainer, phone: Item, japanese: Bool, longName: Bool, mode: String
     ) throws {
       let history = Item(
         name: "Past iPhone", category: .phone,
@@ -149,7 +154,8 @@
       container.mainContext.insert(bag)
       container.mainContext.insert(
         Item(
-          name: "MacBook Air", category: .computer, purchaseDate: homeDate(2024, 3, 8),
+          name: "MacBook Air", category: .computer,
+          purchaseDate: mode == "home-photo-83" ? homeDate(2025, 3, 8) : homeDate(2024, 3, 8),
           purchasePrice: 183_800, targetMonths: 36))
       phone.usageNotes.append(
         UsageNote(

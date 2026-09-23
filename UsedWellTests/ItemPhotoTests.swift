@@ -41,6 +41,24 @@ struct ItemPhotoDraftTests {
 }
 
 struct ItemPhotoPipelineTests {
+  @Test func adaptiveLayoutKeepsWholePhotoWithinItsBounds() {
+    let landscape = AdaptivePhotoLayout.fittedSize(
+      pixelWidth: 1264, pixelHeight: 848, maxWidth: 140, maxHeight: 168)
+    let portrait = AdaptivePhotoLayout.fittedSize(
+      pixelWidth: 800, pixelHeight: 1200, maxWidth: 140, maxHeight: 168)
+    let square = AdaptivePhotoLayout.fittedSize(
+      pixelWidth: 1024, pixelHeight: 1024, maxWidth: 140, maxHeight: 168)
+    let extreme = AdaptivePhotoLayout.fittedSize(
+      pixelWidth: 200, pixelHeight: 2000, maxWidth: 140, maxHeight: 168)
+
+    #expect(abs(landscape.width - 134) < 0.01)
+    #expect(abs(landscape.width / landscape.height - 1264.0 / 848) < 0.001)
+    #expect(abs(portrait.height - 162) < 0.01)
+    #expect(abs(portrait.width / portrait.height - 800.0 / 1200) < 0.001)
+    #expect(abs(square.width - square.height) < 0.01)
+    #expect(extreme.height <= 162 && extreme.width > 0)
+  }
+
   @Test func invalidImageFailsWithoutProducingData() {
     #expect(throws: ItemPhotoPipeline.Failure.self) {
       try ItemPhotoPipeline.prepare(data: Data([0, 1, 2]))

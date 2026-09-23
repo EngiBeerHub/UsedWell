@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct HistoryView: View {
+  @Environment(\.appPalette) private var palette
   let notifications: NotificationScheduler
   let asOf: Date
   var commit = PersistenceCommit()
@@ -21,7 +22,7 @@ struct HistoryView: View {
         ScrollView {
           LazyVStack(alignment: .leading, spacing: 12) {
             Text("使用終了 \(completedItems.count)点")
-              .font(.subheadline).foregroundStyle(.secondary).padding(.bottom, 4)
+              .font(.subheadline).foregroundStyle(palette.secondaryText).padding(.bottom, 4)
             ForEach(completedItems) { item in
               NavigationLink {
                 ItemDetailView(
@@ -33,15 +34,19 @@ struct HistoryView: View {
             }
           }.padding(16)
         }
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(palette.background)
       }
-    }.navigationTitle("これまで使ったもの")
+    }
+    .background(palette.background)
+    .navigationTitle("これまで使ったもの")
+    .toolbarBackground(palette.background, for: .navigationBar)
   }
 }
 
 private struct HistoryItemRow: View {
   @Environment(\.locale) private var locale
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  @Environment(\.appPalette) private var palette
   let item: Item
   let asOf: Date
 
@@ -54,8 +59,11 @@ private struct HistoryItemRow: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
       layout {
-        ItemPhotoView(data: item.photoData, category: item.category, width: 64, maxPixelSize: 300)
-          .clipShape(RoundedRectangle(cornerRadius: 12))
+        ItemPhotoView(
+          data: item.photoData, category: item.category, width: 64, maxHeight: 76,
+          maxPixelSize: 300
+        )
+        .frame(width: 64, alignment: .leading)
         VStack(alignment: .leading, spacing: 8) {
           Text(item.name).font(.headline)
           Text(item.usageDurationText(asOf: asOf, locale: locale))
@@ -63,23 +71,23 @@ private struct HistoryItemRow: View {
           let cost = item.currentDailyCost(asOf: asOf).formatted(
             .currency(code: locale.currency?.identifier ?? "JPY")
               .precision(.fractionLength(0)).locale(locale))
-          Text("\(cost) / 日").font(.caption).foregroundStyle(.secondary)
+          Text("\(cost) / 日").font(.caption).foregroundStyle(palette.secondaryText)
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity, alignment: .leading)
         if !dynamicTypeSize.isAccessibilitySize {
           Image(systemName: "chevron.right")
-            .font(.caption).foregroundStyle(.tertiary).accessibilityHidden(true)
+            .font(.caption).foregroundStyle(palette.secondaryText).accessibilityHidden(true)
         }
       }
       Text("\(item.completedPeriodText(locale: locale)) 使用終了")
-        .font(.caption).foregroundStyle(.secondary)
+        .font(.caption).foregroundStyle(palette.secondaryText)
         .fixedSize(horizontal: false, vertical: true)
     }
     .padding(16)
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(
-      Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20)
+      palette.surface, in: RoundedRectangle(cornerRadius: 20)
     )
     .contentShape(RoundedRectangle(cornerRadius: 20))
     .accessibilityElement(children: .combine)
