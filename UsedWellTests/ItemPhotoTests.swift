@@ -60,6 +60,7 @@ struct ItemPhotoPipelineTests {
   }
 
   @Test func invalidImageFailsWithoutProducingData() {
+    #expect(ItemPhotoPipeline.pixelSize(data: Data([0, 1, 2])) == nil)
     #expect(throws: ItemPhotoPipeline.Failure.self) {
       try ItemPhotoPipeline.prepare(data: Data([0, 1, 2]))
     }
@@ -89,6 +90,7 @@ struct ItemPhotoPipelineTests {
       CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any])
     #expect(properties[kCGImagePropertyPixelWidth] as? Int == 1024)
     #expect(properties[kCGImagePropertyPixelHeight] as? Int == 2048)
+    #expect(ItemPhotoPipeline.pixelSize(data: data) == CGSize(width: 1024, height: 2048))
     #expect(properties[kCGImagePropertyGPSDictionary] == nil)
     let thumbnail = try ItemPhotoPipeline.thumbnail(data: data, maxPixelSize: 300)
     #expect(thumbnail.width == 150 && thumbnail.height == 300)

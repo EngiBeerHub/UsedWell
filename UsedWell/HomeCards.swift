@@ -99,6 +99,7 @@ struct FeaturedItemCard: View {
       .font(.caption)
       .foregroundStyle(palette.secondaryText)
       .minimumScaleFactor(0.85)
+      // The bar sits on the light featuredInset in Forest Light, unlike the status above it.
       UsageProgressBar(progress: item.progress(asOf: asOf), status: item.status(asOf: asOf))
     }
     .padding(16)
@@ -130,49 +131,37 @@ struct FeaturedItemCard: View {
 struct ItemRow: View {
   @Environment(\.locale) private var locale
   @Environment(\.appPalette) private var palette
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
   let item: Item
   let asOf: Date
 
   var body: some View {
-    HStack(alignment: .top, spacing: 12) {
+    rowLayout {
       ItemPhotoView(
         data: item.photoData, category: item.category, width: 46, maxHeight: 56,
         maxPixelSize: 300
       )
       .frame(width: 46, alignment: .leading)
       VStack(alignment: .leading, spacing: 5) {
-        HStack(alignment: .firstTextBaseline, spacing: 6) {
+        titleLayout {
           Text(item.name)
             .font(.subheadline.weight(.semibold))
-            .lineLimit(2)
+            .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
+            .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
           Text(item.usageDurationText(asOf: asOf, locale: locale))
             .font(.subheadline.weight(.semibold))
-            .fixedSize()
-          Image(systemName: "chevron.right")
-            .font(.caption2)
-            .foregroundStyle(palette.secondaryText)
-            .accessibilityHidden(true)
+            .fixedSize(horizontal: false, vertical: true)
+          if !dynamicTypeSize.isAccessibilitySize {
+            Image(systemName: "chevron.right")
+              .font(.caption2)
+              .foregroundStyle(palette.secondaryText)
+              .accessibilityHidden(true)
+          }
         }
         .foregroundStyle(palette.primaryText)
-        HStack(spacing: 4) {
-          StatusLabel(item: item, asOf: asOf, homeFont: .caption2)
-          Spacer(minLength: 3)
-          Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0)))
-            .font(.caption2)
-            .foregroundStyle(palette.secondaryText)
-        }
-        HStack(spacing: 4) {
-          Text("目標\(item.targetDurationText(locale: locale))")
-          Text("・")
-          Text(item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale))
-          Spacer(minLength: 3)
-          Text(dailyCost)
-        }
-        .font(.caption2)
-        .foregroundStyle(palette.secondaryText)
-        .lineLimit(1)
-        .minimumScaleFactor(0.8)
+        statusSummary
+        metricSummary
         UsageProgressBar(progress: item.progress(asOf: asOf), status: item.status(asOf: asOf))
       }
     }
@@ -180,6 +169,59 @@ struct ItemRow: View {
     .contentShape(Rectangle())
     .accessibilityElement(children: .combine)
     .accessibilityIdentifier("regular-item-\(item.navigationID)")
+  }
+
+  private var rowLayout: AnyLayout {
+    dynamicTypeSize.isAccessibilitySize
+      ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+      : AnyLayout(HStackLayout(alignment: .top, spacing: 12))
+  }
+
+  private var titleLayout: AnyLayout {
+    dynamicTypeSize.isAccessibilitySize
+      ? AnyLayout(VStackLayout(alignment: .leading, spacing: 5))
+      : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: 6))
+  }
+
+  private var statusSummary: some View {
+    ViewThatFits(in: .horizontal) {
+      HStack(spacing: 4) {
+        StatusLabel(item: item, asOf: asOf, homeFont: .caption2)
+        Spacer(minLength: 3)
+        progressText
+      }
+      .fixedSize(horizontal: true, vertical: false)
+      VStack(alignment: .leading, spacing: 4) {
+        StatusLabel(item: item, asOf: asOf, homeFont: .caption2)
+        progressText
+      }
+    }
+  }
+
+  private var progressText: some View {
+    Text(item.progress(asOf: asOf), format: .percent.precision(.fractionLength(0)))
+      .font(.caption2)
+      .foregroundStyle(palette.secondaryText)
+  }
+
+  private var metricSummary: some View {
+    ViewThatFits(in: .horizontal) {
+      HStack(spacing: 4) {
+        Text("目標\(item.targetDurationText(locale: locale))")
+        Text("・")
+        Text(item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale))
+        Spacer(minLength: 3)
+        Text(dailyCost)
+      }
+      .fixedSize(horizontal: true, vertical: false)
+      VStack(alignment: .leading, spacing: 4) {
+        Text("目標\(item.targetDurationText(locale: locale))")
+        Text(item.remainingText(asOf: asOf, usesDayPrecision: true, locale: locale))
+        Text(dailyCost)
+      }
+    }
+    .font(.caption2)
+    .foregroundStyle(palette.secondaryText)
   }
 
   private var dailyCost: String {
@@ -215,9 +257,8 @@ struct StatusLabel: View {
     if status == .stillUsing {
       return featured ? palette.featuredSecondaryText : palette.secondaryText
     }
-    let effectiveScheme: ColorScheme =
-      featured && (selectedTheme == AppTheme.forest.rawValue || colorScheme == .dark)
-      ? .dark : colorScheme
-    return AppPalette.progressColor(for: status, colorScheme: effectiveScheme)
+    return AppPalette.progressColor(
+      for: status, colorScheme: colorScheme,
+      theme: AppTheme(rawValue: selectedTheme) ?? .warm, featured: featured)
   }
 }
