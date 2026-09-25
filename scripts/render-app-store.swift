@@ -1,4 +1,5 @@
 // Usage: swift scripts/render-app-store.swift <raw PNG directory> <output directory> <ja-JP|en-US>
+// D+ polished: full device context with floating runtime crops on slides 2, 3, and 5.
 // All app content comes from runtime captures. Only framing and Store copy are drawn.
 import AppKit
 
@@ -6,7 +7,6 @@ struct StoreSlide: Decodable {
   let name: String
   let headline: String
   let subcopy: String
-  let caption: String
 }
 
 let arguments = CommandLine.arguments
@@ -24,6 +24,9 @@ guard let slides = copy[locale], slides.count == 5 else {
 try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
 let canvasWidth = 1284
 let canvasHeight = 2778
+let slideNames = ["01-hero", "02-progress", "03-notes", "04-themes", "05-cost"]
+precondition(slides.map(\.name) == slideNames, "Unexpected Store story or output names")
+let japanese = locale == "ja-JP"
 
 func color(_ hex: UInt32) -> NSColor {
   NSColor(
@@ -55,44 +58,78 @@ func runtime(_ name: String, crop: CGRect? = nil) -> NSImage {
 }
 
 func text(
-  _ string: String, left: CGFloat = 88, top: CGFloat, width: CGFloat = 1108,
+  _ string: String, left: CGFloat = 78, top: CGFloat, width: CGFloat = 1128,
   height: CGFloat, size: CGFloat, weight: NSFont.Weight = .regular, ink: NSColor,
-  spacing: CGFloat = 9
+  spacing: CGFloat = 26
 ) {
   let paragraph = NSMutableParagraphStyle()
   paragraph.lineSpacing = spacing
+  // Use macOS fonts so regeneration does not depend on downloaded fonts.
+  let font =
+    japanese
+    ? NSFont(name: weight == .regular ? "HiraginoSans-W3" : "HiraginoSans-W6", size: size)!
+    : NSFont.systemFont(ofSize: size, weight: weight)
   let attributed = NSAttributedString(
     string: string,
     attributes: [
-      .font: NSFont.systemFont(ofSize: size, weight: weight),
+      .font: font,
       .foregroundColor: ink, .paragraphStyle: paragraph
     ])
+  for line in string.components(separatedBy: "\n") {
+    let lineWidth = (line as NSString).size(withAttributes: [.font: font]).width
+    precondition(lineWidth <= width, "Store text wraps unexpectedly: \(line)")
+  }
   let bounds = attributed.boundingRect(
-    with: NSSize(width: width, height: 10_000), options: [.usesLineFragmentOrigin, .usesFontLeading]
+    with: NSSize(width: width, height: 10_000), options: [.usesLineFragmentOrigin]
   )
   precondition(bounds.height <= height, "Store text overflows: \(string)")
-  attributed.draw(in: rect(left, top, width, height))
+  attributed.draw(with: rect(left, top, width, height), options: [.usesLineFragmentOrigin])
 }
 
-func panel(_ image: NSImage, left: CGFloat, top: CGFloat, width: CGFloat, height: CGFloat? = nil) {
-  let scaledHeight = image.size.height * width / image.size.width
-  let frame = rect(left, top, width, height ?? scaledHeight)
-  let path = NSBezierPath(roundedRect: frame, xRadius: 44, yRadius: 44)
+func roundedImage(_ image: NSImage, frame: NSRect, radius: CGFloat) {
+  NSGraphicsContext.saveGraphicsState()
+  NSBezierPath(roundedRect: frame, xRadius: radius, yRadius: radius).addClip()
+  image.draw(in: frame)
+  NSGraphicsContext.restoreGraphicsState()
+}
+
+func device(_ image: NSImage, left: CGFloat, top: CGFloat, width: CGFloat) {
+  // Generic device silhouette, not Apple artwork or an illustration of a specific iPhone.
+  // No sensor housing, camera, hardware buttons, logos, or other Apple-specific details.
+  // https://developer.apple.com/app-store/marketing/guidelines/#section-product-images
+  let scale = width / 860
+  let inset = 26 * scale
+  let screenWidth = width - inset * 2
+  let screenHeight = screenWidth * image.size.height / image.size.width
+  let body = NSBezierPath(
+    roundedRect: rect(left, top, width, screenHeight + inset * 2),
+    xRadius: 115 * scale, yRadius: 115 * scale)
+  color(0x20201E).setFill()
+  body.fill()
+  color(0x76756F).setStroke()
+  body.lineWidth = 2 * scale
+  body.stroke()
+  roundedImage(
+    image, frame: rect(left + inset, top + inset, screenWidth, screenHeight), radius: 89 * scale)
+}
+
+func overlay(_ image: NSImage) {
+  let width: CGFloat = 1152
+  let height = image.size.height * width / image.size.width
+  let frame = rect(66, 2596 - height, width, height)
+  let path = NSBezierPath(roundedRect: frame, xRadius: 34, yRadius: 34)
   NSGraphicsContext.saveGraphicsState()
   let shadow = NSShadow()
-  shadow.shadowColor = NSColor.black.withAlphaComponent(0.11)
-  shadow.shadowBlurRadius = 44
-  shadow.shadowOffset = NSSize(width: 0, height: -18)
+  shadow.shadowColor = color(0x433524).withAlphaComponent(0.10)
+  shadow.shadowBlurRadius = 28
+  shadow.shadowOffset = NSSize(width: 0, height: -10)
   shadow.set()
-  color(0xFFFCF7).setFill()
+  color(0xFBF6ED).setFill()
   path.fill()
   NSGraphicsContext.restoreGraphicsState()
-  NSGraphicsContext.saveGraphicsState()
-  path.addClip()
-  image.draw(in: NSRect(x: left, y: frame.maxY - scaledHeight, width: width, height: scaledHeight))
-  NSGraphicsContext.restoreGraphicsState()
-  color(0xDED1BF).withAlphaComponent(0.6).setStroke()
-  path.lineWidth = 1
+  roundedImage(image, frame: frame, radius: 34)
+  color(0xBAA486).withAlphaComponent(0.7).setStroke()
+  path.lineWidth = 2.5
   path.stroke()
 }
 
@@ -109,52 +146,47 @@ func render(width: Int, height: Int, draw: () -> Void) -> NSBitmapImageRep {
   return NSBitmapImageRep(cgImage: context.makeImage()!)
 }
 
-let icon = imageAt(
-  scripts.deletingLastPathComponent().appendingPathComponent(
-    "UsedWell/Assets.xcassets/AppIcon.appiconset/AppIcon.png"))
 var finished: [NSImage] = []
 for (index, slide) in slides.enumerated() {
-  let forest = index == 2
-  let primary = color(forest ? 0x243F35 : 0x302F2B)
-  let secondary = color(forest ? 0x566A5A : 0x746F66)
-  let accent = color(forest ? 0x285342 : 0x9C502F)
   let bitmap = render(width: canvasWidth, height: canvasHeight) {
-    color(forest ? 0xE8EEE2 : 0xF4EADB).setFill()
+    color(0xF0E6D7).setFill()
     NSRect(x: 0, y: 0, width: canvasWidth, height: canvasHeight).fill()
-    NSGraphicsContext.saveGraphicsState()
-    NSBezierPath(roundedRect: rect(88, 83, 68, 68), xRadius: 16, yRadius: 16).addClip()
-    icon.draw(in: rect(88, 83, 68, 68))
-    NSGraphicsContext.restoreGraphicsState()
-    text("UsedWell", left: 177, top: 88, height: 64, size: 42, weight: .semibold, ink: primary)
     text(
-      String(format: "%02d / 05", index + 1), left: 1044, top: 102, width: 150,
-      height: 44, size: 27, weight: .medium, ink: secondary)
-    text(
-      slide.headline, top: 233, height: 260, size: index == 4 ? 86 : 92,
-      weight: .bold, ink: primary, spacing: 12)
-    text(slide.subcopy, top: 525, height: 158, size: 38, ink: secondary, spacing: 14)
+      slide.headline, top: index == 3 ? 100 : 130, height: 310,
+      size: index == 1 || index == 2 ? 108 : 100, weight: .semibold, ink: color(0x302B25))
+    if !slide.subcopy.isEmpty {
+      text(
+        slide.subcopy, left: 82, top: 493, width: 1120, height: 225, size: 80,
+        ink: color(0x675748))
+    }
     switch index {
     case 0:
-      panel(runtime("01-home"), left: 170, top: 689, width: 944)
+      device(runtime("01-home"), left: 144, top: 566, width: 996)
     case 1:
-      text(slide.caption, top: 790, height: 60, size: 30, weight: .medium, ink: accent)
-      panel(
-        runtime("01-home", crop: CGRect(x: 60, y: 651, width: 1086, height: 1458)),
-        left: 72, top: 929, width: 1140)
+      device(runtime("01-home"), left: 212, top: 854, width: 860)
+      // R4 crop: the entire photo, name, state, duration, goal, and 95% form one block.
+      overlay(runtime("01-home", crop: CGRect(x: 108, y: 792, width: 990, height: 936)))
     case 2:
-      panel(runtime("03-goal"), left: 170, top: 689, width: 944)
-    case 3:
-      text(slide.caption, top: 790, height: 60, size: 30, weight: .medium, ink: accent)
-      panel(
+      device(runtime("02-detail"), left: 212, top: 854, width: 860)
+      // English notes wrap to more lines; include all three notes at the same magnification.
+      overlay(
         runtime(
-          "02-detail",
-          crop: CGRect(x: 0, y: 429, width: 1206, height: locale == "en-US" ? 1764 : 1620)),
-        left: 72, top: 929, width: 1140)
+          "02-detail", crop: CGRect(x: 48, y: 1270, width: 1110, height: japanese ? 775 : 900)))
+    case 3:
+      for (offset, name, background, ink, capture) in [
+        (0, "Warm", UInt32(0xE6D7BE), UInt32(0x965334), "01-home"),
+        (624, "Forest", UInt32(0xD0DAC7), UInt32(0x234A3D), "04-home-forest")
+      ] {
+        color(background).setFill()
+        rect(offset == 0 ? 0 : 642, 730, 642, 2048).fill()
+        text(
+          name, left: CGFloat(64 + offset), top: 994, width: 550, height: 110,
+          size: 78, weight: .semibold, ink: color(ink))
+        device(runtime(capture), left: CGFloat(48 + offset), top: 1130, width: 564)
+      }
     default:
-      text(slide.caption, top: 790, height: 60, size: 30, weight: .medium, ink: accent)
-      panel(
-        runtime("05-cost", crop: CGRect(x: 0, y: 440, width: 1206, height: 1840)),
-        left: 72, top: 929, width: 1140)
+      device(runtime("05-cost"), left: 212, top: 854, width: 860)
+      overlay(runtime("05-cost", crop: CGRect(x: 48, y: 1590, width: 1110, height: 600)))
     }
   }
   try bitmap.representation(using: .png, properties: [:])!.write(
@@ -162,11 +194,16 @@ for (index, slide) in slides.enumerated() {
   finished.append(
     NSImage(cgImage: bitmap.cgImage!, size: NSSize(width: canvasWidth, height: canvasHeight)))
 }
-let sheet = render(width: 2000, height: 866) {
-  for (index, image) in finished.enumerated() {
-    image.draw(in: NSRect(x: index * 400, y: 0, width: 400, height: 866))
+for (name, width) in [
+  ("contact-sheet", 400), ("contact-sheet-240px", 240), ("contact-sheet-180px", 180)
+] {
+  let height = Int((Double(width) * Double(canvasHeight) / Double(canvasWidth)).rounded())
+  let sheet = render(width: width * 5, height: height) {
+    for (index, image) in finished.enumerated() {
+      image.draw(in: NSRect(x: index * width, y: 0, width: width, height: height))
+    }
   }
+  try sheet.representation(using: .png, properties: [:])!.write(
+    to: output.appendingPathComponent(name + ".png"))
 }
-try sheet.representation(using: .png, properties: [:])!.write(
-  to: output.appendingPathComponent("contact-sheet.png"))
-print("Rendered \(locale): five 1284 x 2778 sRGB PNGs and contact sheet")
+print("Rendered \(locale): five 1284 x 2778 sRGB PNGs and 400/240/180px contact sheets")

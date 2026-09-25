@@ -1,8 +1,8 @@
 #!/bin/bash
 # Usage: bash scripts/app-store-screenshots.sh IPHONE_17_PRO_UDID OUTPUT_DIR ja-JP|en-US|all [XCRESULT]
-# Capture the dedicated Store flow, then compose five screenshots and a contact sheet per locale.
+# Capture the dedicated Store flow, then compose five screenshots and 400/240/180px sheets per locale.
 # Reuse a successful result bundle without building or rerunning captures.
-# Keep output outside app-store/screenshots until the presentation has been reviewed.
+# Use a staging directory; only the five numbered PNGs belong in app-store/screenshots/<locale>.
 set -euo pipefail
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 simulator_id="${1:?iPhone 17 Pro simulator UDID is required}"
@@ -33,7 +33,7 @@ if [ "$#" -lt 4 ]; then
   xcrun simctl status_bar "$simulator_id" override --time "9:41" \
     --dataNetwork wifi --wifiMode active --wifiBars 3 --cellularMode active \
     --cellularBars 4 --batteryState discharging --batteryLevel 100
-  xcodebuild test -project "$repo_root/UsedWell.xcodeproj" -scheme UsedWell \
+  xcodebuild test -project "$repo_root/UsedWell.xcodeproj" -scheme UsedWell -configuration Debug \
     -destination "platform=iOS Simulator,id=$simulator_id" \
     -parallel-testing-enabled NO -derivedDataPath "$work_dir/DerivedData" \
     -resultBundlePath "$result_path" -only-testing:"UsedWellUITests/$selector" \
@@ -49,9 +49,10 @@ for language in "${locales[@]}"; do
 from pathlib import Path
 import struct
 import sys
+import zlib
 
 folder = Path(sys.argv[1])
-expected = {"01-hero", "02-progress", "03-decision", "04-notes", "05-cost"}
+expected = {"01-hero", "02-progress", "03-notes", "04-themes", "05-cost"}
 files = list(folder.glob("0*.png"))
 assert {path.stem for path in files} == expected, "Expected exactly five Store PNGs"
 for path in files:
@@ -60,7 +61,21 @@ for path in files:
     width, height, depth, color = struct.unpack(">IIBB", data[16:26])
     assert (width, height, depth, color) == (1284, 2778, 8, 2), \
         f"{path}: expected 1284x2778, 8-bit RGB without alpha"
-print(f"Verified {folder.name}: five 1284x2778 RGB PNGs without alpha")
+    chunks = {}
+    offset = 8
+    while offset < len(data):
+        length = struct.unpack(">I", data[offset:offset + 4])[0]
+        kind = data[offset + 4:offset + 8]
+        payload = data[offset + 8:offset + 8 + length]
+        crc = struct.unpack(">I", data[offset + 8 + length:offset + 12 + length])[0]
+        assert zlib.crc32(kind + payload) == crc, f"{path}: corrupt PNG chunk"
+        chunks[kind] = payload
+        offset += 12 + length
+    assert b"sRGB" in chunks and chunks[b"sRGB"] in (b"\0", b"\1", b"\2", b"\3"), \
+        f"{path}: expected explicit sRGB color space"
+    assert b"tRNS" not in chunks, f"{path}: unexpected transparency"
+    assert b"IDAT" in chunks and b"IEND" in chunks, f"{path}: incomplete PNG"
+print(f"Verified {folder.name}: five 1284x2778, 8-bit sRGB PNGs without alpha")
 PY
 done
 echo "Runtime captures: $output_dir/raw"

@@ -36,6 +36,7 @@ final class AppStoreScreenshotTests: UIFlowTestCase {
     let prefix = "\(language)-\(region)"
     let app = launch(language: language, region: region, fixture: "store-home")
     XCTAssertTrue(app.buttons["featured-item"].label.contains("95%"))
+    let warmFeatured = app.buttons["featured-item"].label
     capture("\(prefix)-01-home", app: app)
     app.buttons["featured-item"].tap()
     XCTAssertTrue(app.buttons["edit-item"].waitForExistence(timeout: 5))
@@ -45,12 +46,10 @@ final class AppStoreScreenshotTests: UIFlowTestCase {
     capture("\(prefix)-04-notes", app: app)
     app.terminate()
 
-    let goal = launch(language: language, region: region, fixture: "store-goal", theme: "forest")
-    XCTAssertTrue(goal.buttons["featured-item"].label.contains("133%"))
-    XCTAssertTrue(
-      goal.buttons["featured-item"].label.contains(language == "ja" ? "目標達成" : "Goal reached"))
-    capture("\(prefix)-03-goal", app: goal)
-    goal.terminate()
+    let forest = launch(language: language, region: region, fixture: "store-home", theme: "forest")
+    XCTAssertEqual(forest.buttons["featured-item"].label, warmFeatured)
+    capture("\(prefix)-04-home-forest", app: forest)
+    forest.terminate()
 
     let cost = launch(language: language, region: region, fixture: "store-cost")
     cost.buttons["featured-item"].tap()

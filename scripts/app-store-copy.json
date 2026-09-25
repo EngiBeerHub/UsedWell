@@ -3,64 +3,54 @@
     {
       "name": "01-hero",
       "headline": "買い替える前に、\n今の愛用品を振り返る。",
-      "subcopy": "使った時間と、使って感じたことから。\n次へ進むタイミングを、自分で。",
-      "caption": ""
+      "subcopy": ""
     },
     {
       "name": "02-progress",
       "headline": "どれくらい使った？\n目標と並べて考える。",
-      "subcopy": "これまで使った時間と、自分で決めた使用目標。\n今どこまで使ったかが、ひと目で。",
-      "caption": "使用期間と使用目標を、ひとつの画面に。"
+      "subcopy": "期間と目標を、ひと目で。"
     },
     {
-      "name": "03-decision",
-      "headline": "買い替えるかは、\n自分で決める。",
-      "subcopy": "90%は、買い替えを考え始める目安。\n100%は使用目標の達成。その先も使い続けられます。",
-      "caption": ""
-    },
-    {
-      "name": "04-notes",
+      "name": "03-notes",
       "headline": "不満も、\nまだ使える理由も。",
-      "subcopy": "そのとき感じたことを、日付つきで。\n迷ったときは、自分の記録を振り返る。",
-      "caption": "数字だけではわからない、使い心地まで。"
+      "subcopy": "使い心地を、\n買い替えの判断材料に。"
+    },
+    {
+      "name": "04-themes",
+      "headline": "気分に合わせて、\nテーマを選べる。",
+      "subcopy": ""
     },
     {
       "name": "05-cost",
       "headline": "1日あたりのコストも、\n判断材料のひとつに。",
-      "subcopy": "今のコストと、もう1年使った場合を見比べる。\n買い替えるか、使い続けるかを考える手がかりに。",
-      "caption": "MacBook Pro · 1年6か月使った場合"
+      "subcopy": "もう1年使ったら？\n先のコストも見比べる。"
     }
   ],
   "en-US": [
     {
       "name": "01-hero",
       "headline": "Before you replace it,\nlook back.",
-      "subcopy": "Consider your time with it and how it feels to use.\nDecide for yourself when it's time to move on.",
-      "caption": ""
+      "subcopy": ""
     },
     {
       "name": "02-progress",
       "headline": "Your time with it.\nYour goal for it.",
-      "subcopy": "See how long you've used it alongside your own goal.\nKnow where you stand, at a glance.",
-      "caption": "Time used and your own goal, together."
+      "subcopy": "Time used and your goal,\nat a glance."
     },
     {
-      "name": "03-decision",
-      "headline": "You decide\nwhen to replace it.",
-      "subcopy": "At 90%, start reflecting. At 100%, your goal is reached.\nYou can keep using it for as long as you like.",
-      "caption": ""
-    },
-    {
-      "name": "04-notes",
+      "name": "03-notes",
       "headline": "The frustrations.\nThe reasons to keep it.",
-      "subcopy": "Keep dated notes on what you notice.\nWhen you're unsure, look back on your own experience.",
-      "caption": "Capture how it feels, beyond the numbers."
+      "subcopy": "Make your experience\npart of the decision."
+    },
+    {
+      "name": "04-themes",
+      "headline": "Choose a theme\nto suit your mood.",
+      "subcopy": ""
     },
     {
       "name": "05-cost",
       "headline": "Cost per day.\nOne more perspective.",
-      "subcopy": "What does another year of use look like?\nCompare costs as one part of your decision.",
-      "caption": "MacBook Pro · after 1 year, 6 months"
+      "subcopy": "Compare today with\none more year of use."
     }
   ]
 }
