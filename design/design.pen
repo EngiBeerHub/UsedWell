@@ -1,5 +1,5 @@
 {
-  "version": "2.18",
+  "version": "2.19",
   "children": [
     {
       "type": "frame",
@@ -296308,6 +296308,5649 @@
           "fontFamily": "Noto Sans JP",
           "fontSize": 16,
           "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "sTIiZ",
+      "x": 32504,
+      "y": -540,
+      "name": "Store v2 · A Minimal Poster · 5 slides",
+      "clip": true,
+      "width": 6852,
+      "height": 3030,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "abyjY",
+          "x": 72,
+          "y": 32,
+          "name": "Comparison label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 6708,
+          "content": "A / Minimal Poster",
+          "lineHeight": 1.32,
+          "fontFamily": "Inter",
+          "fontSize": 70,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "q8Xj1",
+          "x": 72,
+          "y": 180,
+          "name": "A1 · Promise",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "D6BXG",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "買い替える前に、\n今の愛用品を振り返る。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "qpiOy",
+              "x": 145,
+              "y": 562,
+              "name": "Home · full screen",
+              "clip": true,
+              "width": 994,
+              "height": 2161.0845771144277,
+              "fill": "#FBF6ED",
+              "cornerRadius": 56,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "aJXol",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Home · full screen · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 994,
+                  "height": 2161.0845771144277
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "YEVi5",
+          "x": 1428,
+          "y": 180,
+          "name": "A2 · Time and Goal",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "lUT7z",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "どれくらい使った？\n目標と並べて考える。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "V5fXc",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "期間と目標を、ひと目で。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "Xx1yd",
+              "x": 66,
+              "y": 784,
+              "name": "Home · header and featured context",
+              "clip": true,
+              "width": 1152,
+              "height": 1854.089552238806,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "qV7r4",
+                  "x": 0,
+                  "y": -335.2835820895522,
+                  "name": "Home · header and featured context · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1152,
+                  "height": 2504.597014925373
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SD1bC",
+          "x": 2784,
+          "y": 180,
+          "name": "A3 · Usage Notes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "JJRVD",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "不満も、\nまだ使える理由も。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "qIv6K",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "使い心地を、\n買い替えの判断材料に。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "rxK1k",
+              "x": 66,
+              "y": 818,
+              "name": "Detail · item context and three notes",
+              "clip": true,
+              "width": 1152,
+              "height": 1671.956756756757,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "NVdAV",
+                  "x": -49.81621621621622,
+                  "y": -445.23243243243246,
+                  "name": "Detail · item context and three notes · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-detail-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1251.6324324324326,
+                  "height": 2721.210810810811
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "O3QpF",
+          "x": 4140,
+          "y": 180,
+          "name": "A4 · Themes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "BXU9N",
+              "x": 78,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "気分に合わせて、\nテーマを選べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "XwKoZ",
+              "x": 92,
+              "y": 448,
+              "name": "Theme label · Warm",
+              "fill": "#965334",
+              "textGrowth": "fixed-width",
+              "width": 1100,
+              "content": "Warm",
+              "lineHeight": 1.15,
+              "fontFamily": "Inter",
+              "fontSize": 70,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "fMhBw",
+              "x": 120,
+              "y": 538,
+              "name": "Warm · photo and goal",
+              "clip": true,
+              "width": 1044,
+              "height": 1029.5801104972375,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "tU8Zs",
+                  "x": -57.67955801104972,
+                  "y": -625.8232044198895,
+                  "name": "Warm · photo and goal · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1159.3591160220994,
+                  "height": 2520.5966850828727
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "wYAD2",
+              "x": 92,
+              "y": 1600,
+              "name": "Theme label · Forest",
+              "fill": "#234A3D",
+              "textGrowth": "fixed-width",
+              "width": 1100,
+              "content": "Forest",
+              "lineHeight": 1.15,
+              "fontFamily": "Inter",
+              "fontSize": 70,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "jIKap",
+              "x": 120,
+              "y": 1688,
+              "name": "Forest · photo and goal",
+              "clip": true,
+              "width": 1044,
+              "height": 1029.5801104972375,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "ngE36",
+                  "x": -57.67955801104972,
+                  "y": -625.8232044198895,
+                  "name": "Forest · photo and goal · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-forest.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1159.3591160220994,
+                  "height": 2520.5966850828727
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Hq5t9",
+          "x": 5496,
+          "y": 180,
+          "name": "A5 · Cost",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "jIeU7",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "1日あたりのコストも、\n判断材料のひとつに。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "sTRw9",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "もう1年使ったら？\n先のコストも見比べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "wIqbw",
+              "x": 66,
+              "y": 780,
+              "name": "Detail · item and notes before cost",
+              "clip": true,
+              "width": 1152,
+              "height": 1757.6119402985075,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "YwX7c",
+                  "x": 0,
+                  "y": -409.7910447761194,
+                  "name": "Detail · item and notes before cost · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-cost-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1152,
+                  "height": 2504.597014925373
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "w8zmjy",
+      "x": 32504,
+      "y": 2710,
+      "name": "Store v2 · B Editorial · 5 slides",
+      "clip": true,
+      "width": 6852,
+      "height": 3030,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "F3ILmu",
+          "x": 72,
+          "y": 32,
+          "name": "Comparison label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 6708,
+          "content": "B / Editorial",
+          "lineHeight": 1.4,
+          "fontFamily": "Inter",
+          "fontSize": 70,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "RfdSi",
+          "x": 72,
+          "y": 180,
+          "name": "B1 · Promise",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#91462E",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "oRPNZ",
+              "x": 102,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#FFF9EF",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "買い替える前に、\n今の愛用品を\n振り返る。",
+              "lineHeight": 1.4,
+              "fontFamily": "Noto Serif JP",
+              "fontSize": 114,
+              "fontWeight": "600"
+            },
+            {
+              "type": "rectangle",
+              "id": "JvO1g",
+              "x": 104,
+              "y": 682,
+              "name": "Editorial rule",
+              "fill": "#FFF9EF",
+              "width": 160,
+              "height": 4
+            },
+            {
+              "type": "frame",
+              "id": "J6Xgw4",
+              "x": 236,
+              "y": 834,
+              "name": "Home · asymmetric portrait",
+              "clip": true,
+              "width": 936,
+              "height": 1870.44776119403,
+              "fill": "#FBF6ED",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "R6Ao6Q",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Home · asymmetric portrait · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 936,
+                  "height": 2034.9850746268658
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Yyebr",
+          "x": 1428,
+          "y": 180,
+          "name": "B2 · Time and Goal",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#E8D9C4",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "yuxWp",
+              "x": 102,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#56331F",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "使った時間と、\n自分の目標。",
+              "lineHeight": 1.4,
+              "fontFamily": "Noto Serif JP",
+              "fontSize": 112,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "R4igWc",
+              "x": 106,
+              "y": 506,
+              "name": "Supporting line",
+              "fill": "#56331F",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "どこまで使ったか、ひと目で。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 76
+            },
+            {
+              "type": "rectangle",
+              "id": "aoBWg",
+              "x": 104,
+              "y": 748,
+              "name": "Editorial rule",
+              "fill": "#56331F",
+              "width": 160,
+              "height": 4
+            },
+            {
+              "type": "frame",
+              "id": "TJOAn",
+              "x": 100,
+              "y": 870,
+              "name": "Home · featured context",
+              "clip": true,
+              "width": 1084,
+              "height": 1744.6467661691543,
+              "fill": "#FBF6ED",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "I9ZtmT",
+                  "x": 0,
+                  "y": -315.4925373134328,
+                  "name": "Home · featured context · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1084,
+                  "height": 2356.756218905473
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ZR3k2",
+          "x": 2784,
+          "y": 180,
+          "name": "B3 · Usage Notes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#91462E",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "wIIR5",
+              "x": 102,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#FFF9EF",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "気になることも。\n気に入っている\nところも。",
+              "lineHeight": 1.4,
+              "fontFamily": "Noto Serif JP",
+              "fontSize": 114,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "a2W8U",
+              "x": 106,
+              "y": 686,
+              "name": "Supporting line",
+              "fill": "#FFF9EF",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "迷ったとき、\n自分の記録を手がかりに。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 76
+            },
+            {
+              "type": "rectangle",
+              "id": "VtkKR",
+              "x": 104,
+              "y": 933,
+              "name": "Editorial rule",
+              "fill": "#FFF9EF",
+              "width": 160,
+              "height": 4
+            },
+            {
+              "type": "frame",
+              "id": "y2z3V",
+              "x": 92,
+              "y": 989,
+              "name": "Detail · item and dated notes",
+              "clip": true,
+              "width": 1100,
+              "height": 1596.4864864864865,
+              "fill": "#FBF6ED",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "dGG1E",
+                  "x": -47.567567567567565,
+                  "y": -425.1351351351351,
+                  "name": "Detail · item and dated notes · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-detail-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1195.1351351351352,
+                  "height": 2598.3783783783783
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "w8FxMU",
+          "x": 4140,
+          "y": 180,
+          "name": "B4 · Themes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#E8D9C4",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "O0Ki7p",
+              "x": 102,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#56331F",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "好きな表情を、\n愛用品の記録に。",
+              "lineHeight": 1.4,
+              "fontFamily": "Noto Serif JP",
+              "fontSize": 112,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "qXb0i",
+              "x": 106,
+              "y": 506,
+              "name": "Supporting line",
+              "fill": "#56331F",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "Warm と Forest。\n選べる2つのテーマ。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 76
+            },
+            {
+              "type": "rectangle",
+              "id": "AtJf6",
+              "x": 104,
+              "y": 748,
+              "name": "Editorial rule",
+              "fill": "#56331F",
+              "width": 160,
+              "height": 4
+            },
+            {
+              "type": "rectangle",
+              "id": "pZVhi",
+              "x": 642,
+              "y": 738,
+              "name": "Forest paper field",
+              "fill": "#CED8C3",
+              "width": 642,
+              "height": 2040
+            },
+            {
+              "type": "frame",
+              "id": "R7ntT",
+              "x": 52,
+              "y": 774,
+              "name": "Warm · rear screen",
+              "clip": true,
+              "width": 970,
+              "height": 1301.3764510779436,
+              "fill": "#FBF6ED",
+              "cornerRadius": 34,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "p2bk2g",
+                  "x": 0,
+                  "y": -282.3134328358209,
+                  "name": "Warm · rear screen · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 970,
+                  "height": 2108.905472636816
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "n25PE",
+              "x": 262,
+              "y": 1450,
+              "name": "Forest · front screen",
+              "clip": true,
+              "width": 970,
+              "height": 1301.3764510779436,
+              "fill": "#FBF6ED",
+              "cornerRadius": 34,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "B70Cl",
+                  "x": 0,
+                  "y": -282.3134328358209,
+                  "name": "Forest · front screen · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-forest.png",
+                    "mode": "stretch"
+                  },
+                  "width": 970,
+                  "height": 2108.905472636816
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "X1Dc1i",
+          "x": 5496,
+          "y": 180,
+          "name": "B5 · Cost",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#E8D9C4",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "QAHAx",
+              "x": 102,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#56331F",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "コストも、\n考える手がかりに。",
+              "lineHeight": 1.4,
+              "fontFamily": "Noto Serif JP",
+              "fontSize": 112,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "POR3V",
+              "x": 106,
+              "y": 506,
+              "name": "Supporting line",
+              "fill": "#56331F",
+              "textGrowth": "fixed-width",
+              "width": 1080,
+              "content": "1日あたりと、\nもう1年先を見比べる。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 76
+            },
+            {
+              "type": "rectangle",
+              "id": "jbX4C",
+              "x": 104,
+              "y": 748,
+              "name": "Editorial rule",
+              "fill": "#56331F",
+              "width": 160,
+              "height": 4
+            },
+            {
+              "type": "frame",
+              "id": "U710Z",
+              "x": 100,
+              "y": 890,
+              "name": "Detail · cost in context",
+              "clip": true,
+              "width": 1084,
+              "height": 1653.8640132669984,
+              "fill": "#FBF6ED",
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "rWWDl",
+                  "x": 0,
+                  "y": -385.60199004975124,
+                  "name": "Detail · cost in context · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-cost-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1084,
+                  "height": 2356.756218905473
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "G730F",
+      "x": 32504,
+      "y": 5960,
+      "name": "Store v2 · C Product-forward · 5 slides",
+      "clip": true,
+      "width": 6852,
+      "height": 3030,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "D4fSLV",
+          "x": 72,
+          "y": 32,
+          "name": "Comparison label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 6708,
+          "content": "C / Product-forward",
+          "lineHeight": 1.3,
+          "fontFamily": "Inter",
+          "fontSize": 70,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "wCaPe",
+          "x": 72,
+          "y": 180,
+          "name": "C1 · Promise",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#FBF6ED",
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "ATgxq",
+              "x": 0,
+              "y": 0,
+              "name": "Rust edge",
+              "fill": "#A4502C",
+              "width": 22,
+              "height": 420
+            },
+            {
+              "type": "text",
+              "id": "G2MNH",
+              "x": 84,
+              "y": 78,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "買い替える前に、\n振り返る。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "PZmRd",
+              "x": 24,
+              "y": 500,
+              "name": "Home · edge to edge context",
+              "clip": true,
+              "width": 1236,
+              "height": 2272.1492537313434,
+              "fill": "#FBF6ED",
+              "cornerRadius": 18,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "JFTL8",
+                  "x": 0,
+                  "y": -359.7313432835821,
+                  "name": "Home · edge to edge context · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1236,
+                  "height": 2687.223880597015
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "vANZY",
+          "x": 1428,
+          "y": 180,
+          "name": "C2 · Time and Goal",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#FBF6ED",
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "QPRIm",
+              "x": 0,
+              "y": 0,
+              "name": "Rust edge",
+              "fill": "#A4502C",
+              "width": 22,
+              "height": 420
+            },
+            {
+              "type": "text",
+              "id": "IUYgL",
+              "x": 84,
+              "y": 78,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "使った期間と、\nこれからの目標。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "wH2TC",
+              "x": 24,
+              "y": 620,
+              "name": "Home · duration and goal enlarged",
+              "clip": true,
+              "width": 1236,
+              "height": 1951.578947368421,
+              "fill": "#FBF6ED",
+              "cornerRadius": 18,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "lwhDd",
+                  "x": -35.77894736842105,
+                  "y": -380.5578947368421,
+                  "name": "Home · duration and goal enlarged · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1307.5578947368422,
+                  "height": 2842.8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "JiQvQ",
+          "x": 2784,
+          "y": 180,
+          "name": "C3 · Usage Notes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#FBF6ED",
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "OyUvj",
+              "x": 0,
+              "y": 0,
+              "name": "Rust edge",
+              "fill": "#A4502C",
+              "width": 22,
+              "height": 420
+            },
+            {
+              "type": "text",
+              "id": "Ef19k",
+              "x": 84,
+              "y": 78,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "使い心地を、\n判断材料に。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "I3m3ly",
+              "x": 88,
+              "y": 411,
+              "name": "Supporting line",
+              "fill": "#685C4D",
+              "textGrowth": "fixed-width",
+              "width": 1108,
+              "content": "不満も、\nまだ使える理由も。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "sdsKy",
+              "x": 24,
+              "y": 716,
+              "name": "Detail · item and notes enlarged",
+              "clip": true,
+              "width": 1236,
+              "height": 1793.87027027027,
+              "fill": "#FBF6ED",
+              "cornerRadius": 18,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "B5PXY",
+                  "x": -53.44864864864864,
+                  "y": -477.69729729729727,
+                  "name": "Detail · item and notes enlarged · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-detail-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1342.8972972972972,
+                  "height": 2919.6324324324323
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "MKdAp",
+          "x": 4140,
+          "y": 180,
+          "name": "C4 · Themes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#FBF6ED",
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "g2HHF",
+              "x": 0,
+              "y": 0,
+              "name": "Rust edge",
+              "fill": "#A4502C",
+              "width": 22,
+              "height": 240
+            },
+            {
+              "type": "text",
+              "id": "DLwX9",
+              "x": 84,
+              "y": 78,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "選べる、2つのテーマ。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 96,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "SDv1x",
+              "x": 44,
+              "y": 274,
+              "name": "Theme label · Warm",
+              "fill": "#975431",
+              "textGrowth": "fixed-width",
+              "width": 1150,
+              "content": "Warm",
+              "lineHeight": 1.3,
+              "fontFamily": "Inter",
+              "fontSize": 68,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "duuoa",
+              "x": 24,
+              "y": 380,
+              "name": "Warm · matching featured card",
+              "clip": true,
+              "width": 1236,
+              "height": 1097.641791044776,
+              "fill": "#FBF6ED",
+              "cornerRadius": 18,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "xNRE9",
+                  "x": 0,
+                  "y": -667.1940298507462,
+                  "name": "Warm · matching featured card · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1236,
+                  "height": 2687.223880597015
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "p1DBXp",
+              "x": 44,
+              "y": 1545,
+              "name": "Theme label · Forest",
+              "fill": "#244D3E",
+              "textGrowth": "fixed-width",
+              "width": 1150,
+              "content": "Forest",
+              "lineHeight": 1.3,
+              "fontFamily": "Inter",
+              "fontSize": 68,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "I451O1",
+              "x": 24,
+              "y": 1640,
+              "name": "Forest · matching featured card",
+              "clip": true,
+              "width": 1236,
+              "height": 1097.641791044776,
+              "fill": "#FBF6ED",
+              "cornerRadius": 18,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "kqLrQ",
+                  "x": 0,
+                  "y": -667.1940298507462,
+                  "name": "Forest · matching featured card · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-forest.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1236,
+                  "height": 2687.223880597015
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PBKLD",
+          "x": 5496,
+          "y": 180,
+          "name": "C5 · Cost",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#FBF6ED",
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "trWAb",
+              "x": 0,
+              "y": 0,
+              "name": "Rust edge",
+              "fill": "#A4502C",
+              "width": 22,
+              "height": 420
+            },
+            {
+              "type": "text",
+              "id": "DnkdZ",
+              "x": 84,
+              "y": 78,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "コストも、\n判断材料に。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "M5o4js",
+              "x": 88,
+              "y": 411,
+              "name": "Supporting line",
+              "fill": "#685C4D",
+              "textGrowth": "fixed-width",
+              "width": 1108,
+              "content": "もう1年使ったら？\n先のコストもひと目で。",
+              "lineHeight": 1.3,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "c03B33",
+              "x": 24,
+              "y": 650,
+              "name": "Detail · cost in context",
+              "clip": true,
+              "width": 1236,
+              "height": 1998.5074626865671,
+              "fill": "#FBF6ED",
+              "cornerRadius": 18,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "xuEq3",
+                  "x": 0,
+                  "y": -439.67164179104475,
+                  "name": "Detail · cost in context · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-cost-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1236,
+                  "height": 2687.223880597015
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "EsdbP",
+      "x": 39576,
+      "y": 5960,
+      "name": "Store v2 · Thumbnail comparison · 240 px",
+      "clip": true,
+      "width": 1328,
+      "height": 1895.7570093457944,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "vTmRo",
+          "x": 28,
+          "y": 22,
+          "name": "Scale note · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "240 px wide / simulated compact Store view",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "OhSk6",
+          "x": 28,
+          "y": 54,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "A / Minimal Poster",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "I1FKeu",
+          "x": 28,
+          "y": 82,
+          "name": "A / Minimal Poster · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/q8Xj1.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "sadTo",
+          "x": 286,
+          "y": 82,
+          "name": "A / Minimal Poster · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/YEVi5.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "wua6d",
+          "x": 544,
+          "y": 82,
+          "name": "A / Minimal Poster · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/SD1bC.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "l061X",
+          "x": 802,
+          "y": 82,
+          "name": "A / Minimal Poster · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/O3QpF.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "x7EOf",
+          "x": 1060,
+          "y": 82,
+          "name": "A / Minimal Poster · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/Hq5t9.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "text",
+          "id": "TI5sq",
+          "x": 28,
+          "y": 649.2523364485982,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "B / Editorial",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "TdStv",
+          "x": 28,
+          "y": 677.2523364485982,
+          "name": "B / Editorial · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/RfdSi.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "PdKON",
+          "x": 286,
+          "y": 677.2523364485982,
+          "name": "B / Editorial · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/Yyebr.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "P81T1",
+          "x": 544,
+          "y": 677.2523364485982,
+          "name": "B / Editorial · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/ZR3k2.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "B4fsE",
+          "x": 802,
+          "y": 677.2523364485982,
+          "name": "B / Editorial · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/w8FxMU.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "t0pJlv",
+          "x": 1060,
+          "y": 677.2523364485982,
+          "name": "B / Editorial · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/X1Dc1i.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "text",
+          "id": "ZpjzL",
+          "x": 28,
+          "y": 1244.5046728971963,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "C / Product-forward",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "w6qYF8",
+          "x": 28,
+          "y": 1272.5046728971963,
+          "name": "C / Product-forward · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/wCaPe.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "MlV0k",
+          "x": 286,
+          "y": 1272.5046728971963,
+          "name": "C / Product-forward · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/vANZY.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "Orz6I",
+          "x": 544,
+          "y": 1272.5046728971963,
+          "name": "C / Product-forward · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/JiQvQ.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "l6B7o",
+          "x": 802,
+          "y": 1272.5046728971963,
+          "name": "C / Product-forward · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/MKdAp.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "CHJLq",
+          "x": 1060,
+          "y": 1272.5046728971963,
+          "name": "C / Product-forward · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/PBKLD.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "htPpv",
+      "x": 41056,
+      "y": 5960,
+      "name": "Store v2 · Thumbnail comparison · 180 px",
+      "clip": true,
+      "width": 1028,
+      "height": 1506.3177570093458,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "T9OHKA",
+          "x": 28,
+          "y": 22,
+          "name": "Scale note · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "180 px wide / simulated compact Store view",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "rr11g",
+          "x": 28,
+          "y": 54,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "A / Minimal Poster",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "f45jG",
+          "x": 28,
+          "y": 82,
+          "name": "A / Minimal Poster · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/q8Xj1.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "uKcK7",
+          "x": 226,
+          "y": 82,
+          "name": "A / Minimal Poster · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/YEVi5.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "yrLEl",
+          "x": 424,
+          "y": 82,
+          "name": "A / Minimal Poster · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/SD1bC.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "q7S3dj",
+          "x": 622,
+          "y": 82,
+          "name": "A / Minimal Poster · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/O3QpF.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "VLgp0",
+          "x": 820,
+          "y": 82,
+          "name": "A / Minimal Poster · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/Hq5t9.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "text",
+          "id": "pOHW1",
+          "x": 28,
+          "y": 519.4392523364486,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "B / Editorial",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "Ox848",
+          "x": 28,
+          "y": 547.4392523364486,
+          "name": "B / Editorial · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/RfdSi.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "xJxkQ",
+          "x": 226,
+          "y": 547.4392523364486,
+          "name": "B / Editorial · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/Yyebr.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "uoF5Z",
+          "x": 424,
+          "y": 547.4392523364486,
+          "name": "B / Editorial · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/ZR3k2.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "xiAtI",
+          "x": 622,
+          "y": 547.4392523364486,
+          "name": "B / Editorial · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/w8FxMU.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "ZcxXL",
+          "x": 820,
+          "y": 547.4392523364486,
+          "name": "B / Editorial · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/X1Dc1i.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "text",
+          "id": "x2Gzki",
+          "x": 28,
+          "y": 984.8785046728972,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "C / Product-forward",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "LNdNy",
+          "x": 28,
+          "y": 1012.8785046728972,
+          "name": "C / Product-forward · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/wCaPe.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "gyjnn",
+          "x": 226,
+          "y": 1012.8785046728972,
+          "name": "C / Product-forward · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/vANZY.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "r8pBY",
+          "x": 424,
+          "y": 1012.8785046728972,
+          "name": "C / Product-forward · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/JiQvQ.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "yrY98",
+          "x": 622,
+          "y": 1012.8785046728972,
+          "name": "C / Product-forward · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/MKdAp.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "Ieh5f",
+          "x": 820,
+          "y": 1012.8785046728972,
+          "name": "C / Product-forward · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/PBKLD.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "yFjs5",
+      "x": 32504,
+      "y": 9210,
+      "name": "Store v2 · D Full iPhone Frame · comparison",
+      "clip": true,
+      "width": 6852,
+      "height": 3030,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "wsxvU",
+          "x": 72,
+          "y": 32,
+          "name": "Comparison label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 6708,
+          "content": "D / Full iPhone Frame",
+          "lineHeight": 1.32,
+          "fontFamily": "Inter",
+          "fontSize": 70,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "Ok3K5",
+          "x": 72,
+          "y": 180,
+          "name": "D1 · Full iPhone Frame",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "l2bN6t",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "買い替える前に、\n今の愛用品を振り返る。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "H3vBNd",
+              "x": 144,
+              "y": 566,
+              "name": "iPhone · full screen",
+              "width": 996,
+              "height": 2094.392523364486,
+              "fill": "#75746F",
+              "cornerRadius": 133.42056074766356,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.5514018691588785,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 130.3177570093458,
+                  "id": "B93fk",
+                  "x": 3.878504672897196,
+                  "y": 3.878504672897196,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 988.2429906542056,
+                  "height": 2086.6355140186915
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "qsFPF",
+                  "x": -3.878504672897196,
+                  "y": 302.5233644859813,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 55.850467289719624
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "yHDop",
+                  "x": -3.878504672897196,
+                  "y": 438.2710280373832,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 111.70093457943925
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "oIfCU",
+                  "x": -3.878504672897196,
+                  "y": 570.1401869158879,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 111.70093457943925
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "h4NgbQ",
+                  "x": 993.6728971962617,
+                  "y": 471.626168224299,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 182.28971962616822
+                },
+                {
+                  "type": "frame",
+                  "id": "EsvHF",
+                  "x": 30.25233644859813,
+                  "y": 30.25233644859813,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 935.4953271028037,
+                  "height": 2033.8878504672896,
+                  "cornerRadius": 103.94392523364486,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "ZnfIB",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 935.4953271028037,
+                      "height": 2033.8878504672896
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 38.78504672897196,
+                      "id": "a0ZPcJ",
+                      "x": 339.75700934579436,
+                      "y": 44.21495327102804,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 255.98130841121494,
+                      "height": 71.3644859813084
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "UMOBH",
+          "x": 1428,
+          "y": 180,
+          "name": "D2 · Full iPhone Frame",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "K00fz",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "どれくらい使った？\n目標と並べて考える。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "qqiIY",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "期間と目標を、ひと目で。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "ILCVm",
+              "x": 212,
+              "y": 854,
+              "name": "iPhone · full screen",
+              "width": 860,
+              "height": 1808.411214953271,
+              "fill": "#75746F",
+              "cornerRadius": 115.202492211838,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.3395638629283488,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 112.5233644859813,
+                  "id": "Z1p2Ok",
+                  "x": 3.3489096573208723,
+                  "y": 3.3489096573208723,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 853.3021806853583,
+                  "height": 1801.7133956386292
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "HJFYr",
+                  "x": -3.3489096573208723,
+                  "y": 261.21495327102804,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 48.22429906542056
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "tE7nP",
+                  "x": -3.3489096573208723,
+                  "y": 378.42679127725853,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "S8hTFt",
+                  "x": -3.3489096573208723,
+                  "y": 492.2897196261682,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "PTECn",
+                  "x": 857.9906542056075,
+                  "y": 407.22741433021804,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 157.39875389408098
+                },
+                {
+                  "type": "frame",
+                  "id": "vZJGP",
+                  "x": 26.121495327102803,
+                  "y": 26.121495327102803,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 807.7570093457944,
+                  "height": 1756.1682242990653,
+                  "cornerRadius": 89.75077881619937,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "Fgcfv",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 807.7570093457944,
+                      "height": 1756.1682242990653
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 33.48909657320872,
+                      "id": "u4NDF",
+                      "x": 293.3644859813084,
+                      "y": 38.177570093457945,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 221.02803738317755,
+                      "height": 61.61993769470405
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "mzmyV",
+          "x": 2784,
+          "y": 180,
+          "name": "D3 · Full iPhone Frame",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "c9uO3",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "不満も、\nまだ使える理由も。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "LYPoe",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "使い心地を、\n買い替えの判断材料に。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "UaiCZ",
+              "x": 212,
+              "y": 854,
+              "name": "iPhone · full screen",
+              "width": 860,
+              "height": 1808.411214953271,
+              "fill": "#75746F",
+              "cornerRadius": 115.202492211838,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.3395638629283488,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 112.5233644859813,
+                  "id": "GiaDs",
+                  "x": 3.3489096573208723,
+                  "y": 3.3489096573208723,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 853.3021806853583,
+                  "height": 1801.7133956386292
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "i4Qnjx",
+                  "x": -3.3489096573208723,
+                  "y": 261.21495327102804,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 48.22429906542056
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "J22UoN",
+                  "x": -3.3489096573208723,
+                  "y": 378.42679127725853,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "dhB2Q",
+                  "x": -3.3489096573208723,
+                  "y": 492.2897196261682,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "RTNI5",
+                  "x": 857.9906542056075,
+                  "y": 407.22741433021804,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 157.39875389408098
+                },
+                {
+                  "type": "frame",
+                  "id": "Uc7Qe",
+                  "x": 26.121495327102803,
+                  "y": 26.121495327102803,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 807.7570093457944,
+                  "height": 1756.1682242990653,
+                  "cornerRadius": 89.75077881619937,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "W65F2q",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-detail-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 807.7570093457944,
+                      "height": 1756.1682242990653
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 33.48909657320872,
+                      "id": "Gij4F",
+                      "x": 293.3644859813084,
+                      "y": 38.177570093457945,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 221.02803738317755,
+                      "height": 61.61993769470405
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bUonm",
+          "x": 4140,
+          "y": 180,
+          "name": "D4 · Full iPhone Frame",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "ppM1D",
+              "x": 78,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "気分に合わせて、\nテーマを選べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "rectangle",
+              "id": "Jt7g2",
+              "x": 0,
+              "y": 730,
+              "name": "Warm paper field",
+              "fill": "#E6D7BE",
+              "width": 642,
+              "height": 2048
+            },
+            {
+              "type": "rectangle",
+              "id": "R2NSp9",
+              "x": 642,
+              "y": 730,
+              "name": "Forest paper field",
+              "fill": "#D0DAC7",
+              "width": 642,
+              "height": 2048
+            },
+            {
+              "type": "text",
+              "id": "d2LMp",
+              "x": 64,
+              "y": 994,
+              "name": "Theme label · Warm",
+              "fill": "#965334",
+              "textGrowth": "fixed-width",
+              "width": 550,
+              "content": "Warm",
+              "lineHeight": 1.32,
+              "fontFamily": "Inter",
+              "fontSize": 78,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "ZiTWC",
+              "x": 688,
+              "y": 994,
+              "name": "Theme label · Forest",
+              "fill": "#234A3D",
+              "textGrowth": "fixed-width",
+              "width": 550,
+              "content": "Forest",
+              "lineHeight": 1.32,
+              "fontFamily": "Inter",
+              "fontSize": 78,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "MTtLw",
+              "x": 48,
+              "y": 1130,
+              "name": "Warm iPhone · full Home",
+              "width": 564,
+              "height": 1185.981308411215,
+              "fill": "#75746F",
+              "cornerRadius": 75.55140186915888,
+              "stroke": "#A4A39A",
+              "strokeWidth": 0.8785046728971962,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 73.79439252336448,
+                  "id": "viGBs",
+                  "x": 2.196261682242991,
+                  "y": 2.196261682242991,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 559.607476635514,
+                  "height": 1181.588785046729
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "RdHDY",
+                  "x": -2.196261682242991,
+                  "y": 171.30841121495328,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 31.626168224299064
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "Yk0pY",
+                  "x": -2.196261682242991,
+                  "y": 248.17757009345794,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "s4R8O",
+                  "x": -2.196261682242991,
+                  "y": 322.85046728971963,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "X4csX1",
+                  "x": 562.6822429906542,
+                  "y": 267.06542056074767,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 103.22429906542055
+                },
+                {
+                  "type": "frame",
+                  "id": "s0PU6w",
+                  "x": 17.130841121495326,
+                  "y": 17.130841121495326,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 529.7383177570093,
+                  "height": 1151.7196261682243,
+                  "cornerRadius": 58.85981308411215,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "P9yyl",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 529.7383177570093,
+                      "height": 1151.7196261682243
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 21.962616822429908,
+                      "id": "Ds7Jo",
+                      "x": 192.39252336448598,
+                      "y": 25.037383177570092,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 144.9532710280374,
+                      "height": 40.41121495327103
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "LPgaR",
+              "x": 672,
+              "y": 1130,
+              "name": "Forest iPhone · full Home",
+              "width": 564,
+              "height": 1185.981308411215,
+              "fill": "#75746F",
+              "cornerRadius": 75.55140186915888,
+              "stroke": "#A4A39A",
+              "strokeWidth": 0.8785046728971962,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 73.79439252336448,
+                  "id": "VRJA5",
+                  "x": 2.196261682242991,
+                  "y": 2.196261682242991,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 559.607476635514,
+                  "height": 1181.588785046729
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "JtAEg",
+                  "x": -2.196261682242991,
+                  "y": 171.30841121495328,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 31.626168224299064
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "m5utgn",
+                  "x": -2.196261682242991,
+                  "y": 248.17757009345794,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "iR5iv",
+                  "x": -2.196261682242991,
+                  "y": 322.85046728971963,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "AgX1N",
+                  "x": 562.6822429906542,
+                  "y": 267.06542056074767,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 103.22429906542055
+                },
+                {
+                  "type": "frame",
+                  "id": "yGrIz",
+                  "x": 17.130841121495326,
+                  "y": 17.130841121495326,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 529.7383177570093,
+                  "height": 1151.7196261682243,
+                  "cornerRadius": 58.85981308411215,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "xZJML",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-forest.png",
+                        "mode": "stretch"
+                      },
+                      "width": 529.7383177570093,
+                      "height": 1151.7196261682243
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 21.962616822429908,
+                      "id": "ihwwj",
+                      "x": 192.39252336448598,
+                      "y": 25.037383177570092,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 144.9532710280374,
+                      "height": 40.41121495327103
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ve61M",
+          "x": 5496,
+          "y": 180,
+          "name": "D5 · Full iPhone Frame",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "wtQNJ",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "1日あたりのコストも、\n判断材料のひとつに。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "J5pet",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "もう1年使ったら？\n先のコストも見比べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "x7ftRh",
+              "x": 212,
+              "y": 854,
+              "name": "iPhone · full screen",
+              "width": 860,
+              "height": 1808.411214953271,
+              "fill": "#75746F",
+              "cornerRadius": 115.202492211838,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.3395638629283488,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 112.5233644859813,
+                  "id": "XwIji",
+                  "x": 3.3489096573208723,
+                  "y": 3.3489096573208723,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 853.3021806853583,
+                  "height": 1801.7133956386292
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "jKJRc",
+                  "x": -3.3489096573208723,
+                  "y": 261.21495327102804,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 48.22429906542056
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "pU1Uj",
+                  "x": -3.3489096573208723,
+                  "y": 378.42679127725853,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "G6Zmw7",
+                  "x": -3.3489096573208723,
+                  "y": 492.2897196261682,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "tRtN6",
+                  "x": 857.9906542056075,
+                  "y": 407.22741433021804,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 157.39875389408098
+                },
+                {
+                  "type": "frame",
+                  "id": "W4jTq",
+                  "x": 26.121495327102803,
+                  "y": 26.121495327102803,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 807.7570093457944,
+                  "height": 1756.1682242990653,
+                  "cornerRadius": 89.75077881619937,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "vXVF5",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-cost-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 807.7570093457944,
+                      "height": 1756.1682242990653
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 33.48909657320872,
+                      "id": "d9bb1T",
+                      "x": 293.3644859813084,
+                      "y": 38.177570093457945,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 221.02803738317755,
+                      "height": 61.61993769470405
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "GHAcJ",
+      "x": 32504,
+      "y": 12460,
+      "name": "Store v2 · E Hybrid · Hero and Theme framed",
+      "clip": true,
+      "width": 6852,
+      "height": 3030,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "LBLgU",
+          "x": 72,
+          "y": 32,
+          "name": "Comparison label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 6708,
+          "content": "E / Hybrid · Hero + Theme framed",
+          "lineHeight": 1.32,
+          "fontFamily": "Inter",
+          "fontSize": 70,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "gkGMd",
+          "x": 72,
+          "y": 180,
+          "name": "E1 · Framed Promise",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "BWED7",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "買い替える前に、\n今の愛用品を振り返る。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "a7Oqg4",
+              "x": 144,
+              "y": 566,
+              "name": "iPhone · full screen",
+              "width": 996,
+              "height": 2094.392523364486,
+              "fill": "#75746F",
+              "cornerRadius": 133.42056074766356,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.5514018691588785,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 130.3177570093458,
+                  "id": "mqbBt",
+                  "x": 3.878504672897196,
+                  "y": 3.878504672897196,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 988.2429906542056,
+                  "height": 2086.6355140186915
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "hwiQX",
+                  "x": -3.878504672897196,
+                  "y": 302.5233644859813,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 55.850467289719624
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "SUZOy",
+                  "x": -3.878504672897196,
+                  "y": 438.2710280373832,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 111.70093457943925
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "R6ThpM",
+                  "x": -3.878504672897196,
+                  "y": 570.1401869158879,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 111.70093457943925
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "b2CWp",
+                  "x": 993.6728971962617,
+                  "y": 471.626168224299,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 182.28971962616822
+                },
+                {
+                  "type": "frame",
+                  "id": "U0IyuQ",
+                  "x": 30.25233644859813,
+                  "y": 30.25233644859813,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 935.4953271028037,
+                  "height": 2033.8878504672896,
+                  "cornerRadius": 103.94392523364486,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "kjk2a",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 935.4953271028037,
+                      "height": 2033.8878504672896
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 38.78504672897196,
+                      "id": "QtXpv",
+                      "x": 339.75700934579436,
+                      "y": 44.21495327102804,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 255.98130841121494,
+                      "height": 71.3644859813084
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "WmqrL",
+          "x": 1428,
+          "y": 180,
+          "name": "E2 · Frameless Time and Goal",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "XAzlu",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "どれくらい使った？\n目標と並べて考える。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "mn8rC",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "期間と目標を、ひと目で。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "tbZog",
+              "x": 66,
+              "y": 784,
+              "name": "Home · header and featured context",
+              "clip": true,
+              "width": 1152,
+              "height": 1854.089552238806,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "ZDXYb",
+                  "x": 0,
+                  "y": -335.2835820895522,
+                  "name": "Home · header and featured context · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1152,
+                  "height": 2504.597014925373
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "WsuJM",
+          "x": 2784,
+          "y": 180,
+          "name": "E3 · Frameless Usage Notes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "es5pf",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "不満も、\nまだ使える理由も。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "f6gas",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "使い心地を、\n買い替えの判断材料に。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "YNo31",
+              "x": 66,
+              "y": 818,
+              "name": "Detail · item context and three notes",
+              "clip": true,
+              "width": 1152,
+              "height": 1671.956756756757,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "vO95j",
+                  "x": -49.81621621621622,
+                  "y": -445.23243243243246,
+                  "name": "Detail · item context and three notes · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-detail-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1251.6324324324326,
+                  "height": 2721.210810810811
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "y3EAkX",
+          "x": 4140,
+          "y": 180,
+          "name": "E4 · Paired iPhone Themes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "BYAlF",
+              "x": 78,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "気分に合わせて、\nテーマを選べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "rectangle",
+              "id": "tKtKo",
+              "x": 0,
+              "y": 730,
+              "name": "Warm paper field",
+              "fill": "#E6D7BE",
+              "width": 642,
+              "height": 2048
+            },
+            {
+              "type": "rectangle",
+              "id": "x5ECu",
+              "x": 642,
+              "y": 730,
+              "name": "Forest paper field",
+              "fill": "#D0DAC7",
+              "width": 642,
+              "height": 2048
+            },
+            {
+              "type": "text",
+              "id": "oQPwo",
+              "x": 64,
+              "y": 994,
+              "name": "Theme label · Warm",
+              "fill": "#965334",
+              "textGrowth": "fixed-width",
+              "width": 550,
+              "content": "Warm",
+              "lineHeight": 1.32,
+              "fontFamily": "Inter",
+              "fontSize": 78,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "k1icj",
+              "x": 688,
+              "y": 994,
+              "name": "Theme label · Forest",
+              "fill": "#234A3D",
+              "textGrowth": "fixed-width",
+              "width": 550,
+              "content": "Forest",
+              "lineHeight": 1.32,
+              "fontFamily": "Inter",
+              "fontSize": 78,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "sHBPt",
+              "x": 48,
+              "y": 1130,
+              "name": "Warm iPhone · full Home",
+              "width": 564,
+              "height": 1185.981308411215,
+              "fill": "#75746F",
+              "cornerRadius": 75.55140186915888,
+              "stroke": "#A4A39A",
+              "strokeWidth": 0.8785046728971962,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 73.79439252336448,
+                  "id": "nC3BU",
+                  "x": 2.196261682242991,
+                  "y": 2.196261682242991,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 559.607476635514,
+                  "height": 1181.588785046729
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "VFtFU",
+                  "x": -2.196261682242991,
+                  "y": 171.30841121495328,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 31.626168224299064
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "BSzDg",
+                  "x": -2.196261682242991,
+                  "y": 248.17757009345794,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "RCzfQ",
+                  "x": -2.196261682242991,
+                  "y": 322.85046728971963,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "kQrMM",
+                  "x": 562.6822429906542,
+                  "y": 267.06542056074767,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 103.22429906542055
+                },
+                {
+                  "type": "frame",
+                  "id": "BVgJq",
+                  "x": 17.130841121495326,
+                  "y": 17.130841121495326,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 529.7383177570093,
+                  "height": 1151.7196261682243,
+                  "cornerRadius": 58.85981308411215,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "dJpxU",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 529.7383177570093,
+                      "height": 1151.7196261682243
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 21.962616822429908,
+                      "id": "DAkko",
+                      "x": 192.39252336448598,
+                      "y": 25.037383177570092,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 144.9532710280374,
+                      "height": 40.41121495327103
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "x2VUVc",
+              "x": 672,
+              "y": 1130,
+              "name": "Forest iPhone · full Home",
+              "width": 564,
+              "height": 1185.981308411215,
+              "fill": "#75746F",
+              "cornerRadius": 75.55140186915888,
+              "stroke": "#A4A39A",
+              "strokeWidth": 0.8785046728971962,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 73.79439252336448,
+                  "id": "SjZ3I",
+                  "x": 2.196261682242991,
+                  "y": 2.196261682242991,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 559.607476635514,
+                  "height": 1181.588785046729
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "z2od11",
+                  "x": -2.196261682242991,
+                  "y": 171.30841121495328,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 31.626168224299064
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "UPLx2",
+                  "x": -2.196261682242991,
+                  "y": 248.17757009345794,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "S942o",
+                  "x": -2.196261682242991,
+                  "y": 322.85046728971963,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "tI5oR",
+                  "x": 562.6822429906542,
+                  "y": 267.06542056074767,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 103.22429906542055
+                },
+                {
+                  "type": "frame",
+                  "id": "ShyL6",
+                  "x": 17.130841121495326,
+                  "y": 17.130841121495326,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 529.7383177570093,
+                  "height": 1151.7196261682243,
+                  "cornerRadius": 58.85981308411215,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "W2AdD",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-forest.png",
+                        "mode": "stretch"
+                      },
+                      "width": 529.7383177570093,
+                      "height": 1151.7196261682243
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 21.962616822429908,
+                      "id": "X6MMg0",
+                      "x": 192.39252336448598,
+                      "y": 25.037383177570092,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 144.9532710280374,
+                      "height": 40.41121495327103
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "wxLkQ",
+          "x": 5496,
+          "y": 180,
+          "name": "E5 · Frameless Cost",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "H9Ibei",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "1日あたりのコストも、\n判断材料のひとつに。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "VoPDF",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "もう1年使ったら？\n先のコストも見比べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "rnweb",
+              "x": 66,
+              "y": 780,
+              "name": "Detail · item and notes before cost",
+              "clip": true,
+              "width": 1152,
+              "height": 1757.6119402985075,
+              "fill": "#FBF6ED",
+              "cornerRadius": 38,
+              "stroke": "#D6CDBE",
+              "strokeWidth": 2,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "w1I7f",
+                  "x": 0,
+                  "y": -409.7910447761194,
+                  "name": "Detail · item and notes before cost · actual runtime pixels",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-cost-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1152,
+                  "height": 2504.597014925373
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "dQzVy",
+      "x": 39576,
+      "y": 12460,
+      "name": "Store v2 · Frame comparison · 240 px",
+      "clip": true,
+      "width": 1328,
+      "height": 1895.7570093457944,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "kQHTe",
+          "x": 28,
+          "y": 22,
+          "name": "Scale note · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "Frame comparison / 240 px wide",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "FhQ4F",
+          "x": 28,
+          "y": 54,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "A / Frameless",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "LVknT",
+          "x": 28,
+          "y": 82,
+          "name": "A / Frameless · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/q8Xj1.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "dxB3O",
+          "x": 286,
+          "y": 82,
+          "name": "A / Frameless · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/YEVi5.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "ZhrVn",
+          "x": 544,
+          "y": 82,
+          "name": "A / Frameless · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/SD1bC.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "CfDZQ",
+          "x": 802,
+          "y": 82,
+          "name": "A / Frameless · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/O3QpF.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "V8EIa",
+          "x": 1060,
+          "y": 82,
+          "name": "A / Frameless · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/Hq5t9.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "text",
+          "id": "h71yji",
+          "x": 28,
+          "y": 649.2523364485982,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "D / Full iPhone Frame",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "C2pib",
+          "x": 28,
+          "y": 677.2523364485982,
+          "name": "D / Full iPhone Frame · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/Ok3K5.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "o0gkMB",
+          "x": 286,
+          "y": 677.2523364485982,
+          "name": "D / Full iPhone Frame · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/UMOBH.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "vAlCP",
+          "x": 544,
+          "y": 677.2523364485982,
+          "name": "D / Full iPhone Frame · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/mzmyV.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "Uj1D5",
+          "x": 802,
+          "y": 677.2523364485982,
+          "name": "D / Full iPhone Frame · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/bUonm.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "sEu9i",
+          "x": 1060,
+          "y": 677.2523364485982,
+          "name": "D / Full iPhone Frame · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/ve61M.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "text",
+          "id": "G31L99",
+          "x": 28,
+          "y": 1244.5046728971963,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "E / Hybrid",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "ebLq5",
+          "x": 28,
+          "y": 1272.5046728971963,
+          "name": "E / Hybrid · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/gkGMd.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "S9jRoT",
+          "x": 286,
+          "y": 1272.5046728971963,
+          "name": "E / Hybrid · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WmqrL.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "d8lggA",
+          "x": 544,
+          "y": 1272.5046728971963,
+          "name": "E / Hybrid · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WsuJM.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "e7F8Yy",
+          "x": 802,
+          "y": 1272.5046728971963,
+          "name": "E / Hybrid · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/y3EAkX.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "MUqS1",
+          "x": 1060,
+          "y": 1272.5046728971963,
+          "name": "E / Hybrid · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/wxLkQ.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "c1Ox3A",
+      "x": 41056,
+      "y": 12460,
+      "name": "Store v2 · Frame comparison · 180 px",
+      "clip": true,
+      "width": 1028,
+      "height": 1506.3177570093458,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "VORNo",
+          "x": 28,
+          "y": 22,
+          "name": "Scale note · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "Frame comparison / 180 px wide",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "T8kJU",
+          "x": 28,
+          "y": 54,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "A / Frameless",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "y7YiSy",
+          "x": 28,
+          "y": 82,
+          "name": "A / Frameless · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/q8Xj1.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "ksniX",
+          "x": 226,
+          "y": 82,
+          "name": "A / Frameless · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/YEVi5.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "FwWKn",
+          "x": 424,
+          "y": 82,
+          "name": "A / Frameless · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/SD1bC.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "H6ZW36",
+          "x": 622,
+          "y": 82,
+          "name": "A / Frameless · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/O3QpF.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "Pf4GB",
+          "x": 820,
+          "y": 82,
+          "name": "A / Frameless · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r1/native/Hq5t9.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "text",
+          "id": "AhuVk",
+          "x": 28,
+          "y": 519.4392523364486,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "D / Full iPhone Frame",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "bqZWd",
+          "x": 28,
+          "y": 547.4392523364486,
+          "name": "D / Full iPhone Frame · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/Ok3K5.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "s2JrRP",
+          "x": 226,
+          "y": 547.4392523364486,
+          "name": "D / Full iPhone Frame · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/UMOBH.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "CHSJ6",
+          "x": 424,
+          "y": 547.4392523364486,
+          "name": "D / Full iPhone Frame · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/mzmyV.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "Rcvzt",
+          "x": 622,
+          "y": 547.4392523364486,
+          "name": "D / Full iPhone Frame · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/bUonm.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "XYUdy",
+          "x": 820,
+          "y": 547.4392523364486,
+          "name": "D / Full iPhone Frame · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/ve61M.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "text",
+          "id": "M4VVw",
+          "x": 28,
+          "y": 984.8785046728972,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "E / Hybrid",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "h5as9N",
+          "x": 28,
+          "y": 1012.8785046728972,
+          "name": "E / Hybrid · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/gkGMd.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "qre0s",
+          "x": 226,
+          "y": 1012.8785046728972,
+          "name": "E / Hybrid · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WmqrL.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "bvPr6",
+          "x": 424,
+          "y": 1012.8785046728972,
+          "name": "E / Hybrid · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WsuJM.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "nroeb",
+          "x": 622,
+          "y": 1012.8785046728972,
+          "name": "E / Hybrid · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/y3EAkX.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "ddsy0",
+          "x": 820,
+          "y": 1012.8785046728972,
+          "name": "E / Hybrid · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/wxLkQ.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "gy5Am",
+      "x": 32504,
+      "y": 15710,
+      "name": "Store v2 · D+ Full Frame + Zoom · polished",
+      "clip": true,
+      "width": 6852,
+      "height": 3030,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "STvfH",
+          "x": 72,
+          "y": 32,
+          "name": "Comparison label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 6708,
+          "content": "D+ / Full Frame + Zoom",
+          "lineHeight": 1.32,
+          "fontFamily": "Inter",
+          "fontSize": 70,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "cMQTx",
+          "x": 72,
+          "y": 180,
+          "name": "D+ 1 · Promise",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "Hm4iV",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "買い替える前に、\n今の愛用品を振り返る。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "RxQUl",
+              "x": 144,
+              "y": 566,
+              "name": "iPhone · full screen",
+              "width": 996,
+              "height": 2094.392523364486,
+              "fill": "#75746F",
+              "cornerRadius": 133.42056074766356,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.5514018691588785,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 130.3177570093458,
+                  "id": "BhYYx",
+                  "x": 3.878504672897196,
+                  "y": 3.878504672897196,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 988.2429906542056,
+                  "height": 2086.6355140186915
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "bI2fg",
+                  "x": -3.878504672897196,
+                  "y": 302.5233644859813,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 55.850467289719624
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "M4anc1",
+                  "x": -3.878504672897196,
+                  "y": 438.2710280373832,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 111.70093457943925
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "WalS6",
+                  "x": -3.878504672897196,
+                  "y": 570.1401869158879,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 111.70093457943925
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 3.102803738317757,
+                  "id": "vDc87",
+                  "x": 993.6728971962617,
+                  "y": 471.626168224299,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 6.205607476635514,
+                  "height": 182.28971962616822
+                },
+                {
+                  "type": "frame",
+                  "id": "PvbNQ",
+                  "x": 30.25233644859813,
+                  "y": 30.25233644859813,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 935.4953271028037,
+                  "height": 2033.8878504672896,
+                  "cornerRadius": 103.94392523364486,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "YdbNa",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 935.4953271028037,
+                      "height": 2033.8878504672896
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 38.78504672897196,
+                      "id": "EoGQk",
+                      "x": 339.75700934579436,
+                      "y": 44.21495327102804,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 255.98130841121494,
+                      "height": 71.3644859813084
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "pmHOf",
+          "x": 1428,
+          "y": 180,
+          "name": "D+ 2 · Time and Goal",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "HVtnf",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "どれくらい使った？\n目標と並べて考える。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "PRNwz",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "期間と目標を、ひと目で。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "k8ezgm",
+              "x": 212,
+              "y": 854,
+              "name": "iPhone · full screen",
+              "width": 860,
+              "height": 1808.411214953271,
+              "fill": "#75746F",
+              "cornerRadius": 115.202492211838,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.3395638629283488,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 112.5233644859813,
+                  "id": "ubYZc",
+                  "x": 3.3489096573208723,
+                  "y": 3.3489096573208723,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 853.3021806853583,
+                  "height": 1801.7133956386292
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "BAdK6",
+                  "x": -3.3489096573208723,
+                  "y": 261.21495327102804,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 48.22429906542056
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "UeGQF",
+                  "x": -3.3489096573208723,
+                  "y": 378.42679127725853,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "Qq2aH",
+                  "x": -3.3489096573208723,
+                  "y": 492.2897196261682,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "g3RDlj",
+                  "x": 857.9906542056075,
+                  "y": 407.22741433021804,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 157.39875389408098
+                },
+                {
+                  "type": "frame",
+                  "id": "Yh722",
+                  "x": 26.121495327102803,
+                  "y": 26.121495327102803,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 807.7570093457944,
+                  "height": 1756.1682242990653,
+                  "cornerRadius": 89.75077881619937,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "I8AAx",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 807.7570093457944,
+                      "height": 1756.1682242990653
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 33.48909657320872,
+                      "id": "rJMVP",
+                      "x": 293.3644859813084,
+                      "y": 38.177570093457945,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 221.02803738317755,
+                      "height": 61.61993769470405
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "H4bTE",
+              "x": 66,
+              "y": 1506.8363636363638,
+              "name": "Time and Goal · magnified same runtime region",
+              "clip": true,
+              "width": 1152,
+              "height": 1089.1636363636362,
+              "fill": "#FBF6ED",
+              "cornerRadius": 34,
+              "stroke": "#BAA486",
+              "strokeWidth": 2.5,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#4335241A",
+                "offset": {
+                  "x": 0,
+                  "y": 10
+                },
+                "blur": 28
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "b7hSmH",
+                  "x": -125.67272727272727,
+                  "y": -921.5999999999999,
+                  "name": "Time and Goal · exact runtime crop",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1403.3454545454545,
+                  "height": 3051.0545454545454
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "h8Uxpa",
+          "x": 2784,
+          "y": 180,
+          "name": "D+ 3 · Usage Notes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "xyW3x",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "不満も、\nまだ使える理由も。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 108,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "D1Ht9",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "使い心地を、\n買い替えの判断材料に。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "U4v3S",
+              "x": 212,
+              "y": 854,
+              "name": "iPhone · full screen",
+              "width": 860,
+              "height": 1808.411214953271,
+              "fill": "#75746F",
+              "cornerRadius": 115.202492211838,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.3395638629283488,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 112.5233644859813,
+                  "id": "GRn4K",
+                  "x": 3.3489096573208723,
+                  "y": 3.3489096573208723,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 853.3021806853583,
+                  "height": 1801.7133956386292
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "IKO15",
+                  "x": -3.3489096573208723,
+                  "y": 261.21495327102804,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 48.22429906542056
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "UKc8G",
+                  "x": -3.3489096573208723,
+                  "y": 378.42679127725853,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "TarVG",
+                  "x": -3.3489096573208723,
+                  "y": 492.2897196261682,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "frcjO",
+                  "x": 857.9906542056075,
+                  "y": 407.22741433021804,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 157.39875389408098
+                },
+                {
+                  "type": "frame",
+                  "id": "vex4H",
+                  "x": 26.121495327102803,
+                  "y": 26.121495327102803,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 807.7570093457944,
+                  "height": 1756.1682242990653,
+                  "cornerRadius": 89.75077881619937,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "WUcVa",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-detail-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 807.7570093457944,
+                      "height": 1756.1682242990653
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 33.48909657320872,
+                      "id": "ykkzn",
+                      "x": 293.3644859813084,
+                      "y": 38.177570093457945,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 221.02803738317755,
+                      "height": 61.61993769470405
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MM3Ot",
+              "x": 66,
+              "y": 1791.6756756756756,
+              "name": "Usage Notes · magnified same runtime region",
+              "clip": true,
+              "width": 1152,
+              "height": 804.3243243243244,
+              "fill": "#FBF6ED",
+              "cornerRadius": 34,
+              "stroke": "#BAA486",
+              "strokeWidth": 2.5,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#4335241A",
+                "offset": {
+                  "x": 0,
+                  "y": 10
+                },
+                "blur": 28
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "u6baBq",
+                  "x": -49.81621621621622,
+                  "y": -1318.0540540540542,
+                  "name": "Usage Notes · exact runtime crop",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-detail-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1251.6324324324326,
+                  "height": 2721.210810810811
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "llgvT",
+          "x": 4140,
+          "y": 180,
+          "name": "D+ 4 · Themes",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "YSb0J",
+              "x": 78,
+              "y": 100,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "気分に合わせて、\nテーマを選べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "rectangle",
+              "id": "ih3c0",
+              "x": 0,
+              "y": 730,
+              "name": "Warm paper field",
+              "fill": "#E6D7BE",
+              "width": 642,
+              "height": 2048
+            },
+            {
+              "type": "rectangle",
+              "id": "L9SNo",
+              "x": 642,
+              "y": 730,
+              "name": "Forest paper field",
+              "fill": "#D0DAC7",
+              "width": 642,
+              "height": 2048
+            },
+            {
+              "type": "text",
+              "id": "Bl9my",
+              "x": 64,
+              "y": 994,
+              "name": "Theme label · Warm",
+              "fill": "#965334",
+              "textGrowth": "fixed-width",
+              "width": 550,
+              "content": "Warm",
+              "lineHeight": 1.32,
+              "fontFamily": "Inter",
+              "fontSize": 78,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "KOIsC",
+              "x": 688,
+              "y": 994,
+              "name": "Theme label · Forest",
+              "fill": "#234A3D",
+              "textGrowth": "fixed-width",
+              "width": 550,
+              "content": "Forest",
+              "lineHeight": 1.32,
+              "fontFamily": "Inter",
+              "fontSize": 78,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "CYZgt",
+              "x": 48,
+              "y": 1130,
+              "name": "Warm iPhone · full Home",
+              "width": 564,
+              "height": 1185.981308411215,
+              "fill": "#75746F",
+              "cornerRadius": 75.55140186915888,
+              "stroke": "#A4A39A",
+              "strokeWidth": 0.8785046728971962,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 73.79439252336448,
+                  "id": "QX0QE",
+                  "x": 2.196261682242991,
+                  "y": 2.196261682242991,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 559.607476635514,
+                  "height": 1181.588785046729
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "FGBdC",
+                  "x": -2.196261682242991,
+                  "y": 171.30841121495328,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 31.626168224299064
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "tS4Hc",
+                  "x": -2.196261682242991,
+                  "y": 248.17757009345794,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "yhVRu",
+                  "x": -2.196261682242991,
+                  "y": 322.85046728971963,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "Ix4oU",
+                  "x": 562.6822429906542,
+                  "y": 267.06542056074767,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 103.22429906542055
+                },
+                {
+                  "type": "frame",
+                  "id": "EmCOp",
+                  "x": 17.130841121495326,
+                  "y": 17.130841121495326,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 529.7383177570093,
+                  "height": 1151.7196261682243,
+                  "cornerRadius": 58.85981308411215,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "C7UQSv",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 529.7383177570093,
+                      "height": 1151.7196261682243
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 21.962616822429908,
+                      "id": "McnX6",
+                      "x": 192.39252336448598,
+                      "y": 25.037383177570092,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 144.9532710280374,
+                      "height": 40.41121495327103
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "eH15v",
+              "x": 672,
+              "y": 1130,
+              "name": "Forest iPhone · full Home",
+              "width": 564,
+              "height": 1185.981308411215,
+              "fill": "#75746F",
+              "cornerRadius": 75.55140186915888,
+              "stroke": "#A4A39A",
+              "strokeWidth": 0.8785046728971962,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 73.79439252336448,
+                  "id": "ERLEE",
+                  "x": 2.196261682242991,
+                  "y": 2.196261682242991,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 559.607476635514,
+                  "height": 1181.588785046729
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "xohGu",
+                  "x": -2.196261682242991,
+                  "y": 171.30841121495328,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 31.626168224299064
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "WoC2I",
+                  "x": -2.196261682242991,
+                  "y": 248.17757009345794,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "ounvh",
+                  "x": -2.196261682242991,
+                  "y": 322.85046728971963,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 63.25233644859813
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 1.7570093457943925,
+                  "id": "yX17H",
+                  "x": 562.6822429906542,
+                  "y": 267.06542056074767,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 3.514018691588785,
+                  "height": 103.22429906542055
+                },
+                {
+                  "type": "frame",
+                  "id": "sSiZY",
+                  "x": 17.130841121495326,
+                  "y": 17.130841121495326,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 529.7383177570093,
+                  "height": 1151.7196261682243,
+                  "cornerRadius": 58.85981308411215,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "ZINr4",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-home-forest.png",
+                        "mode": "stretch"
+                      },
+                      "width": 529.7383177570093,
+                      "height": 1151.7196261682243
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 21.962616822429908,
+                      "id": "odCZz",
+                      "x": 192.39252336448598,
+                      "y": 25.037383177570092,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 144.9532710280374,
+                      "height": 40.41121495327103
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "G2mGv",
+          "x": 5496,
+          "y": 180,
+          "name": "D+ 5 · Cost",
+          "clip": true,
+          "width": 1284,
+          "height": 2778,
+          "fill": "#F0E6D7",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "vQhS0",
+              "x": 78,
+              "y": 130,
+              "name": "Headline",
+              "fill": "#302B25",
+              "textGrowth": "fixed-width",
+              "width": 1128,
+              "content": "1日あたりのコストも、\n判断材料のひとつに。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 100,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "cRhUt",
+              "x": 82,
+              "y": 493,
+              "name": "Supporting line",
+              "fill": "#675748",
+              "textGrowth": "fixed-width",
+              "width": 1120,
+              "content": "もう1年使ったら？\n先のコストも見比べる。",
+              "lineHeight": 1.32,
+              "fontFamily": "Noto Sans JP",
+              "fontSize": 80
+            },
+            {
+              "type": "frame",
+              "id": "dknhe",
+              "x": 212,
+              "y": 854,
+              "name": "iPhone · full screen",
+              "width": 860,
+              "height": 1808.411214953271,
+              "fill": "#75746F",
+              "cornerRadius": 115.202492211838,
+              "stroke": "#A4A39A",
+              "strokeWidth": 1.3395638629283488,
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 112.5233644859813,
+                  "id": "rwQ9t",
+                  "x": 3.3489096573208723,
+                  "y": 3.3489096573208723,
+                  "name": "Front glass and black bezel",
+                  "fill": "#121211",
+                  "width": 853.3021806853583,
+                  "height": 1801.7133956386292
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "xbFrU",
+                  "x": -3.3489096573208723,
+                  "y": 261.21495327102804,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 48.22429906542056
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "QXVT0",
+                  "x": -3.3489096573208723,
+                  "y": 378.42679127725853,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "KLtDb",
+                  "x": -3.3489096573208723,
+                  "y": 492.2897196261682,
+                  "name": "Side control",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 96.44859813084112
+                },
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 2.6791277258566977,
+                  "id": "Qu1fA",
+                  "x": 857.9906542056075,
+                  "y": 407.22741433021804,
+                  "name": "Power button",
+                  "fill": "#777770",
+                  "width": 5.358255451713395,
+                  "height": 157.39875389408098
+                },
+                {
+                  "type": "frame",
+                  "id": "f1hec7",
+                  "x": 26.121495327102803,
+                  "y": 26.121495327102803,
+                  "name": "Full actual runtime screen",
+                  "clip": true,
+                  "width": 807.7570093457944,
+                  "height": 1756.1682242990653,
+                  "cornerRadius": 89.75077881619937,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "pYQxs",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Actual runtime pixels",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "exploration/store-v2-20260924/runtime/ja-cost-warm.png",
+                        "mode": "stretch"
+                      },
+                      "width": 807.7570093457944,
+                      "height": 1756.1682242990653
+                    },
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 33.48909657320872,
+                      "id": "gsu6q",
+                      "x": 293.3644859813084,
+                      "y": 38.177570093457945,
+                      "name": "Hardware camera island",
+                      "fill": "#090909",
+                      "width": 221.02803738317755,
+                      "height": 61.61993769470405
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "iQGM6",
+              "x": 66,
+              "y": 1973.2972972972973,
+              "name": "Cost · magnified same runtime region",
+              "clip": true,
+              "width": 1152,
+              "height": 622.7027027027027,
+              "fill": "#FBF6ED",
+              "cornerRadius": 34,
+              "stroke": "#BAA486",
+              "strokeWidth": 2.5,
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#4335241A",
+                "offset": {
+                  "x": 0,
+                  "y": 10
+                },
+                "blur": 28
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "S7aIPD",
+                  "x": -49.81621621621622,
+                  "y": -1650.1621621621623,
+                  "name": "Cost · exact runtime crop",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "exploration/store-v2-20260924/runtime/ja-cost-warm.png",
+                    "mode": "stretch"
+                  },
+                  "width": 1251.6324324324326,
+                  "height": 2721.210810810811
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "T8lyYa",
+      "x": 39576,
+      "y": 15710,
+      "name": "Store v2 · D+ vs E · 240 px",
+      "clip": true,
+      "width": 1328,
+      "height": 1300.5046728971963,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "KVRPM",
+          "x": 28,
+          "y": 22,
+          "name": "Scale note · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "D+ vs E / 240 px wide",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "oXPl8",
+          "x": 28,
+          "y": 54,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "D+ / Full Frame + Zoom · polished",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "TotC3",
+          "x": 28,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/cMQTx.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "WouFZ",
+          "x": 286,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/pmHOf.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "z2cm8E",
+          "x": 544,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/h8Uxpa.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "CFuIL",
+          "x": 802,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/llgvT.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "BtFJT",
+          "x": 1060,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/G2mGv.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "text",
+          "id": "glWio",
+          "x": 28,
+          "y": 649.2523364485982,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 1272,
+          "content": "E / Hybrid",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "W7iDoX",
+          "x": 28,
+          "y": 677.2523364485982,
+          "name": "E / Hybrid · 1 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/gkGMd.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "YMeYE",
+          "x": 286,
+          "y": 677.2523364485982,
+          "name": "E / Hybrid · 2 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WmqrL.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "FaTqE",
+          "x": 544,
+          "y": 677.2523364485982,
+          "name": "E / Hybrid · 3 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WsuJM.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "HCcbo",
+          "x": 802,
+          "y": 677.2523364485982,
+          "name": "E / Hybrid · 4 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/y3EAkX.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        },
+        {
+          "type": "rectangle",
+          "id": "E5CG2k",
+          "x": 1060,
+          "y": 677.2523364485982,
+          "name": "E / Hybrid · 5 · 240px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/wxLkQ.png",
+            "mode": "stretch"
+          },
+          "width": 240,
+          "height": 519.2523364485982
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "qtoKb",
+      "x": 41056,
+      "y": 15710,
+      "name": "Store v2 · D+ vs E · 180 px",
+      "clip": true,
+      "width": 1028,
+      "height": 1040.8785046728972,
+      "fill": "#D7D5CF",
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "Fwjpg",
+          "x": 28,
+          "y": 22,
+          "name": "Scale note · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "D+ vs E / 180 px wide",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "FBtIj",
+          "x": 28,
+          "y": 54,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "D+ / Full Frame + Zoom · polished",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "G1e5pi",
+          "x": 28,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/cMQTx.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "fQ00h",
+          "x": 226,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/pmHOf.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "Mx0rD",
+          "x": 424,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/h8Uxpa.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "mFAAy",
+          "x": 622,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/llgvT.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "AaVQi",
+          "x": 820,
+          "y": 82,
+          "name": "D+ / Full Frame + Zoom · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r4-dplus-polish/native/G2mGv.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "text",
+          "id": "fK7Wu",
+          "x": 28,
+          "y": 519.4392523364486,
+          "name": "Direction label · outside screenshots",
+          "fill": "#302B25",
+          "textGrowth": "fixed-width",
+          "width": 972,
+          "content": "E / Hybrid",
+          "fontFamily": "Inter",
+          "fontSize": 18,
+          "fontWeight": "500"
+        },
+        {
+          "type": "rectangle",
+          "id": "xvZ26",
+          "x": 28,
+          "y": 547.4392523364486,
+          "name": "E / Hybrid · 1 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/gkGMd.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "Q6Yk6",
+          "x": 226,
+          "y": 547.4392523364486,
+          "name": "E / Hybrid · 2 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WmqrL.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "ZsrDs",
+          "x": 424,
+          "y": 547.4392523364486,
+          "name": "E / Hybrid · 3 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/WsuJM.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "xznpg",
+          "x": 622,
+          "y": 547.4392523364486,
+          "name": "E / Hybrid · 4 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/y3EAkX.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
+        },
+        {
+          "type": "rectangle",
+          "id": "wqkXv",
+          "x": 820,
+          "y": 547.4392523364486,
+          "name": "E / Hybrid · 5 · 180px",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "exploration/store-v2-20260924/review-r2/native/wxLkQ.png",
+            "mode": "stretch"
+          },
+          "width": 180,
+          "height": 389.4392523364486
         }
       ]
     }
