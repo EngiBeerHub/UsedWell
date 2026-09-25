@@ -55,6 +55,7 @@
     }
 
     static var homeReferenceDate: Date? {
+      if mode?.hasPrefix("store-") == true { return StoreScreenshotFixtures.referenceDate }
       guard mode?.hasPrefix("home-") == true else { return nil }
       return homeDate(2026, 9, 8)
     }
@@ -181,6 +182,10 @@
         for: Item.self, UsageNote.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true))
       guard mode != "empty" else { return container }
+      if mode.hasPrefix("store-") {
+        try StoreScreenshotFixtures.populate(container, mode: mode, locale: locale)
+        return container
+      }
       if mode.hasPrefix("home-") {
         try populateHome(container, mode: mode, locale: locale)
         return container
