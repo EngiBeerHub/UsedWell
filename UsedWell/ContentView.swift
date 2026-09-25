@@ -98,7 +98,6 @@ struct ContentView: View {
       }
       .navigationTitle("愛用品")
       .navigationBarTitleDisplayMode(.large)
-      .toolbarBackground(palette.background, for: .navigationBar)
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button("設定", systemImage: "gearshape") { showsSettings = true }

@@ -47,20 +47,30 @@ final class ThemeUITests: UIFlowTestCase {
   }
 
   @MainActor func testHomeTitleCollapsesAndToolbarRemains() {
-    let app = XCUIApplication()
-    app.launchArguments = [
-      "-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP", "-lastAcknowledgedRegion", "JP"
-    ]
-    app.launchEnvironment["USEDWELL_FIXTURE"] = "home-review"
-    app.launchEnvironment["USEDWELL_RESET_PREFERENCES"] = "1"
-    app.launch()
-    XCTAssertTrue(app.navigationBars["愛用品"].waitForExistence(timeout: 5))
-    capture("Home initial large title", app: app)
-    app.swipeUp()
-    XCTAssertTrue(app.navigationBars["愛用品"].exists)
-    XCTAssertTrue(app.buttons["open-settings"].isHittable)
-    XCTAssertTrue(app.buttons["add-item"].isHittable)
-    capture("Home scrolled compact title", app: app)
+    for theme in ["Warm", "Forest"] {
+      let app = XCUIApplication()
+      app.launchArguments = [
+        "-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP", "-lastAcknowledgedRegion", "JP"
+      ]
+      app.launchEnvironment["USEDWELL_FIXTURE"] = "home-review"
+      app.launchEnvironment["USEDWELL_RESET_PREFERENCES"] = "1"
+      app.launch()
+      if theme == "Forest" {
+        app.buttons["open-settings"].tap()
+        app.segmentedControls["theme-picker"].buttons["Forest"].tap()
+        app.buttons["完了"].tap()
+      }
+      XCTAssertTrue(app.navigationBars["愛用品"].waitForExistence(timeout: 5))
+      capture("\(theme) Home initial large title", app: app)
+      app.swipeUp()
+      XCTAssertTrue(app.navigationBars["愛用品"].exists)
+      XCTAssertTrue(app.buttons["open-settings"].isHittable)
+      XCTAssertTrue(app.buttons["add-item"].isHittable)
+      capture("\(theme) Home scrolled compact title", app: app)
+      app.swipeDown()
+      capture("\(theme) Home large title restored", app: app)
+      app.terminate()
+    }
   }
 
   @MainActor func testLargeEnglishRegularRowKeepsAllInformation() {
