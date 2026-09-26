@@ -1,118 +1,9 @@
 {
   "sourceLanguage" : "ja",
   "strings" : {
-    "Forest" : {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Forest"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Forest"
-          }
-        }
-      }
-    } ,
-    "Warm" : {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Warm"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Warm"
-          }
-        }
-      }
-    } ,
-    "テーマ" : {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Theme"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テーマ"
-          }
-        }
-      }
-    } ,
-    "設定" : {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settings"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定"
-          }
-        }
-      }
-    } ,
-    "使用メモ・コストを確認" : {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "View notes and costs"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "使用メモ・コストを確認"
-          }
-        }
-      }
-    } ,
-    "使用メモ ・ %@" : {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Usage Note · %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "使用メモ ・ %@"
-          }
-        }
-      }
-    } ,
-    "画面の色を選べます。ライト・ダーク表示はiPhoneの設定に従います。" : {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose the app colors. Light and Dark follow your iPhone settings."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "画面の色を選べます。ライト・ダーク表示はiPhoneの設定に従います。"
-          }
-        }
-      }
-    } ,
+    "・" : {
+
+    },
     "%@ 〜 %@" : {
       "localizations" : {
         "en" : {
@@ -363,7 +254,24 @@
         }
       }
     },
+    "Forest" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forest"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forest"
+          }
+        }
+      }
+    },
     "home.items.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -375,6 +283,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "愛用品"
+          }
+        }
+      }
+    },
+    "Warm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warm"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warm"
           }
         }
       }
@@ -583,6 +507,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "そろそろ見直しどきです"
+          }
+        }
+      }
+    },
+    "テーマ" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テーマ"
           }
         }
       }
@@ -808,6 +748,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用メモ"
+          }
+        }
+      }
+    },
+    "使用メモ ・ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage Note · %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用メモ ・ %@"
+          }
+        }
+      }
+    },
+    "使用メモ・コストを確認" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View notes and costs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用メモ・コストを確認"
           }
         }
       }
@@ -1622,6 +1594,22 @@
         }
       }
     },
+    "画面の色を選べます。ライト・ダーク表示はiPhoneの設定に従います。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose the app colors. Light and Dark follow your iPhone settings."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面の色を選べます。ライト・ダーク表示はiPhoneの設定に従います。"
+          }
+        }
+      }
+    },
     "登録内容を編集" : {
       "localizations" : {
         "en" : {
@@ -1858,6 +1846,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "記録を削除"
+          }
+        }
+      }
+    },
+    "設定" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
           }
         }
       }
