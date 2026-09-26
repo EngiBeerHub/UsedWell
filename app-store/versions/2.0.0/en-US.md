@@ -40,15 +40,11 @@ You can also keep notes on what you've actually noticed while using it.
 
 UsedWell brings those pieces together so you can make the decision with your own context in front of you.
 
-## Your time with it. Your goal for it
+Your time with it. Your goal for it.
 
 Set your own usage goal and see where you are today.
 
-UsedWell shows three simple states:
-
-- Still want to use it
-- Start considering replacement
-- Goal reached
+UsedWell shows three simple states: Still want to use it, Start considering replacement, and Goal reached.
 
 At 90%, it's simply a point to start reflecting.
 
@@ -57,7 +53,7 @@ It means you've reached the usage goal you set for yourself.
 
 If you're still happy with the item, you can keep using it well beyond your goal.
 
-## The frustrations. The reasons to keep it
+The frustrations. The reasons to keep it.
 
 Add dated Usage Notes whenever something stands out.
 
@@ -73,20 +69,17 @@ When you're considering a replacement, you can look back on more than numbers—
 There's no need to log something every day.
 Add a note only when there's something worth remembering.
 
-## Cost per day. One more perspective
+Cost per day. One more perspective.
 
 UsedWell calculates your current cost per day from the purchase price and time used.
 
-You can also compare what the cost per day would look like:
-
-- At your usage goal
-- After one more year of use
+You can also compare what the cost per day would look like at your usage goal and after one more year of use.
 
 The point isn't to “get your money's worth.”
 
 Cost per day is simply one more perspective when you're deciding whether to replace something or keep using it.
 
-## Add a photo to make each item easier to recognize
+Add a photo to make each item easier to recognize.
 
 You can add one optional photo to each item.
 
@@ -96,28 +89,22 @@ If you don't add a photo, UsedWell shows a category icon instead.
 
 Photos stay on your device.
 
-## Choose between Warm and Forest
+Choose between Warm and Forest.
 
 UsedWell includes two visual themes.
 
 Warm uses a soft Sand / Ivory palette.
-
 Forest uses a calm Cream / Deep Forest palette.
 
 Light and Dark appearance continue to follow your iPhone settings.
 
-## Keep the record after you're done
+Keep the record after you're done.
 
 When you actually stop using an item, mark it as replaced.
 
-The record stays in History so you can look back on:
+The record stays in History so you can look back on your final time used, Usage Notes, final cost per day, and the period from purchase to completion.
 
-- Final time used
-- Usage Notes
-- Final cost per day
-- The period from purchase to completion
-
-## Key features
+Key features
 
 • Add, edit, and delete items
 • Add one optional photo per item
